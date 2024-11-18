@@ -1,16 +1,62 @@
-using UnityEngine;
+using UnityEngine.Events;
 
-public class EventManager : MonoBehaviour
+/// <summary>
+/// The Event Manager for the game. This will handle all events that are called throughout
+/// the game, but should break them up into different categories to help make the project 
+/// easier to understand and enable scalability as time goes on.
+/// 
+/// WARNING: Because this is static, before anything destroys itself (including scene change),
+/// the event needs to unsubscribe itself, done using -= instead of += from earlier. This
+/// will cause errors otherwise and can lead to all sorts of bad news.
+/// 
+/// REM-i
+/// </summary>
+public static class EventManager
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    //This is just a set of event templates to help someone call events using this, not actually
+    //meant to be used in the project
+    #region Templates
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    /*
+     * No Input Event: 
+     * EventManager.noInputEvent += someOtherScriptMethod; to subscribe
+     * 
+     * EventManager.InvokeNoInputEvent(); to invoke the event
+     */
+
+    //public static event UnityAction noInputEvent;
+    //public static void InvokeNoInputEvent() => noInputEvent?.Invoke();
+
+    /*
+     * One Input Event: 
+     * EventManager.oneInputEvent += someOtherScriptMethod; to subscribe
+     * NOTE: Some other script method must implement (T) as a parameter
+     * 
+     * EventManager.InvokeOneInputEvent(); to invoke the event
+     */
+
+    //public static event UnityAction<T> oneInputEvent;
+    //public static void InvokeOneInputEvent(T input) => oneInputEvent?.Invoke(input);
+
+    /*
+     * Multi Input Event: 
+     * EventManager.multInputEvent += someOtherScriptMethod; to subscribe
+     * NOTE: Some other script method must implement (T1, T2, T3, ..., T) as a parameter
+     * 
+     * EventManager.InvokeMultInputEvent(); to invoke the event
+     */
+
+    //public static event UnityAction<T1, T2, T3, ..., T> multInputEvent;
+    //public static void InvokeMultInputEvent(T1 input1, T2 input2, T3 input3, ..., T input)
+    //                                          => oneInputEvent?.Invoke(input1, input2, input3, ..., input);
+
+    #endregion
+
+    #region Events
+
+    #endregion
+
+    #region Event Triggers
+
+    #endregion
 }
