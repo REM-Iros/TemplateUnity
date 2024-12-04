@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using FMODUnity;
 
 /// <summary>
 /// Basic audio manager to be used throughout a game. A library of all of the sound effects and
@@ -12,19 +13,18 @@ public class AudioManager<T> : MonoBehaviour where T : MonoBehaviour
 {
     #region Vars
 
-    //Create an audio clip dictionary that will be called
-    private Dictionary<string, AudioClip> audioDict = new Dictionary<string, AudioClip>();
-
     #endregion
 
     #region Callable Methods
 
-    public void PlayAudio(string audioName)
+    /// <summary>
+    /// This calls the runtime manager to play a oneshot of an audio event.
+    /// </summary>
+    /// <param name="sound"></param>
+    /// <param name="pos"></param>
+    public void PlayOneShotAudio(EventReference sound, Vector3 pos)
     {
-        if(audioDict.ContainsKey(audioName))
-        {
-
-        }
+        RuntimeManager.PlayOneShot(sound, pos);
     }
 
     #endregion
