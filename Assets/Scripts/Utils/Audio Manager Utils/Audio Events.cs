@@ -6,7 +6,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-[CreateAssetMenu(fileName = "New Audio Event", menuName = "Audio/AudioEvents")]
+[CreateAssetMenu(fileName = "New Audio Event", menuName = "Audio/Audio Event")]
 public class AudioEvents : ScriptableObject
 {
     public string eventName;            //The event name that is referenced
