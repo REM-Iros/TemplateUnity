@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Video;
 
 /// <summary>
 /// This is a generic egaer singleton template class that allows other classes to inherit
@@ -29,10 +30,38 @@ public class EagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
     }
 
     #endregion
+
     #region Methods
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void Awake()
+    {
+        if (_instance)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+            Debug.LogWarning($"Destroyed dupe {typeof(T).Name} singleton");
+        }
+    }
+
     #endregion
 
     #region Constructors
+
+    // Static constructor
+    static EagerSingleton()
+    {
+        //Creates an instance of the singleton on startup
+        GameObject obj = new GameObject(typeof(T).Name);
+        _instance = obj.AddComponent<T>();
+        DontDestroyOnLoad(obj);
+    }
 
     protected EagerSingleton() { } //Prevents calling new to create instances
 

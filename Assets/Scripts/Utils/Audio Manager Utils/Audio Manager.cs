@@ -10,7 +10,7 @@ using FMOD.Studio;
 /// 
 /// REM-i
 /// </summary>
-public class AudioManager<T> : MonoBehaviour where T : MonoBehaviour
+public class AudioManager : EagerSingleton<AudioManager>
 {
     #region Vars
 
@@ -26,6 +26,17 @@ public class AudioManager<T> : MonoBehaviour where T : MonoBehaviour
     #endregion
 
     #region Callable Methods
+
+    /// <summary>
+    /// Calls the base awake for the eager singleton, then initializes the audio dictionary
+    /// </summary>
+    protected override void Awake()
+    {
+        //Call the base method
+        base.Awake();
+
+        InitDictionary();
+    }
 
     /// <summary>
     /// Called on awake, initializes the events
@@ -192,64 +203,5 @@ public class AudioManager<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Singleton Stuff
-
-    //Instance variable that stores manager as an instance
-    private static T _instance;
-
-    //Lock to prevent multithread issues
-    private static readonly object _lock = new object();
-
-    //Create instance that we can call from other scripts
-    public static T Instance
-    {
-        get
-        {
-            //Lock down manager so others can use it
-            lock (_lock)
-            {
-                if (_instance == null)
-                {
-                    //Look for already instantiated instance
-                    _instance = FindAnyObjectByType<T>();
-
-                    //If no instance, then create a new one
-                    if (_instance == null)
-                    {
-                        GameObject singletonObject = new GameObject(typeof(T).Name);
-                        _instance = singletonObject.AddComponent<T>();
-
-                        //Make manager persistant
-                        DontDestroyOnLoad(singletonObject);
-                    }
-                }
-                return _instance;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Awake method to check if there is an audiomanager already present, if not, set
-    /// this as the audio manager singleton. Also initializes dictionary.
-    /// </summary>
-    protected virtual void Awake()
-    {
-        //Check for instance
-        if (_instance == null)
-        {
-            //Set instance if null
-            _instance = this as T;
-            DontDestroyOnLoad(gameObject);
-        }
-        //Otherwise we have a dupe and destroy it
-        else if (_instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-        InitDictionary();
-    }
     #endregion
 }
