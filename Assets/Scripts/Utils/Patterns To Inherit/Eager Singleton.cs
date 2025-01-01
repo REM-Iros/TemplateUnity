@@ -13,7 +13,6 @@ public class EagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     #region Vars
 
-    //START HERE: Finish this when you get a chance
     private static T _instance;
 
     public static T Instance
@@ -34,7 +33,7 @@ public class EagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
     #region Methods
 
     /// <summary>
-    /// 
+    /// Called on startup, sets instance if not present and prevents destruction on load.
     /// </summary>
     protected virtual void Awake()
     {
@@ -57,13 +56,13 @@ public class EagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
     // Static constructor
     static EagerSingleton()
     {
-        //Creates an instance of the singleton on startup
+        // Creates an instance of the singleton on startup
         GameObject obj = new GameObject(typeof(T).Name);
         _instance = obj.AddComponent<T>();
         DontDestroyOnLoad(obj);
     }
 
-    protected EagerSingleton() { } //Prevents calling new to create instances
+    protected EagerSingleton() { } // Prevents calling new to create instances
 
     #endregion
 }

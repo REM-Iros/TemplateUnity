@@ -14,7 +14,7 @@ public class LazySingleton<T> : MonoBehaviour where T : MonoBehaviour
     private static T _instance;
     private static readonly object _instanceLock = new();
 
-    //Peristence determiner, true means persist, false means it only exists for a scene, set in editor
+    // Peristence determiner, true means persist, false means it only exists for a scene, set in editor
     [SerializeField]
     private bool Persistent { get; set; } = true;
 
@@ -36,7 +36,7 @@ public class LazySingleton<T> : MonoBehaviour where T : MonoBehaviour
                         GameObject singletonObj = new GameObject(typeof(T).FullName);
                         _instance = singletonObj.AddComponent<T>();
 
-                        //Only set don't destroy on load when persistent
+                        // Only set don't destroy on load when persistent
                         LazySingleton<T> singleton = _instance as LazySingleton<T>;
                         if (singleton != null && singleton.Persistent)
                         {
@@ -80,7 +80,7 @@ public class LazySingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     #region Constructors
 
-    protected LazySingleton() { } //Prevent instantiation through "new"
+    protected LazySingleton() { } // Prevent instantiation through "new"
 
     #endregion
 }
