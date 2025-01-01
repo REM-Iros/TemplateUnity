@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /// <summary>
@@ -13,17 +14,13 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class SaveManager : MonoBehaviour
+public class SaveManager : EagerSingleton<SaveManager>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Calls base method, which sets it as a save manager, then checks for Save Data and loads it up.
+    protected override void Awake()
     {
-        
-    }
+        base.Awake();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+
     }
 }
