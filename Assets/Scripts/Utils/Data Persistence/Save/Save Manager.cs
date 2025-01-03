@@ -1,5 +1,4 @@
-using FMODUnity;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -19,8 +18,6 @@ public class SaveManager : EagerSingleton<SaveManager>
 {
     #region Vars
 
-    #region Save Vars
-
     // Set the path
     private const string _saveName = "game_save_file";
 
@@ -31,11 +28,10 @@ public class SaveManager : EagerSingleton<SaveManager>
     private bool _encryptSave = true;
 
     // Const variable that determines how many save files the manager checks for
-    private const int _maxSaveFileIndex = 21;
+    private const int _maxSaveFileIndex = 6;
 
-    #endregion
-
-
+    // Private array for having game data loaded in
+    private GameData[] _files;
 
     #endregion
 
@@ -49,19 +45,28 @@ public class SaveManager : EagerSingleton<SaveManager>
         // Init handler
         _handler = new FileHandler(Application.persistentDataPath, _saveName, _encryptSave);
 
-        LoadPreviews();
+        // Offset because we have an array
+        _files = new GameData[_maxSaveFileIndex - 1];
+
+        LoadAllSavesOnStartup();
     }
 
     /// <summary>
-    /// This loads up the previews for each of the save file slots
+    /// Method called on startup that loads in all saves to generate previews for the player
+    /// NOTE: Might need to generate separate previews later, but for now, this seems fine.
+    /// I don't think the JSON data will get soooo large that it kills performance.
     /// </summary>
-    private void LoadPreviews()
+    private void LoadAllSavesOnStartup()
     {
-        // TODO: Implement
+        // Load every file designated
+        for (int i = 1; i < _maxSaveFileIndex; i++)
+        {
+            _files[i - 1] = _handler.Load(i);
+        }
     }
 
     /// <summary>
-    /// Save method called from menus, as well as autosave to store data to json.
+    /// Save method called from menus, as well as autosave to store data to json
     /// </summary>
     /// <param name="index"></param>
     public void SaveGame(int index)
@@ -74,11 +79,9 @@ public class SaveManager : EagerSingleton<SaveManager>
     /// </summary>
     public void LoadGame(int index)
     {
-        DataManager.Instance.LoadGameData(_handler.Load(index));
-
-        if (DataManager.Instance.GameData == null)
+        if (_files[index] != null)
         {
-            Debug.LogError($"Could not retrieve game data from path at index: {_saveName}_{index}.json");
+            DataManager.Instance.LoadGameData(_files[index]);
         }
     }
 
