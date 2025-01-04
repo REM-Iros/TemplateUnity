@@ -81,7 +81,7 @@ public class SaveManager : EagerSingleton<SaveManager>
     {
         if (_files[index] != null)
         {
-            DataManager.Instance.LoadGameData(_files[index]);
+            ServiceLocator.Get<DataManager>().LoadGameData(_files[index]);
         }
     }
 

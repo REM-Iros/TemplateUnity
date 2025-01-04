@@ -1,43 +1,32 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
-/// This script is called at the start of the game, it initializes all of the
-/// managers we are going to need in the game. If you need to add more managers,
-/// add them in the init managers script (only works for singletons).
+/// Bootstrap is called on the init scene, ensures all services are ready to go,
+/// and then transitions to the main menu
 /// 
 /// REM-i
 /// </summary>
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private string nextScene;
-
     /// <summary>
-    /// On awake, set to not destroy on load, and load async while
-    /// instantiating managers.
+    /// On startup, call the initialization, and then move to the main menu
     /// </summary>
     private void Awake()
     {
-        //Set this object to not destroy
-        DontDestroyOnLoad(gameObject);
+        InitServiceLocator();
 
-        //Initialize the managers
-        InitManagers();
-
-        //Transition to the next scene
-        SceneManager.LoadSceneAsync(nextScene);
+        // Move onto the main menu
+        // TODO: Implement scene transition to main menu
     }
 
     /// <summary>
-    /// Make calls to the managers, so that they are loaded properly
+    /// Stores all managers that need to go into the service locator.
     /// </summary>
-    private void InitManagers()
+    private void InitServiceLocator()
     {
-        /* NEXT: Start here, need to figure out way to call our singletons
-        if (AudioManager.Instance != null)
-        {
-            
-        }
-        */
+        // Register major game managers that need to persist throughout scenes.
+        ServiceLocator.Register(AudioManager.Instance);
+        ServiceLocator.Register(SaveManager.Instance);
+        ServiceLocator.Register(DataManager.Instance);
     }
 }

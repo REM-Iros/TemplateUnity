@@ -1,5 +1,10 @@
-using UnityEngine;
-
+/// <summary>
+/// Data manager is for storing the current games data, and providing it when
+/// a request is made to it. Should hold global data for progression and such,
+/// not minor data that doesn't need to persist between scenes.
+/// 
+/// REM-i
+/// </summary>
 public class DataManager : EagerSingleton<DataManager>
 {
     #region Vars

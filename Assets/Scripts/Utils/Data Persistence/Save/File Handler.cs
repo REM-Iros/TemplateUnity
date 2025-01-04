@@ -2,6 +2,12 @@ using System;
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// Filehandler class that opens up the save file with the given path, saves it, and
+/// can also encrypt the file. Called by the save manager for file IO.
+/// 
+/// REM-i
+/// </summary>
 public class FileHandler
 {
     #region Vars

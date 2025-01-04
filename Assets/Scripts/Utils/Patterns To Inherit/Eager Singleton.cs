@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Video;
 
 /// <summary>
 /// This is a generic egaer singleton template class that allows other classes to inherit
