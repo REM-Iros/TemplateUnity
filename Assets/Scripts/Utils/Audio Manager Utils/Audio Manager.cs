@@ -47,15 +47,18 @@ public class AudioManager : EagerSingleton<AudioManager>
         audioEventDict = new Dictionary<string, AudioEvents>();
 
         //Go through each event, check if it's in the dict, if not, add it
-        foreach (var e in events)
+        if(events != null)
         {
-            if(!audioEventDict.ContainsKey(e.name))
+            foreach (var e in events)
             {
-                audioEventDict.Add(e.name, e);
-            }
-            else
-            {
-                Debug.LogWarning($"Dupe name: {e.name}");
+                if (!audioEventDict.ContainsKey(e.name))
+                {
+                    audioEventDict.Add(e.name, e);
+                }
+                else
+                {
+                    Debug.LogWarning($"Dupe name: {e.name}");
+                }
             }
         }
     }

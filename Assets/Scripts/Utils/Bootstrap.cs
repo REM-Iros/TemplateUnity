@@ -25,8 +25,8 @@ public class Bootstrap : MonoBehaviour
     private void InitServiceLocator()
     {
         // Register major game managers that need to persist throughout scenes.
-        ServiceLocator.Register(AudioManager.Instance);
-        ServiceLocator.Register(SaveManager.Instance);
-        ServiceLocator.Register(DataManager.Instance);
+        ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
+        ServiceLocator.Register(FindAnyObjectByType<SaveManager>());
+        ServiceLocator.Register(FindAnyObjectByType<DataManager>());
     }
 }
