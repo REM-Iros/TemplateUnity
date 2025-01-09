@@ -13,6 +13,7 @@ public class Bootstrap : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        // Set up the service locator
         InitServiceLocator();
 
         // Move onto the main menu
