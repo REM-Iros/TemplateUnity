@@ -477,9 +477,9 @@ MonoBehaviour:
   m_MoveAction: {fileID: 1477741510638017321, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   m_SubmitAction: {fileID: -6843239020715840643, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   m_CancelAction: {fileID: -2358078435841384810, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
-  m_LeftClickAction: {fileID: 0}
-  m_MiddleClickAction: {fileID: 0}
-  m_RightClickAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 1621701876442375847, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
+  m_MiddleClickAction: {fileID: 7358189218698671731, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
+  m_RightClickAction: {fileID: -4617596716909131186, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   m_ScrollWheelAction: {fileID: 0}
   m_TrackedDevicePositionAction: {fileID: 0}
   m_TrackedDeviceOrientationAction: {fileID: 0}

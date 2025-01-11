@@ -31,6 +31,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Left Click",
+                    "type": "Button",
+                    "id": "7eb89276-d31e-4391-8481-e4fe8333ed9e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Right Click",
+                    "type": "Button",
+                    "id": "876ade34-e3b6-4025-9eaa-b089d8599e08",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Middle Click",
+                    "type": "Button",
+                    "id": "3f1a0a6a-7aa3-42f1-acbb-aeb67f95c907",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -51,7 +78,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -62,7 +89,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -73,7 +100,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -84,7 +111,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Navigate",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -106,7 +133,7 @@
                     "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Submit",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -128,7 +155,7 @@
                     "path": "<Keyboard>/k",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -141,6 +168,39 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "650b89e8-252b-4fcb-b5d9-af39969e0716",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Left Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "821cd703-5e19-4ef9-afa4-bdc89ca26c5f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Right Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86ecd1ae-48b5-4500-807f-a613d28fefc4",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Middle Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -205,7 +265,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -216,7 +276,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -227,7 +287,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -238,7 +298,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -260,7 +320,7 @@
                     "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -282,7 +342,7 @@
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -304,7 +364,7 @@
                     "path": "<Keyboard>/k",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KBM",
                     "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -325,11 +385,16 @@
     ],
     "controlSchemes": [
         {
-            "name": "Keyboard",
-            "bindingGroup": "Keyboard",
+            "name": "KBM",
+            "bindingGroup": "KBM",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }
