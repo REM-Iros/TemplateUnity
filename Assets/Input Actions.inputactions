@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "Navigate",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "8d0d6827-84b9-40c2-858e-34ac1d58094e",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -55,6 +55,24 @@
                     "type": "Button",
                     "id": "3f1a0a6a-7aa3-42f1-acbb-aeb67f95c907",
                     "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Point",
+                    "type": "PassThrough",
+                    "id": "a1227a6b-a79a-438e-9ef5-dadd05d586a6",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Scroll Wheel",
+                    "type": "PassThrough",
+                    "id": "5fc125de-53fe-440f-9559-ebce9c2ffc5a",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -203,6 +221,28 @@
                     "action": "Middle Click",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "20d74fd6-8352-4c25-ac38-fd9493cd21a8",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "81409804-1af9-4793-bc0d-230658cf1478",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Scroll Wheel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -235,7 +275,7 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Menu",
