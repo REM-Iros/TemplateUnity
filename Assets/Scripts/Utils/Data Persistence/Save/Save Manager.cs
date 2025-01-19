@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -52,6 +51,15 @@ public class SaveManager : EagerSingleton<SaveManager>
     }
 
     /// <summary>
+    /// On a new game being called, the save manager will load the basic game
+    /// data into the data manager.
+    /// </summary>
+    public void NewGame()
+    {
+        ServiceLocator.Get<DataManager>().LoadGameData(new GameData());
+    }
+
+    /// <summary>
     /// Method called on startup that loads in all saves to generate previews for the player
     /// NOTE: Might need to generate separate previews later, but for now, this seems fine.
     /// I don't think the JSON data will get soooo large that it kills performance.
@@ -77,12 +85,25 @@ public class SaveManager : EagerSingleton<SaveManager>
     /// <summary>
     /// Load method called from the menus, checks for the save game in the index and loads it
     /// </summary>
-    public void LoadGame(int index)
+    public bool LoadGame(int index)
     {
         if (_files[index] != null)
         {
             ServiceLocator.Get<DataManager>().LoadGameData(_files[index]);
+
+            return true;
         }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Method is called when load buttons start up and provides basic info for the save file
+    /// </summary>
+    /// <param name="index"></param>
+    public void LoadFileSnapshot(int index)
+    {
+
     }
 
     #endregion

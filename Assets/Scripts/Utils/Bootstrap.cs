@@ -29,5 +29,6 @@ public class Bootstrap : MonoBehaviour
         ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
         ServiceLocator.Register(FindAnyObjectByType<SaveManager>());
         ServiceLocator.Register(FindAnyObjectByType<DataManager>());
+        ServiceLocator.Register(FindAnyObjectByType<SceneControlManager>());
     }
 }

@@ -13,6 +13,14 @@ public class GameData
 {
     #region Vars
 
+    #region Current Scene Values
+
+    //Current Scene Data Values
+    public Vector3 currPlayerPosition;
+    public string currPlayerScene;
+
+    #endregion
+
     public int someVal;
 
     #endregion
@@ -23,6 +31,10 @@ public class GameData
     /// </summary>
     public GameData()
     {
+        //Store the current scene data
+        currPlayerPosition = Vector3.zero;
+        currPlayerScene = "";
+
         someVal = 0;
     }
 }
