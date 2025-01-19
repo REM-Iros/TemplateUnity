@@ -54,9 +54,21 @@ public static class EventManager
 
     #region Events
 
+    #region Main Menu Events
+
+    public static event UnityAction MMENU_ChangeLoadSnapshot;
+
+    #endregion
+
     #endregion
 
     #region Event Triggers
+
+    #region Main Menu Events
+
+    public static void InvokeMMENU_ChangeLoadSnapshot() => MMENU_ChangeLoadSnapshot?.Invoke();
+
+    #endregion
 
     #endregion
 }

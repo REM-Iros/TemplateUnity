@@ -24,13 +24,16 @@ public class SaveManager : EagerSingleton<SaveManager>
     private FileHandler _handler;
 
     // Encryption bool, set to true for encryption, false for no, default is true
-    private bool _encryptSave = true;
+    private readonly bool _encryptSave = true;
 
     // Const variable that determines how many save files the manager checks for
     private const int _maxSaveFileIndex = 6;
 
     // Private array for having game data loaded in
     private GameData[] _files;
+
+    // Store the array for the save file
+    private int _fileIndex;
 
     #endregion
 
@@ -97,14 +100,159 @@ public class SaveManager : EagerSingleton<SaveManager>
         return false;
     }
 
+    #region File Methods
+
     /// <summary>
-    /// Method is called when load buttons start up and provides basic info for the save file
+    /// Called on startup of the game, checks if we have any files available
+    /// </summary>
+    /// <returns></returns>
+    public bool IsThereAvailableFile()
+    {
+        // If we have a file, return true
+        foreach (var file in _files)
+        {
+            if (file != null)
+            {
+                return true;
+            }
+        }
+
+        // Otherwise, we don't have an available file
+        return false;
+    }
+
+    /// <summary>
+    /// Method is called when load menu opens up, returns basic info
     /// </summary>
     /// <param name="index"></param>
-    public void LoadFileSnapshot(int index)
+    public void LoadFirstFileSnapshot()
     {
-
+        // Iterate until we find the first non-null file and return that index
+        for (int i = 0; i < _files.Length; i++)
+        {
+            if (_files[i] != null)
+            {
+                _fileIndex = i;
+                break;
+            }
+        }
     }
+
+    /// <summary>
+    /// These next three methods return some values for the snapshots.
+    /// There may be a better way to do this such as defining a snapshot
+    /// class that you fill up, but I'm unsure.
+    /// </summary>
+    /// <returns></returns>
+    public int GetSnapshotIndex()
+    {
+        return _fileIndex;
+    }
+
+    public Vector3 GetSnapshotPos()
+    {
+        return _files[_fileIndex].currPlayerPosition;
+    }
+
+    public string GetSnapshotScene()
+    {
+        return _files[_fileIndex].currPlayerScene;
+    }
+
+    public int GetSnapshotValue()
+    {
+        return _files[_fileIndex].someVal;
+    }
+
+    /// <summary>
+    /// Looks through the files we have loaded to find the next available file
+    /// </summary>
+    public bool FindNextAvailableFileLeft()
+    {
+        // Define some temp variables for storing info
+        bool _isFound = false;
+        int _iterationCount = _maxSaveFileIndex - 1;
+        int _tempIndex = _fileIndex;
+
+        // Iterate backwards until we find next available file
+        while (!_isFound)
+        {
+            _tempIndex--;
+
+            // Wrap around if we go past the boundary
+            if (_tempIndex < 0)
+            {
+                _tempIndex = _maxSaveFileIndex - 1;
+            }
+
+            // If we find a non-empty file, change the index to that
+            if (_files[_tempIndex] != null)
+            {
+                _isFound = true;
+                _fileIndex = _tempIndex;
+            }
+            // Otherwise, we decrement the amount of times we want to iterate
+            else
+            {
+                _iterationCount--;
+
+                // Prevents inf loops
+                if (_iterationCount == 0)
+                {
+                    Debug.Log("Save Manager could not find another file");
+                    break;
+                }
+            }
+        }
+
+        return _isFound;
+    }
+
+    /// <summary>
+    /// Looks through the files we have loaded to find the next available file
+    /// </summary>
+    public bool FindNextAvailableFileRight()
+    {
+        // Define some temp variables for storing info
+        bool _isFound = false;
+        int _iterationCount = _maxSaveFileIndex - 1;
+        int _tempIndex = _fileIndex;
+
+        // Iterate backwards until we find next available file
+        while (!_isFound)
+        {
+            _tempIndex++;
+
+            // Wrap around if we go past the boundary
+            if (_tempIndex > _maxSaveFileIndex - 1)
+            {
+                _tempIndex = 0;
+            }
+
+            // If we find a non-empty file, change the index to that
+            if (_files[_tempIndex] != null)
+            {
+                _isFound = true;
+                _fileIndex = _tempIndex;
+            }
+            // Otherwise, we decrement the amount of times we want to iterate
+            else
+            {
+                _iterationCount--;
+
+                // Prevents inf loops
+                if (_iterationCount == 0)
+                {
+                    Debug.Log("Save Manager could not find another file");
+                    break;
+                }
+            }
+        }
+
+        return _isFound;
+    }
+
+    #endregion
 
     #endregion
 }
