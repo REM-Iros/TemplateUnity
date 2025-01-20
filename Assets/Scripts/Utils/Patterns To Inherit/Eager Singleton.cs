@@ -48,6 +48,14 @@ public class EagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// A method to call by the bootstrap to inst the objects
+    /// </summary>
+    public virtual void Generate()
+    {
+        
+    }
+
     #endregion
 
     #region Constructors

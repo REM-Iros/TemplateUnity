@@ -42,8 +42,10 @@ public class SaveManager : EagerSingleton<SaveManager>
     /// <summary>
     /// Start creates the file handler and immediately pulls data
     /// </summary>
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         // Init handler
         _handler = new FileHandler(Application.persistentDataPath, _saveName, _encryptSave);
 
@@ -109,9 +111,9 @@ public class SaveManager : EagerSingleton<SaveManager>
     public bool IsThereAvailableFile()
     {
         // If we have a file, return true
-        foreach (var file in _files)
+        for (int i = 0; i < _files.Length; i++) 
         {
-            if (file != null)
+            if (_files != null)
             {
                 return true;
             }
@@ -165,9 +167,12 @@ public class SaveManager : EagerSingleton<SaveManager>
     }
 
     /// <summary>
-    /// Looks through the files we have loaded to find the next available file
+    /// This script will check for the next file available based on which direction the
+    /// enum passed in states
     /// </summary>
-    public bool FindNextAvailableFileLeft()
+    /// <param name="lAndR"></param>
+    /// <returns></returns>
+    public bool FindNextAvailableFile(LeftRightNav lAndR)
     {
         // Define some temp variables for storing info
         bool _isFound = false;
@@ -177,54 +182,14 @@ public class SaveManager : EagerSingleton<SaveManager>
         // Iterate backwards until we find next available file
         while (!_isFound)
         {
-            _tempIndex--;
+            _tempIndex = (lAndR == LeftRightNav.Left ? _tempIndex-- : _tempIndex++);   
 
             // Wrap around if we go past the boundary
             if (_tempIndex < 0)
             {
                 _tempIndex = _maxSaveFileIndex - 1;
             }
-
-            // If we find a non-empty file, change the index to that
-            if (_files[_tempIndex] != null)
-            {
-                _isFound = true;
-                _fileIndex = _tempIndex;
-            }
-            // Otherwise, we decrement the amount of times we want to iterate
-            else
-            {
-                _iterationCount--;
-
-                // Prevents inf loops
-                if (_iterationCount == 0)
-                {
-                    Debug.Log("Save Manager could not find another file");
-                    break;
-                }
-            }
-        }
-
-        return _isFound;
-    }
-
-    /// <summary>
-    /// Looks through the files we have loaded to find the next available file
-    /// </summary>
-    public bool FindNextAvailableFileRight()
-    {
-        // Define some temp variables for storing info
-        bool _isFound = false;
-        int _iterationCount = _maxSaveFileIndex - 1;
-        int _tempIndex = _fileIndex;
-
-        // Iterate backwards until we find next available file
-        while (!_isFound)
-        {
-            _tempIndex++;
-
-            // Wrap around if we go past the boundary
-            if (_tempIndex > _maxSaveFileIndex - 1)
+            else if (_tempIndex > _maxSaveFileIndex - 1)
             {
                 _tempIndex = 0;
             }

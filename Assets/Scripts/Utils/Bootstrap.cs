@@ -8,6 +8,9 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap : MonoBehaviour
 {
+    // Hard code the first scene to go to
+    private readonly string _firstScene = "1_Main Menu";
+
     /// <summary>
     /// On startup, call the initialization, and then move to the main menu
     /// </summary>
@@ -18,6 +21,7 @@ public class Bootstrap : MonoBehaviour
 
         // Move onto the main menu
         // TODO: Implement scene transition to main menu
+        ServiceLocator.Get<SceneControlManager>().ChangeScene(_firstScene);
     }
 
     /// <summary>
@@ -25,6 +29,11 @@ public class Bootstrap : MonoBehaviour
     /// </summary>
     private void InitServiceLocator()
     {
+        AudioManager.Instance.Generate();
+        SaveManager.Instance.Generate();
+        DataManager.Instance.Generate();
+        SceneControlManager.Instance.Generate();
+
         // Register major game managers that need to persist throughout scenes.
         ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
         ServiceLocator.Register(FindAnyObjectByType<SaveManager>());

@@ -19,8 +19,10 @@ public class DataManager : EagerSingleton<DataManager>
     /// <summary>
     /// Start inits the gamedata as null
     /// </summary>
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
         GameData = null;
     }
 

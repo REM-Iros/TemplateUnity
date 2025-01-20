@@ -9,13 +9,6 @@ using UnityEngine;
 /// </summary>
 public class LoadGameButton : ButtonBase
 {
-    #region Vars
-
-    // Store the index for the game we are loading
-    [SerializeField]
-    private int _loadGameIndex;
-
-    #endregion
 
     /// <summary>
     /// When the button is pressed, get the savemanager's file from that index, and then load
@@ -23,10 +16,12 @@ public class LoadGameButton : ButtonBase
     /// </summary>
     protected override void OnButtonPressed()
     {
+        
+
         // Check for if the load file is present at the index
-        if (!ServiceLocator.Get<SaveManager>().LoadGame(_loadGameIndex))
+        if (!ServiceLocator.Get<SaveManager>().LoadGame(ServiceLocator.Get<SaveManager>().GetSnapshotIndex()))
         {
-            Debug.LogError($"Save file at index {_loadGameIndex} could not be found.");
+            Debug.LogError($"Save file at index {ServiceLocator.Get<SaveManager>().GetSnapshotIndex()} could not be found.");
             return;
         }
 

@@ -33,7 +33,7 @@ public class ChangeMenuButton : ButtonBase
         // Set the next menu to be on
         if (_nextMenu != null)
         {
-            _nextMenu.SetActive(false);
+            _nextMenu.SetActive(true);
         }
     }
 }
