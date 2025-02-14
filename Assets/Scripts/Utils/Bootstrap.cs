@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Bootstrap is called on the init scene, ensures all services are ready to go,
@@ -8,6 +9,10 @@ using UnityEngine;
 /// </summary>
 public class Bootstrap : MonoBehaviour
 {
+    // Input actions to insert into the Input Manager
+    [SerializeField]
+    private InputActionAsset inputActions;
+
     // Hard code the first scene to go to
     private readonly string _firstScene = "1_Main Menu";
 
@@ -20,7 +25,6 @@ public class Bootstrap : MonoBehaviour
         InitServiceLocator();
 
         // Move onto the main menu
-        // TODO: Implement scene transition to main menu
         ServiceLocator.Get<SceneControlManager>().ChangeScene(_firstScene);
     }
 
@@ -33,11 +37,13 @@ public class Bootstrap : MonoBehaviour
         SaveManager.Instance.Generate();
         DataManager.Instance.Generate();
         SceneControlManager.Instance.Generate();
+        InputManager.Instance.Generate();
 
         // Register major game managers that need to persist throughout scenes.
         ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
         ServiceLocator.Register(FindAnyObjectByType<SaveManager>());
         ServiceLocator.Register(FindAnyObjectByType<DataManager>());
         ServiceLocator.Register(FindAnyObjectByType<SceneControlManager>());
+        ServiceLocator.Register(FindAnyObjectByType<InputManager>());
     }
 }
