@@ -270,9 +270,17 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("<Mouse>")
 
-                ////TODO: Why no work
-                .WithCancelingThrough("<Keyboard>/escape")
-                .WithCancelingThrough("<Gamepad>/select")
+               // Fuck me this is aids, I need to make my own kus
+                .OnPotentialMatch(
+                    operation =>
+                    {
+                        if (operation.selectedControl.path == "/Keyboard/escape")
+                        {
+                            operation.Cancel();
+                            return;
+                        }
+                    }
+                )
                 .OnCancel(
                     operation =>
                     {

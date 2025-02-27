@@ -275,6 +275,28 @@
                 },
                 {
                     "name": "",
+                    "id": "3a0e7c9e-a7b5-4115-8dce-0287725a6d3e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Any Key Pressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "525d6224-543d-4be0-b885-62eb9954d359",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Any Key Pressed",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "02707ed7-8448-42f9-906a-2f6daecafeb0",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
