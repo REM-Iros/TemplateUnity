@@ -10,11 +10,11 @@ public class HideOtherMenus : ButtonBase
 {
     #region Vars
 
-    // The menu we want to show
+    [Tooltip("This is the obj that will be shown when the button is clicked")]
     [SerializeField]
     private GameObject chosenObj;
 
-    // The menus we want to hide
+    [Tooltip("This is all of the other objs that we want to hide when the button is pressed")]
     [SerializeField]
     private GameObject[] otherObjs;
 

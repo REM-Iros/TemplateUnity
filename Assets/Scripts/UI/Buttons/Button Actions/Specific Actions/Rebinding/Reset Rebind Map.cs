@@ -10,11 +10,15 @@ public class ResetRebindMap : ButtonBase
 {
     #region Vars
 
-    // Store the current input action assets
+    [Tooltip("This is the InputActionAsset we want to refer to")]
     [SerializeField]
     private InputActionAsset _inputActions;
 
-    // This is the control scheme that will be reset
+    [Tooltip("This is the action map name that we want to reset")]
+    [SerializeField]
+    private string _map;
+
+    [Tooltip("This is the control scheme that will be reset")]
     [SerializeField]
     private string _targetControlScheme;
 
@@ -27,12 +31,18 @@ public class ResetRebindMap : ButtonBase
     /// </summary>
     protected override void OnButtonPressed()
     {
-        foreach (InputActionMap map in _inputActions.actionMaps)
+        // Go through each action map
+        foreach (InputActionMap actionMap in _inputActions.actionMaps)
         {
-            foreach (InputAction action in map.actions)
+            // If the action map represents the one we want to reset
+            if (actionMap.name == _map)
             {
-                // This resets all of the input actions for the map that is masked
-                action.RemoveBindingOverride(InputBinding.MaskByGroup(_targetControlScheme));
+                // Run through each action and reset the binding if it matches the control scheme
+                foreach (InputAction action in actionMap)
+                {
+                    // This resets all of the input actions for the map that is masked
+                    action.RemoveBindingOverride(InputBinding.MaskByGroup(_targetControlScheme));
+                }
             }
         }
     }
