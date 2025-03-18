@@ -1,8 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
-using Unity.VisualScripting;
 
 /// <summary>
 /// This is a basic script that swaps visibility of game objects
@@ -15,15 +12,18 @@ public class SwapInputDeviceUI : MonoBehaviour
 {
     #region Vars
 
-    // Store the parent objs of gamepad and mk ui
+    [Tooltip("This is the gameobject that shows the keyboard ui")]
     [SerializeField]
-    private GameObject[] _kbmUI;
-    [SerializeField]
-    private GameObject[] _gamePadUI;
+    private GameObject _kbmUI;
 
-    // Store kbm action and gamepad actions for when something is pressed
+    [Tooltip("This is the gameobject that shows the gamepad ui")]
+    [SerializeField]
+    private GameObject _gamePadUI;
+
+    [Tooltip("This is the action reference for the any key pressed action")]
     [SerializeField]
     private InputActionReference _kbmAction;
+    [Tooltip("This is the action reference for the any gamepad button pressed action")]
     [SerializeField]
     private InputActionReference _gamepadAction;
 
@@ -74,10 +74,7 @@ public class SwapInputDeviceUI : MonoBehaviour
     /// <param name="enabled"></param>
     private void ToggleAllKBMUI(bool enabled)
     {
-        foreach (var item in _kbmUI)
-        {
-            item.SetActive(enabled);
-        }
+        _kbmUI.SetActive(enabled);
     }
 
     /// <summary>
@@ -86,10 +83,7 @@ public class SwapInputDeviceUI : MonoBehaviour
     /// <param name="enabled"></param>
     private void ToggleAllGamepadUI(bool enabled)
     {
-        foreach (var item in _gamePadUI)
-        {
-            item.SetActive(enabled);
-        }
+        _gamePadUI.SetActive(enabled);
     }
 
     #endregion

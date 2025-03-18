@@ -269,8 +269,6 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             // Configure the rebind.
             m_RebindOperation = action.PerformInteractiveRebinding(bindingIndex)
                 .WithControlsExcluding("<Mouse>")
-
-               // Fuck me this is aids, I need to make my own kus
                 .OnPotentialMatch(
                     operation =>
                     {
