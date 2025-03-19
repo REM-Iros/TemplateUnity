@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64c4e8cc6cfded4d92eb5eba74b3ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _kbmUI: []
-  _gamePadUI: []
+  _kbmUI: {fileID: 8302302483083516749}
+  _gamePadUI: {fileID: 8620959049596902721}
   _kbmAction: {fileID: -6632441315014228853, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   _gamepadAction: {fileID: 3928153361088068013, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
 --- !u!1 &1306309341049825889
@@ -503,14 +503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64c4e8cc6cfded4d92eb5eba74b3ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _kbmUI:
-  - {fileID: 5871606906274217906}
-  - {fileID: 948337890840125499}
-  - {fileID: 8302302483083516749}
-  _gamePadUI:
-  - {fileID: 1797792612705227455}
-  - {fileID: 9078579012800012899}
-  - {fileID: 8620959049596902721}
+  _kbmUI: {fileID: 0}
+  _gamePadUI: {fileID: 0}
   _kbmAction: {fileID: -6632441315014228853, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   _gamepadAction: {fileID: 3928153361088068013, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
 --- !u!1 &1530287301662510015
@@ -1093,6 +1087,59 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &2224416168995682148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5042083201336892342}
+  - component: {fileID: 4763339884688139612}
+  m_Layer: 5
+  m_Name: Rebind Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5042083201336892342
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224416168995682148}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6719700105280984299}
+  m_Father: {fileID: 5243715374709402859}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4763339884688139612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2224416168995682148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64c4e8cc6cfded4d92eb5eba74b3ea2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _kbmUI: {fileID: 5871606906274217906}
+  _gamePadUI: {fileID: 1797792612705227455}
+  _kbmAction: {fileID: -6632441315014228853, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
+  _gamepadAction: {fileID: 3928153361088068013, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
 --- !u!1 &2419708470186593284
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,8 +1297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64c4e8cc6cfded4d92eb5eba74b3ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _kbmUI: []
-  _gamePadUI: []
+  _kbmUI: {fileID: 948337890840125499}
+  _gamePadUI: {fileID: 9078579012800012899}
   _kbmAction: {fileID: -6632441315014228853, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
   _gamepadAction: {fileID: 3928153361088068013, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
 --- !u!1 &3386501179159263794
@@ -1554,12 +1601,12 @@ GameObject:
   - component: {fileID: 2399918207859466794}
   - component: {fileID: 6430212467325319467}
   m_Layer: 5
-  m_Name: Rebind Panel
+  m_Name: Darken Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6719700105280984299
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1574,7 +1621,7 @@ RectTransform:
   m_Children:
   - {fileID: 1629001858643699641}
   - {fileID: 8391769631970823587}
-  m_Father: {fileID: 5243715374709402859}
+  m_Father: {fileID: 5042083201336892342}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1867,7 +1914,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2913578107239994248}
-  - {fileID: 6719700105280984299}
+  - {fileID: 5042083201336892342}
   m_Father: {fileID: 7726567978248424675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -6967,7 +7014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f65ae08ae5ae6524a99d0a9d3d3f05f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _action: {fileID: 0}
+  _actionRef: {fileID: 0}
   _panel: {fileID: 0}
   _rebindText: {fileID: 0}
 --- !u!1001 &5541596309884935546
