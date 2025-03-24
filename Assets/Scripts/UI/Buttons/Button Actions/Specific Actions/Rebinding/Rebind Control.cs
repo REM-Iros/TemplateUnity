@@ -8,6 +8,7 @@ using TMPro;
 /// pressed, a panel will show up asking the player to rebind the control. If the player
 /// presses an escape key, it stops the rebind and doesn't save. Otherwise, this will rebind
 /// a control. It should also check for duplicates.
+/// TODO: Finish implementation because I can't be bothered anymore right now, it's pissed me off too much. 
 /// 
 /// REM-i
 /// </summary>
@@ -156,7 +157,7 @@ public class RebindControl : ButtonBase
     public void ResetInputAction()
     {
         ////TODO: Need to get the proper binding index for each of the actions
-        _actionRef.action.RemoveBindingOverride();
+        // _actionRef.action.RemoveBindingOverride();
     }
 
     #endregion

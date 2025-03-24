@@ -12,13 +12,13 @@ public class SwapInputDeviceUI : MonoBehaviour
 {
     #region Vars
 
-    [Tooltip("This is the gameobject that shows the keyboard ui")]
+    [Tooltip("This is the gameobject array that shows the keyboard ui")]
     [SerializeField]
-    private GameObject _kbmUI;
+    private GameObject[] _kbmUI;
 
-    [Tooltip("This is the gameobject that shows the gamepad ui")]
+    [Tooltip("This is the gameobject array that shows the gamepad ui")]
     [SerializeField]
-    private GameObject _gamePadUI;
+    private GameObject[] _gamePadUI;
 
     [Tooltip("This is the action reference for the any key pressed action")]
     [SerializeField]
@@ -74,7 +74,10 @@ public class SwapInputDeviceUI : MonoBehaviour
     /// <param name="enabled"></param>
     private void ToggleAllKBMUI(bool enabled)
     {
-        _kbmUI.SetActive(enabled);
+        foreach (var ui in _kbmUI)
+        {
+            ui.SetActive(enabled);
+        }
     }
 
     /// <summary>
@@ -83,7 +86,10 @@ public class SwapInputDeviceUI : MonoBehaviour
     /// <param name="enabled"></param>
     private void ToggleAllGamepadUI(bool enabled)
     {
-        _gamePadUI.SetActive(enabled);
+        foreach (var ui in _gamePadUI)
+        {
+            ui.SetActive(enabled);
+        }
     }
 
     #endregion

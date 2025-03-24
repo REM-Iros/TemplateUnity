@@ -153,17 +153,17 @@ public class SaveManager : EagerSingleton<SaveManager>
 
     public Vector3 GetSnapshotPos()
     {
-        return _files[_fileIndex].currPlayerPosition;
+        return _files[_fileIndex]._currPlayerPosition;
     }
 
     public string GetSnapshotScene()
     {
-        return _files[_fileIndex].currPlayerScene;
+        return _files[_fileIndex]._currPlayerScene;
     }
 
     public int GetSnapshotValue()
     {
-        return _files[_fileIndex].someVal;
+        return _files[_fileIndex]._someVal;
     }
 
     /// <summary>

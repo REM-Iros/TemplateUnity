@@ -18,6 +18,6 @@ public class NewGameButton : ButtonBase
         ServiceLocator.Get<SaveManager>().NewGame();
 
         // Load up the first scene for the new game
-        ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);
+        ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData._currPlayerScene);
     }
 }

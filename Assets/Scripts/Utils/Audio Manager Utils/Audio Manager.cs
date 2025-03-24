@@ -22,7 +22,6 @@ public class AudioManager : EagerSingleton<AudioManager>
     //Dictionary for currently running events
     private Dictionary<string, EventInstance> runningEvents;
 
-
     #endregion
 
     #region Callable Methods

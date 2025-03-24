@@ -258,6 +258,7 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
 
             void CleanUp()
             {
+
                 m_RebindOperation?.Dispose();
                 m_RebindOperation = null;
                 action.Enable();
@@ -272,6 +273,8 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 .OnPotentialMatch(
                     operation =>
                     {
+                        Debug.Log(operation.selectedControl.path);
+
                         if (operation.selectedControl.path == "/Keyboard/escape")
                         {
                             operation.Cancel();
@@ -340,6 +343,9 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
             s_RebindActionUIs.Add(this);
             if (s_RebindActionUIs.Count == 1)
                 InputSystem.onActionChange += OnActionChange;
+
+            UpdateActionLabel();
+            UpdateBindingDisplay();
         }
 
         protected void OnDisable()
