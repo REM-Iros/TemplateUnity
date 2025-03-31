@@ -1,3 +1,4 @@
+using System;
 using UnityEngine.Events;
 
 /// <summary>
@@ -8,6 +9,8 @@ using UnityEngine.Events;
 /// WARNING: Because this is static, before anything destroys itself (including scene change),
 /// the event needs to unsubscribe itself, done using -= instead of += from earlier. This
 /// will cause errors otherwise and can lead to all sorts of bad news.
+/// 
+/// Changed to now use C# events as they are better for performance
 /// 
 /// REM-i
 /// </summary>
@@ -24,7 +27,7 @@ public static class EventManager
      * EventManager.InvokeNoInputEvent(); to invoke the event
      */
 
-    //public static event UnityAction noInputEvent;
+    //public static event Action noInputEvent;
     //public static void InvokeNoInputEvent() => noInputEvent?.Invoke();
 
     /*
@@ -35,7 +38,7 @@ public static class EventManager
      * EventManager.InvokeOneInputEvent(); to invoke the event
      */
 
-    //public static event UnityAction<T> oneInputEvent;
+    //public static event Action<T> oneInputEvent;
     //public static void InvokeOneInputEvent(T input) => oneInputEvent?.Invoke(input);
 
     /*
@@ -46,7 +49,7 @@ public static class EventManager
      * EventManager.InvokeMultInputEvent(); to invoke the event
      */
 
-    //public static event UnityAction<T1, T2, T3, ..., T> multInputEvent;
+    //public static event Action<T1, T2, T3, ..., T> multInputEvent;
     //public static void InvokeMultInputEvent(T1 input1, T2 input2, T3 input3, ..., T input)
     //                                          => oneInputEvent?.Invoke(input1, input2, input3, ..., input);
 
@@ -56,7 +59,7 @@ public static class EventManager
 
     #region Main Menu Events
 
-    public static event UnityAction MMENU_ChangeLoadSnapshot;
+    public static event Action MMENU_ChangeLoadSnapshot;
 
     #endregion
 
