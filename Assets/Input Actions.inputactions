@@ -646,7 +646,7 @@
                 {
                     "name": "down",
                     "id": "9439c41d-d7db-4538-b7c1-23d8a1bdc030",
-                    "path": "<Keyboard>/d",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "KBM",
