@@ -262,7 +262,7 @@ Transform:
   m_GameObject: {fileID: 1332835279}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -773,17 +773,17 @@ MonoBehaviour:
   _jumpHoldTime: 1
   _doubleJumpForce: 5
   _groundCheckTransform: {fileID: 1630443693}
-  _groundCheckRadius: 0.01
+  _groundCheckDimensions: {x: 0.37, y: 0.1}
   _groundLayer:
     serializedVersion: 2
     m_Bits: 8
   _coyoteTimeMax: 0.5
   _wallCheckTransform: {fileID: 1332835280}
-  _wallCheckRadius: 0.01
+  _wallCheckDimensions: {x: 0.1, y: 0.5}
   _wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  _wallJumpForce: {x: -3, y: 4}
+  _wallJumpForce: {x: -9, y: 4}
   _wallSlideSpeed: 0.5
 --- !u!1001 &8202094757938362907
 PrefabInstance:

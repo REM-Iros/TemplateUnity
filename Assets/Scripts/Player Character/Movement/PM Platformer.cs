@@ -47,7 +47,7 @@ public class PMPlatformer : PlayerMovementParent
 
     [Tooltip("This is the radius of the ground check.")]
     [SerializeField]
-    private float _groundCheckRadius;
+    private Vector2 _groundCheckDimensions;
 
     [Tooltip("This is the layer mask for the ground check.")]
     [SerializeField]
@@ -78,7 +78,7 @@ public class PMPlatformer : PlayerMovementParent
 
     [Tooltip("This is the radius of the wall check.")]
     [SerializeField]
-    private float _wallCheckRadius;
+    private Vector2 _wallCheckDimensions;
 
     [Tooltip("This is the layer mask for the wall check.")]
     [SerializeField]
@@ -247,10 +247,12 @@ public class PMPlatformer : PlayerMovementParent
         if (_moveVector.x > 0)
         {
             _rb2d.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            _wallJumpForce.x = -1 * Mathf.Abs(_wallJumpForce.x);
         }
         else if (_moveVector.x < 0)
         {
             _rb2d.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            _wallJumpForce.x = Mathf.Abs(_wallJumpForce.x);
         }
     }
 
@@ -293,7 +295,7 @@ public class PMPlatformer : PlayerMovementParent
             return;
         }
 
-        //_isGrounded = Physics2D.Overlap(_groundCheckTransform.position, _groundCheckRadius, _groundLayer);
+        _isGrounded = Physics2D.OverlapBox(_groundCheckTransform.position, _groundCheckDimensions, 0f, _groundLayer);
 
         // If we are grounded, we need to reset the double jump
         if (_isGrounded)
@@ -320,7 +322,7 @@ public class PMPlatformer : PlayerMovementParent
             return;
         }
 
-        _isCollidingWithWall = Physics2D.OverlapCircle(_wallCheckTransform.position, _wallCheckRadius, _wallLayer);
+        _isCollidingWithWall = Physics2D.OverlapBox(_wallCheckTransform.position, _wallCheckDimensions, 0f, _wallLayer);
     }
 
     #endregion
@@ -398,6 +400,20 @@ public class PMPlatformer : PlayerMovementParent
     #endregion
 
     #endregion
+
+    #endregion
+
+    #region Gizmos
+
+    void OnDrawGizmosSelected()
+    {
+        if (_wallCheckTransform == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(_wallCheckTransform.position, _wallCheckDimensions);
+
+        Gizmos.DrawWireCube(_groundCheckTransform.position, _groundCheckDimensions);
+    }
 
     #endregion
 }
