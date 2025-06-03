@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 1330381601814241717}
   - component: {fileID: 95671434394116216}
   - component: {fileID: 565533728227074922}
+  - component: {fileID: 509512140083405467}
+  - component: {fileID: 8677702727239608343}
   m_Layer: 0
   m_Name: 2D Top Down Player (Non-Momentum Based)
   m_TagString: Untagged
@@ -260,7 +262,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: affb7c07a6a1b65469af43e67399c3c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputController: {fileID: 509512140083405467}
+  _movementController: {fileID: 8677702727239608343}
+  _jumpingController: {fileID: 0}
+--- !u!114 &509512140083405467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812407251559310137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2edf24e0abdc3b44a31b4daa1250e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _playerInput: {fileID: 95671434394116216}
-  _speed: 3
-  _dashSpeed: 5
+--- !u!114 &8677702727239608343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812407251559310137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c8fc8a095668d74dbf62376cb968ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _rb2d: {fileID: 5592756437638016637}
+  _speed: 3
+  _enableDashing: 1
+  _dashSpeed: 5

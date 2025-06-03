@@ -9,8 +9,10 @@ using UnityEngine.InputSystem;
 /// 
 /// REM-i
 /// </summary>
-public class PMPlatformer : PlayerMovementParent
+public class PMPlatformer : PlayerController
 {
+    /*
+
     #region Vars
 
     #region Input Vars
@@ -112,36 +114,6 @@ public class PMPlatformer : PlayerMovementParent
     #region Methods
 
     #region Init and Destroy Methods
-
-    /// <summary>
-    /// We need to call the startup of the input actions and add any actions
-    /// that the 2d platformer will use
-    /// </summary>
-    protected override void InitializeInputActions()
-    {
-        base.InitializeInputActions();
-
-        // Get the menu action from the player input
-        if (_playerInput.actions["Jump"] != null)
-        {
-            _jumpAction = _playerInput.actions["Jump"];
-        }
-    }
-
-    /// <summary>
-    /// Subscribe the new actions to the new events added with the platformer controller
-    /// </summary>
-    protected override void SubscribeToStartupEvents()
-    {
-        base.SubscribeToStartupEvents();
-
-        // Sub to the dash events
-        if (_jumpAction != null)
-        {
-            _jumpAction.performed += JumpMethod;
-            _jumpAction.canceled += EndJumpMethod;
-        }
-    }
 
     /// <summary>
     /// Unsubscribe the new actions from the events when the player is destroyed
@@ -416,4 +388,6 @@ public class PMPlatformer : PlayerMovementParent
     }
 
     #endregion
+
+    */
 }
