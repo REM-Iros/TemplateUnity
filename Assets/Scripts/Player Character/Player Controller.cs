@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private JumpingComponentParent _jumpingController;
 
+    [Tooltip("This is the wall detection script")]
+    [SerializeField]
+    private WallDetection _wallDetection;
+
     #endregion
 
     #endregion
@@ -159,6 +163,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     protected virtual void FixedUpdate()
     {
+        if (_wallDetection != null)
+        {
+            _wallDetection.DetectWalls();
+        }
+
         // If we have a jump controller, we want anything that needs to
         // be executed during the jump to occur here
         if (_jumpingController != null)

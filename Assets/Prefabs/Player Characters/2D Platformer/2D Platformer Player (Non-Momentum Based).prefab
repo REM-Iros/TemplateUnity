@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8687527831255978771}
   - component: {fileID: 4981797829608442110}
   - component: {fileID: 4760717575518828979}
+  - component: {fileID: 868334430415134241}
   m_Layer: 0
   m_Name: 2D Platformer Player (Non-Momentum Based)
   m_TagString: Untagged
@@ -276,6 +277,7 @@ MonoBehaviour:
   _inputController: {fileID: 8687527831255978771}
   _movementController: {fileID: 4981797829608442110}
   _jumpingController: {fileID: 4760717575518828979}
+  _wallDetection: {fileID: 868334430415134241}
 --- !u!114 &8687527831255978771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +307,7 @@ MonoBehaviour:
   _speed: 3
   _enableDashing: 1
   _dashSpeed: 5
+  _wallDetection: {fileID: 868334430415134241}
 --- !u!114 &4760717575518828979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,3 +327,21 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  _coyoteTimeController: {fileID: 0}
+--- !u!114 &868334430415134241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2475865485876209933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea70be31a657bb41bc65c2bfce9c653, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _raycastRect: {x: 0.05, y: 1}
+  _raycastDist: 0.55
+  _wallLayer:
+    serializedVersion: 2
+    m_Bits: 64

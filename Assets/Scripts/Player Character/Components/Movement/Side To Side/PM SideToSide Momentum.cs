@@ -14,6 +14,10 @@ public class PMSideToSideMomentum : MovementComponentParent
     [SerializeField, Header("Momentum Variables")]
     private float _speedCap;
 
+    [Tooltip("This is the wallcheck component, used for 2D movement.")]
+    [SerializeField, Header("Components")]
+    private WallDetection _wallDetection;
+
     #endregion
 
     #region Movement Methods
@@ -33,6 +37,19 @@ public class PMSideToSideMomentum : MovementComponentParent
         else
         {
             _rb2d.linearVelocityX = _moveVector.x * _speedCap;
+        }
+
+        // Only run this if we have wall detection and are colliding with something
+        if (_wallDetection != null && _wallDetection.IsColliding())
+        {
+            if (_wallDetection.IsLeftWallColliding && _moveVector.x < 0)
+            {
+                _rb2d.linearVelocityX = 0;
+            }
+            else if (_wallDetection.IsRightWallColliding && _moveVector.x > 0)
+            {
+                _rb2d.linearVelocityX = 0;
+            }
         }
     }
 
