@@ -64,6 +64,7 @@ public class WallDetection : MonoBehaviour
             return;
         }
 
+        // Get the wall collisions
         _isLeftWallColliding = Physics2D.OverlapBox(new Vector2(transform.position.x - _raycastDist, transform.position.y), _raycastRect, 0f, _wallLayer);
         _isRightWallColliding = Physics2D.OverlapBox(new Vector2(transform.position.x + _raycastDist, transform.position.y), _raycastRect, 0f, _wallLayer);
     }

@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private WallDetection _wallDetection;
 
+    [Tooltip("This is the wall jump component script")]
+    [SerializeField]
+    private PMWallJump _wallJump;
+
     #endregion
 
     #endregion
@@ -109,6 +113,14 @@ public class PlayerController : MonoBehaviour
             _inputController.RegisterJumpPerformed(_jumpingController.GetJumpPressed);
             _inputController.RegisterJumpCancelled(_jumpingController.GetJumpReleased);
         }
+
+        // Attach the scripts that need to be attached between movement and wall jumping
+        if (_wallJump != null)
+        {
+            // Set wall jumping
+            _inputController.RegisterMovementPerformed(_wallJump.GetMovementVector);
+            _inputController.RegisterMovementCancelled(_wallJump.GetMovementVector);
+        }
     }
 
     /// <summary>
@@ -150,6 +162,14 @@ public class PlayerController : MonoBehaviour
             _inputController.UnregisterJumpPerformed(_jumpingController.GetJumpPressed);
             _inputController.UnregisterJumpCancelled(_jumpingController.GetJumpReleased);
         }
+
+        // Attach the scripts that need to be attached between movement and wall jumping
+        if (_wallJump != null)
+        {
+            // Set wall jumping
+            _inputController.UnregisterMovementPerformed(_wallJump.GetMovementVector);
+            _inputController.UnregisterMovementCancelled(_wallJump.GetMovementVector);
+        }
     }
 
     #endregion
@@ -163,6 +183,7 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     protected virtual void FixedUpdate()
     {
+        // Get our wall detection
         if (_wallDetection != null)
         {
             _wallDetection.DetectWalls();

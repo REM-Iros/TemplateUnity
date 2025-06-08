@@ -54,9 +54,13 @@ public class JumpingComponentParent : MonoBehaviour
 
     #region Component Vars
 
-    [Tooltip("This stores the coyote time modifier script. ")]
+    [Tooltip("This stores the coyote time modifier script.")]
     [SerializeField, Header("Components")]
     private PMCoyoteTimeModifier _coyoteTimeController;
+
+    [Tooltip("This stores the wall jump modifier script.")]
+    [SerializeField]
+    private PMWallJump _wallJumpController;
 
     #endregion
 
@@ -131,6 +135,12 @@ public class JumpingComponentParent : MonoBehaviour
         }
 
         ApplyJumpForce();
+
+        // Apply the wall jump force if we have a wall jump script
+        if (_wallJumpController != null)
+        {
+            _wallJumpController.ApplyWallJumpForce();
+        }
 
         _isJumpHeld = true;
     }
