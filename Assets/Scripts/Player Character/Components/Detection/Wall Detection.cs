@@ -3,8 +3,7 @@ using UnityEngine;
 /// <summary>
 /// This is a script that is used for wall detection. It is a component that will
 /// raycast from both sides of the player to detect for walls and if the wall is detected
-/// and the player is not grounded, it will allow them to stick to the wall, and jump from
-/// it.
+/// it will set a bool that can be polled by other methods that need it.
 /// 
 /// REM-i
 /// </summary>
@@ -49,7 +48,7 @@ public class WallDetection : MonoBehaviour
     /// Checks for if the player is running up against a wall and updates
     /// the bools based on this.
     /// </summary>
-    public void DetectWalls()
+    void Update()
     {
         // Check if we have transforms and layers set
         if (_raycastRect == null)

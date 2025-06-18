@@ -24,15 +24,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("This is the jumping component script")]
     [SerializeField]
-    private JumpingComponentParent _jumpingController;
-
-    [Tooltip("This is the wall detection script")]
-    [SerializeField]
-    private WallDetection _wallDetection;
-
-    [Tooltip("This is the wall jump component script")]
-    [SerializeField]
-    private PMWallJump _wallJump;
+    private PMJumpManager _jumpManager;
 
     #endregion
 
@@ -107,19 +99,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // Attach the scripts that need to be attached between jumping and input
-        if (_jumpingController != null)
+        if (_jumpManager != null)
         {
             // Set the jump action
-            _inputController.RegisterJumpPerformed(_jumpingController.GetJumpPressed);
-            _inputController.RegisterJumpCancelled(_jumpingController.GetJumpReleased);
-        }
-
-        // Attach the scripts that need to be attached between movement and wall jumping
-        if (_wallJump != null)
-        {
-            // Set wall jumping
-            _inputController.RegisterMovementPerformed(_wallJump.GetMovementVector);
-            _inputController.RegisterMovementCancelled(_wallJump.GetMovementVector);
+            // With us using a manager now, we just need to sub the manager's get jump pressed and released
+            _inputController.RegisterJumpPerformed(_jumpManager.GetJumpPressed);
+            _inputController.RegisterJumpCancelled(_jumpManager.GetJumpReleased);
         }
     }
 
@@ -156,19 +141,11 @@ public class PlayerController : MonoBehaviour
         }
 
         // Attach the scripts that need to be attached between jumping and input
-        if (_jumpingController != null)
+        if (_jumpManager != null)
         {
             // Set the jump action
-            _inputController.UnregisterJumpPerformed(_jumpingController.GetJumpPressed);
-            _inputController.UnregisterJumpCancelled(_jumpingController.GetJumpReleased);
-        }
-
-        // Attach the scripts that need to be attached between movement and wall jumping
-        if (_wallJump != null)
-        {
-            // Set wall jumping
-            _inputController.UnregisterMovementPerformed(_wallJump.GetMovementVector);
-            _inputController.UnregisterMovementCancelled(_wallJump.GetMovementVector);
+            _inputController.UnregisterJumpPerformed(_jumpManager.GetJumpPressed);
+            _inputController.UnregisterJumpCancelled(_jumpManager.GetJumpReleased);
         }
     }
 
@@ -183,19 +160,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     protected virtual void FixedUpdate()
     {
-        // Get our wall detection
-        if (_wallDetection != null)
-        {
-            _wallDetection.DetectWalls();
-        }
-
-        // If we have a jump controller, we want anything that needs to
-        // be executed during the jump to occur here
-        if (_jumpingController != null)
-        {
-            _jumpingController.CheckGround();
-            _jumpingController.ExecuteDuringJump();
-        }
 
         // If we have a movement controller, we want to move the player
         // if they are currently ready to be moved

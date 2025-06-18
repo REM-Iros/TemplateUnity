@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -12,47 +13,84 @@ public class PMCoyoteTimeModifier : MonoBehaviour
 {
     #region Vars
 
+    [Tooltip("Ground detection to poll when we are no longer grounded.")]
+    [SerializeField]
+    private GroundDetection _groundDetection;
+
     // Coyote time is the grace period for the player to jump after leaving a platform
     [Tooltip("This is the coyote time for the player.")]
     [SerializeField, Header("Coyote Time Vars")]
     private float _coyoteTimeMax;
 
-    // This is the current amount of expended coyote time for the player
-    private float _coyoteTimeCurrent;
+    // This is the last recorded time the player was grounded
+    private float _lastGroundedTime;
+
+    // This bool is used to detect when grounded state change occurs
+    private bool _grounded;
 
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// This method will handle the coyote time for the player. Time stays at max if the player is grounded
-    /// and decrements when the player is airborne
+    /// Check if coyote time is present and if it isn't, then we throw an error.
     /// </summary>
-    public float HandleCoyoteTime(bool _isGrounded)
+    private void Awake()
     {
-        // Reset the coyote time if we are grounded
-        if (_isGrounded)
+        if (_groundDetection == null)
         {
-            _coyoteTimeCurrent = _coyoteTimeMax;
+            Debug.LogError("Ground detection not found for coyote time, will not work.");
+            return;
         }
-        // Otherwise decrement coyote time
-        else
-        {
-            DecrementCoyoteTime();
-        }
+    }
 
-        return _coyoteTimeCurrent;
+    #region Event Methods
+
+    /*
+     * On enable or disable, we need to sub/unsub appropriate event
+     */
+    private void OnEnable()
+    {
+        _groundDetection.OnGroundedStateChange += OnGroundStateChange;
+    }
+
+    private void OnDisable()
+    {
+        _groundDetection.OnGroundedStateChange -= OnGroundStateChange;
     }
 
     /// <summary>
-    /// This is called when the player is considered not grounded. Will decrement the coyote time
-    /// available until it is 0 and the player can no longer double jump.
+    /// This method subs to the event of the ground detection to determine when we are grounded or not.
     /// </summary>
-    private void DecrementCoyoteTime()
+    /// <param name="currentState"></param>
+    private void OnGroundStateChange(bool currentState)
     {
-        if (_coyoteTimeCurrent > 0)
+        _grounded = currentState;
+
+        // Store the current time as the last time we were grounded
+        if (!_grounded)
         {
-            _coyoteTimeCurrent -= Time.deltaTime;
+            _lastGroundedTime = Time.time;
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Checks the current coyote time against the threshold and if we are within it, returns true.
+    /// </summary>
+    /// <returns></returns>
+    public bool WithinCoyoteTimeThreshold()
+    {
+        // If we are grounded, don't bother checking
+        if (_grounded)
+        {
+            return true;
+        }
+        // If we aren't, compare last time player touched the ground to current time to see if it is under the threshold
+        else
+        {
+            return Time.time - _lastGroundedTime <= _coyoteTimeMax;
         }
     }
 

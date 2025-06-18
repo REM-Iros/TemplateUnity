@@ -1,15 +1,18 @@
 using UnityEngine;
 
 /// <summary>
-/// This is a component of the Jump Parent, and allows the player
-/// to hold the jump button to get longer jumps, or shorter if they
-/// just tap it.
+/// This is a modifier for jumping that allows the player to hold
+/// the jump button to gain more height.
 /// 
 /// REM-i
 /// </summary>
-public class PMVariableHeightJump : JumpingComponentParent
+public class PMVariableHeightModifier : MonoBehaviour, IJumpReleaseListener
 {
-    #region Variable Height Vars
+    #region Vars
+
+    [Tooltip("This is rigidbody we need to apply force to the object.")]
+    [SerializeField, Header("Rigidbody")]
+    private Rigidbody2D _rb2d;
 
     [Tooltip("This is the force that will be applied over time as the jump is held.")]
     [SerializeField, Header("Variable Height Vars")]
@@ -36,6 +39,8 @@ public class PMVariableHeightJump : JumpingComponentParent
 
     #endregion
 
+    #region Methods
+
     /// <summary>
     /// We want to init the object's gravity at the base gravity scale
     /// </summary>
@@ -49,16 +54,10 @@ public class PMVariableHeightJump : JumpingComponentParent
     /// <summary>
     /// Inherit the base and implement a basic jump.
     /// </summary>
-    protected override void ApplyJumpForce()
+    public void NotifyJumping()
     {
-        // Reset the linear velocity of y
-        _rb2d.linearVelocityY = 0f;
-
         // Change the gravity scale
         _rb2d.gravityScale = _jumpGravityScale;
-
-        // Apply force to the player to get them to jump
-        _rb2d.AddForceY(_jumpForce, ForceMode2D.Impulse);
 
         // Set the hold time to max
         _holdTime = _maxHoldTime;
@@ -69,16 +68,10 @@ public class PMVariableHeightJump : JumpingComponentParent
     /// While jump is being held, continue to apply force until either it is released
     /// or the timer is up.
     /// </summary>
-    public override void ExecuteDuringJump()
+    private void Update()
     {
-        // Make sure we only run this while jump is held
-        if(!_isJumpHeld)
-        {
-            return;
-        }
-
-        // Stop granting extra height if we have no more hold time
-        if (_holdTime <= 0f)
+        // Make sure we only run this while we have hold time
+        if (_holdTime <= 0)
         {
             return;
         }
@@ -93,12 +86,14 @@ public class PMVariableHeightJump : JumpingComponentParent
     /// <summary>
     /// Reset the jump held script and gravity
     /// </summary>
-    protected override void OnJumpReleased()
+    public void JumpRelease()
     {
-        _isJumpHeld = false;
+        _holdTime = 0;
 
         _rb2d.gravityScale = _baseGravityScale;
     }
+
+    #endregion
 
     #endregion
 }
