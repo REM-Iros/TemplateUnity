@@ -9,7 +9,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class MovementComponentParent : MonoBehaviour
+public class MovementComponentParent : MonoBehaviour, IMovementInterface
 {
     #region Vars
 
@@ -22,27 +22,6 @@ public class MovementComponentParent : MonoBehaviour
     [Tooltip("This is the basic speed variable.")]
     [SerializeField, Header("Movement Vars")]
     protected float _speed;
-
-    // This is the 2D vector that movement will be passed into
-    protected Vector2 _moveVector;
-
-    [Space(5)]
-
-    #endregion
-
-    #region Dash Vars
-
-    [Tooltip("This is a bool that will be checked whenever dashing is looked at.")]
-    [SerializeField, Header("Dashing Vars")]
-    private bool _enableDashing;
-    public bool IsDashingEnabled { get { return _enableDashing; } }
-
-    [Tooltip("This is the basic speed variable.")]
-    [SerializeField]
-    protected float _dashSpeed;
-
-    // This is the boolean that will be used to check if the player is dashing
-    protected bool _isDashing;
 
     #endregion
 
@@ -76,34 +55,12 @@ public class MovementComponentParent : MonoBehaviour
 
     #endregion
 
-    #region Event Methods
-
-    /*
-     * Attach these scripts to the input script from the parent
-     */
-    public void GetMovementVector(Vector2 MoveVector)
-    {
-        _moveVector = MoveVector;
-    }
-
-    public void GetDashPressed()
-    {
-        _isDashing = true;
-    }
-
-    public void GetDashReleased()
-    {
-        _isDashing = false;
-    }
-
-    #endregion
-
     #region Movement Methods
 
     /// <summary>
     /// This is the method that will be called to move the player
     /// </summary>
-    public virtual void MovePlayer()
+    public virtual void Move(Vector2 input)
     {
         // Only call this if the rigidbody is not null
         if (_rb2d == null)

@@ -1,0 +1,20 @@
+using UnityEngine;
+
+/// <summary>
+/// This movement variant handles horiontal movement for side-to-side 2D.
+/// 
+/// REM-i
+/// </summary>
+public class PMHorizontalMovement : MovementComponentParent
+{
+    /// <summary>
+    /// This handles the two way movement.
+    /// </summary>
+    /// <param name="input"></param>
+    public override void Move(Vector2 input)
+    {
+        base.Move(input);
+
+        _rb2d.linearVelocityX = input.x * _speed;
+    }
+}

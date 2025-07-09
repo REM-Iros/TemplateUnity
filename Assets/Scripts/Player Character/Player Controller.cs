@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
 
     [Tooltip("This is the movement component script")]
     [SerializeField, Header("Movement Components")]
-    private MovementComponentParent _movementController;
+    private PMMovementManager _movementController;
 
     [Tooltip("This is the jumping component script")]
     [SerializeField]
@@ -90,12 +90,9 @@ public class PlayerController : MonoBehaviour
         if (_movementController != null)
         {
             // Set movement
-            _inputController.RegisterMovementPerformed(_movementController.GetMovementVector);
-            _inputController.RegisterMovementCancelled(_movementController.GetMovementVector);
+            _inputController.RegisterMovementPerformed(_movementController.GetMovementPressed);
+            _inputController.RegisterMovementCancelled(_movementController.GetMovementReleased);
 
-            // Set dash
-            _inputController.RegisterDashPerformed(_movementController.GetDashPressed);
-            _inputController.RegisterDashCancelled(_movementController.GetDashReleased);
         }
 
         // Attach the scripts that need to be attached between jumping and input
@@ -132,12 +129,8 @@ public class PlayerController : MonoBehaviour
         if (_movementController != null)
         {
             // Set movement
-            _inputController.UnregisterMovementPerformed(_movementController.GetMovementVector);
-            _inputController.UnregisterMovementCancelled(_movementController.GetMovementVector);
-
-            // Set dash
-            _inputController.UnregisterDashPerformed(_movementController.GetDashPressed);
-            _inputController.UnregisterDashCancelled(_movementController.GetDashReleased);
+            _inputController.UnregisterMovementPerformed(_movementController.GetMovementPressed);
+            _inputController.UnregisterMovementCancelled(_movementController.GetMovementReleased);
         }
 
         // Attach the scripts that need to be attached between jumping and input
@@ -161,12 +154,6 @@ public class PlayerController : MonoBehaviour
     protected virtual void FixedUpdate()
     {
 
-        // If we have a movement controller, we want to move the player
-        // if they are currently ready to be moved
-        if (_movementController != null)
-        {
-            _movementController.MovePlayer();
-        }
     }
 
     #endregion
