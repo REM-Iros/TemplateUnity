@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -15,21 +14,23 @@ public class PMMovementManager : MonoBehaviour
 
     [Tooltip("This is the list of movement interface you will end up using!")]
     [SerializeField, Header("Move Components")]
-    private IMovementInterface _moveComponent;
+    private InterfaceWrapper<IMovementInterface> _moveComponent;
+
+    private Vector2 _moveVector;
 
     #endregion
 
     #region Methods
 
     /// <summary>
-    /// On awake, we want to check if we even have a list to work with, otherwise,
+    /// On awake, we want to check if we even have a component to work with, otherwise,
     /// we need to throw an error because this script either shouldn't be here, or needs
-    /// to have the list of jumps applied. (Editor application should be the standard
+    /// to have the movement component applied. (Editor application should be the standard
     /// because otherwise the order doesn't really work).
     /// </summary>
     private void Awake()
     {
-        // If our jump component list is null, we need to throw an error
+        // If our movement component is null, we need to throw an error
         if (_moveComponent == null)
         {
             Debug.LogError("Movement Manager attached but no move component, player will not be able to move.");
@@ -64,7 +65,20 @@ public class PMMovementManager : MonoBehaviour
             return;
         }
 
-        _moveComponent.Move(MoveVector);
+        _moveVector = MoveVector;
+        
+    }
+
+    private void FixedUpdate()
+    {
+        // Only run this if we have a move component
+        if (_moveComponent == null)
+        {
+            Debug.LogError("No move component found");
+            return;
+        }
+
+        _moveComponent.Value.Move(_moveVector);
     }
 
     #endregion

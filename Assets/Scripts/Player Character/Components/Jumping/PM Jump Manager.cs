@@ -15,11 +15,11 @@ public class PMJumpManager : MonoBehaviour
 
     [Tooltip("This is the list of jumps you want to be able to use. Order matters!")]
     [SerializeField, Header("Jump Components")]
-    private List<IJumpInterface> _jumpComponentList;
+    private List<InterfaceWrapper<IJumpInterface>> _jumpComponentList;
 
     [Tooltip("This is the list of jumps that need to sub to the button being released.")]
     [SerializeField, Header("Listener Components")]
-    private List<IJumpReleaseListener> _jumpReleaseListenerList;
+    private List<InterfaceWrapper<IJumpReleaseListener>> _jumpReleaseListenerList;
 
     #endregion
 
@@ -76,9 +76,9 @@ public class PMJumpManager : MonoBehaviour
         // Run through each jump in the list until you have one whose conditions is met.
         foreach (var jump in _jumpComponentList)
         {
-            if (jump.CanJump())
+            if (jump.Value.CanJump())
             {
-                jump.Jump();
+                jump.Value.Jump();
 
                 break;
             }
@@ -101,7 +101,7 @@ public class PMJumpManager : MonoBehaviour
         // Just blanket notify them all. Only one should be even running
         foreach (var listener in _jumpReleaseListenerList)
         {
-            listener.JumpRelease();
+            listener.Value.JumpRelease();
         }
     }
 

@@ -12,7 +12,7 @@ public class WallDetection : MonoBehaviour
     #region Vars
 
     [Tooltip("This is the size of the raycast (use a rectangle).")]
-    [SerializeField, Header("Ground Check Vars")]
+    [SerializeField, Header("Wall Check Vars")]
     private Vector2 _raycastRect;
 
     [Tooltip("This is how far we want the rectangle down before we cast it.")]

@@ -70,5 +70,24 @@ public class GroundDetection : MonoBehaviour
         }
     }
 
+    #region Debug Methods
+
+    /// <summary>
+    /// Draws the ground check cubes
+    /// </summary>
+    private void OnDrawGizmosSelected()
+    {
+        if (_raycastRect == null) return;
+
+        Gizmos.color = Color.green;
+
+        // Draw raycast
+        Gizmos.DrawWireCube(new Vector2(transform.position.x, transform.position.y - _raycastDist), _raycastRect);
+    }
+
     #endregion
+
+    #endregion
+
+
 }
