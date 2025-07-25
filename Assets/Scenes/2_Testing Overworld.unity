@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveComponent:
     _object: {fileID: 201653788}
+  _wallDetection: {fileID: 1528951194}
 --- !u!114 &201653788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,7 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb2d: {fileID: 1523942088273598765}
-  _jumpForce: 3
+  _jumpForce: 2.5
   _groundDetection: {fileID: 1528951195}
   _coyoteTimeModifier: {fileID: 720092776}
   _variableHeightModifier: {fileID: 720092777}
@@ -320,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundDetection: {fileID: 1528951195}
-  _coyoteTimeMax: 0.5
+  _coyoteTimeMax: 0.1
 --- !u!114 &720092777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,9 +335,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb2d: {fileID: 1523942088273598765}
-  _jumpHeldForce: 0.25
-  _maxHoldTime: 1.2
-  _jumpGravityScale: 0.8
+  _jumpHeldForce: 10
+  _maxHoldTime: 0.1
+  _jumpGravityScale: 0.6
   _baseGravityScale: 1
 --- !u!114 &720092778
 MonoBehaviour:
@@ -460,8 +461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea70be31a657bb41bc65c2bfce9c653, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastRect: {x: 0.05, y: 1}
-  _raycastDist: 0.55
+  _raycastRect: {x: 0.025, y: 1}
+  _raycastDist: 0.513
   _wallLayer:
     serializedVersion: 2
     m_Bits: 64

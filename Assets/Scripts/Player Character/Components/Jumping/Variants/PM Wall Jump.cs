@@ -58,6 +58,14 @@ public class PMWallJump : JumpingComponentParent
         _rb2d.AddForce(new Vector2(_wallDetection.IsLeftWallColliding ? _wallJumpForce : -_wallJumpForce, _jumpForce), ForceMode2D.Impulse);
     }
 
+    /// <summary>
+    /// A timer before regular movement can take over again
+    /// </summary>
+    private void Update()
+    {
+        
+    }
+
     #endregion
 
     #endregion

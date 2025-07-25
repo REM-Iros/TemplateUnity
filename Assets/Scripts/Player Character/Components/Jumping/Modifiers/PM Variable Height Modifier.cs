@@ -73,6 +73,7 @@ public class PMVariableHeightModifier : MonoBehaviour, IJumpReleaseListener
         // Make sure we only run this while we have hold time
         if (_holdTime <= 0)
         {
+            _rb2d.gravityScale = _baseGravityScale;
             return;
         }
 

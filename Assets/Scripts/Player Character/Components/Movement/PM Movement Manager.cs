@@ -16,7 +16,16 @@ public class PMMovementManager : MonoBehaviour
     [SerializeField, Header("Move Components")]
     private InterfaceWrapper<IMovementInterface> _moveComponent;
 
+    // Movement vector for player moving
     private Vector2 _moveVector;
+
+    [Tooltip("This is the wall detector to disable movement against a wall.")]
+    [SerializeField, Header("Wall Jump")]
+    private WallDetection _wallDetection;
+
+    [Tooltip("This is the wall jump script, it needs to disable the movement for a small amount of time.")]
+    [SerializeField]
+    private PMWallJump _wallJump;
 
     #endregion
 
@@ -69,6 +78,9 @@ public class PMMovementManager : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Call the movement method in the fixed update to handle physics
+    /// </summary>
     private void FixedUpdate()
     {
         // Only run this if we have a move component
@@ -78,7 +90,29 @@ public class PMMovementManager : MonoBehaviour
             return;
         }
 
+        // Alter the movement vector if we are against a wall
+        if (_wallDetection != null)
+        {
+            CheckWallMovement();
+        }
+
         _moveComponent.Value.Move(_moveVector);
+    }
+
+    /// <summary>
+    /// If we are against a wall, stop allowing movement in that direction.
+    /// </summary>
+    private void CheckWallMovement()
+    {
+        if (_wallDetection.IsRightWallColliding)
+        {
+            _moveVector.x = Mathf.Clamp(_moveVector.x, -1, 0);
+        }
+
+        if (_wallDetection.IsLeftWallColliding)
+        {
+            _moveVector.x = Mathf.Clamp(_moveVector.x, 0, 1);
+        }
     }
 
     #endregion
