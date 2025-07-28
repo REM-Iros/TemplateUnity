@@ -16,6 +16,10 @@ public class PMMovementManager : MonoBehaviour
     [SerializeField, Header("Move Components")]
     private InterfaceWrapper<IMovementInterface> _moveComponent;
 
+    [Tooltip("This is the velocity controller that actually enables a player to move.")]
+    [SerializeField]
+    private PMVelocityController _velocityController;
+
     // Movement vector for player moving
     private Vector2 _moveVector;
 

@@ -19,6 +19,11 @@ public class PMWallJump : JumpingComponentParent
     [SerializeField, Header("Wall Jump Force")]
     private float _wallJumpForce;
 
+    // This is the timer for the velocity override
+    [SerializeField, Header("Velocity Override Timer")]
+    private const float _velocityOverrideTimer = 0.2f;
+    private float _velocityOverrideTimerCurrent = 0f;
+
     #endregion
 
     #region Methods
@@ -58,13 +63,35 @@ public class PMWallJump : JumpingComponentParent
         _rb2d.AddForce(new Vector2(_wallDetection.IsLeftWallColliding ? _wallJumpForce : -_wallJumpForce, _jumpForce), ForceMode2D.Impulse);
     }
 
+    #region Override Timer
+
     /// <summary>
     /// A timer before regular movement can take over again
     /// </summary>
     private void Update()
     {
-        
+        // Only run the override timer if the override is active
+        if (_velocityOverrideTimerCurrent > 0)
+        {
+            RunMomentumOverrideTimer();
+        }
     }
+
+    private void RunMomentumOverrideTimer()
+    {
+        // Decrease the timer
+        _velocityOverrideTimerCurrent -= Time.deltaTime;
+
+        // If the timer is done, reset the override
+        if (_velocityOverrideTimerCurrent <= 0)
+        {
+            
+
+            _velocityOverrideTimerCurrent = 0f;
+        }
+    }
+
+    #endregion
 
     #endregion
 
