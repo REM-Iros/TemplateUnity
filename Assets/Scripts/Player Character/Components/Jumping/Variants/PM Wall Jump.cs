@@ -54,13 +54,11 @@ public class PMWallJump : JumpingComponentParent
     /// <summary>
     /// Applies a force in the opposite direction of the wall and upwards
     /// </summary>
-    protected override void ApplyJumpForce()
+    public override VelocityRequest Jump()
     {
-        // Reset linear velocity
-        _rb2d.linearVelocityY = 0;
-
         //Apply force to the player opposite of the wall and upwards
-        _rb2d.AddForce(new Vector2(_wallDetection.IsLeftWallColliding ? _wallJumpForce : -_wallJumpForce, _jumpForce), ForceMode2D.Impulse);
+        return new VelocityRequest(new Vector2(_wallDetection.IsLeftWallColliding ? _wallJumpForce : -_wallJumpForce, _jumpForce), 
+                                    VelocityPriority.Override, "Walljump");
     }
 
     #region Override Timer

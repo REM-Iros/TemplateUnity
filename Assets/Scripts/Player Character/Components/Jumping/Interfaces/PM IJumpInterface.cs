@@ -9,5 +9,11 @@ public interface IJumpInterface
     bool CanJump();
 
     // This is the actual jump that gets implemented
-    void Jump();
+    VelocityRequest Jump();
+
+    // We want to check for forces to apply afterwards
+    bool IsPersistantForce();
+
+    // If there is a persistant force, we need to continue applying it
+    TimedVelocityRequest PersistantJump();
 }

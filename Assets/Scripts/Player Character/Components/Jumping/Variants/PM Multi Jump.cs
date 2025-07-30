@@ -85,22 +85,20 @@ public class PMMultiJump : JumpingComponentParent
     /// <summary>
     /// Apply the jump force and if we want variable height, notify that.
     /// </summary>
-    protected override void ApplyJumpForce()
+    public override VelocityRequest Jump()
     {
         // Increment our current jumps
         _currentExtraJumps += 1;
 
-        // Reset linear velocity
-        _rb2d.linearVelocityY = 0;
+        return new VelocityRequest(new Vector2(0, _jumpForce), VelocityPriority.Normal, "Jump");
 
-        // Apply force to the player to get them to jump
-        _rb2d.AddForceY(_jumpForce, ForceMode2D.Impulse);
-
+        /*
         // Notify variable height if it is present
         if (_variableHeightModifier != null)
         {
             _variableHeightModifier.NotifyJumping();
         }
+        */
     }
 
     #endregion

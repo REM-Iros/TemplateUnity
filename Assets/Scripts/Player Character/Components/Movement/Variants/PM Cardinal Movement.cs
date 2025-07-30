@@ -11,10 +11,8 @@ public class PMCardinalMovement : MovementComponentParent
     /// This handles the four way movement.
     /// </summary>
     /// <param name="input"></param>
-    public override void Move(Vector2 input)
+    public override VelocityRequest Move(Vector2 input)
     {
-        base.Move(input);
-
-        _rb2d.linearVelocity = input.normalized * _speed;
+        return new VelocityRequest(input.normalized * _speed, VelocityPriority.Normal, "Movement");
     }
 }

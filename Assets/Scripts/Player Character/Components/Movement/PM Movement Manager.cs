@@ -27,10 +27,6 @@ public class PMMovementManager : MonoBehaviour
     [SerializeField, Header("Wall Jump")]
     private WallDetection _wallDetection;
 
-    [Tooltip("This is the wall jump script, it needs to disable the movement for a small amount of time.")]
-    [SerializeField]
-    private PMWallJump _wallJump;
-
     #endregion
 
     #region Methods
@@ -43,10 +39,24 @@ public class PMMovementManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        InitDependencies();
+    }
+
+    /// <summary>
+    /// Just checks to make sure we have the dependencies needed.
+    /// </summary>
+    private void InitDependencies()
+    {
         // If our movement component is null, we need to throw an error
         if (_moveComponent == null)
         {
             Debug.LogError("Movement Manager attached but no move component, player will not be able to move.");
+        }
+
+        // If our velocity controller is null, we need to throw an error
+        if (_velocityController == null)
+        {
+            Debug.LogError("Velocity Controller is not found by Movement manager, player will not be able to move");
         }
     }
 
@@ -100,7 +110,8 @@ public class PMMovementManager : MonoBehaviour
             CheckWallMovement();
         }
 
-        _moveComponent.Value.Move(_moveVector);
+        // Submit a velocity request
+        _velocityController.SubmitVelocityRequest(_moveComponent.Value.Move(_moveVector));
     }
 
     /// <summary>

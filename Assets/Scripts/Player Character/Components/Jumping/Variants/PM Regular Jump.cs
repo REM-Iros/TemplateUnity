@@ -106,19 +106,34 @@ public class PMRegularJump : JumpingComponentParent
     /// <summary>
     /// Inherit the base and implement a basic jump.
     /// </summary>
-    protected override void ApplyJumpForce()
+    public override VelocityRequest Jump()
     {
-        // Reset linear velocity
-        _rb2d.linearVelocityY = 0;
+        return new VelocityRequest(new Vector2(0, _jumpForce), VelocityPriority.Normal, "Jump");
+    }
 
-        // Apply force to the player to get them to jump
-        _rb2d.AddForceY(_jumpForce, ForceMode2D.Impulse);
-
-        // Notify variable height if it is present
-        if (_variableHeightModifier != null)
+    /// <summary>
+    /// We want to check for the variable height jump, which means we need to
+    /// apply a persistant force.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool CheckForPersistantForce()
+    {
+        // If the modifier isn't present, ignore this.
+        if (_variableHeightModifier == null)
         {
-            _variableHeightModifier.NotifyJumping();
+            return false;
         }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Get the variable height timed request
+    /// </summary>
+    /// <returns></returns>
+    public override TimedVelocityRequest PersistantJump()
+    {
+        return new TimedVelocityRequest(_variableHeightModifier.GetVelocityRequest(), _variableHeightModifier.MaxHoldTime);
     }
 
     #endregion

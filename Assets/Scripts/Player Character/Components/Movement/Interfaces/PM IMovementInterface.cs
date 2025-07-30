@@ -8,5 +8,5 @@ using UnityEngine;
 public interface IMovementInterface
 {
     // This is the actual movement that gets implemented
-    void Move(Vector2 input);
+    VelocityRequest Move(Vector2 input);
 }

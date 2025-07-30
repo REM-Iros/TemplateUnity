@@ -21,6 +21,13 @@ public class PMJumpManager : MonoBehaviour
     [SerializeField, Header("Listener Components")]
     private List<InterfaceWrapper<IJumpReleaseListener>> _jumpReleaseListenerList;
 
+    [Tooltip("This is the velocity manager we want to submit to.")]
+    [SerializeField, Header("Velocity Manager")]
+    private PMVelocityController _velocityController;
+
+    // This is a list of timed velocity requests that get passed into the velocity manager.
+    private List<(VelocityRequest, float)> _requestList;
+
     #endregion
 
     #region Methods
@@ -38,6 +45,8 @@ public class PMJumpManager : MonoBehaviour
         {
             Debug.LogError("Jump Manager attached but no jump components, player will not be able to jump.");
         }
+
+        _requestList = new List<(VelocityRequest, float)>();
     }
 
     #region Event Methods
@@ -78,7 +87,12 @@ public class PMJumpManager : MonoBehaviour
         {
             if (jump.Value.CanJump())
             {
-                jump.Value.Jump();
+                _velocityController.SubmitVelocityRequest(jump.Value.Jump());
+
+                if (jump.Value.IsPersistantForce())
+                {
+                    _requestList.Add(jump.Value.PersistantJump());
+                }
 
                 break;
             }
@@ -102,6 +116,24 @@ public class PMJumpManager : MonoBehaviour
         foreach (var listener in _jumpReleaseListenerList)
         {
             listener.Value.JumpRelease();
+        }
+    }
+
+    /// <summary>
+    /// This will apply 
+    /// </summary>
+    private void FixedUpdate()
+    {
+        if (_requestList.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _requestList.Count; i++)
+        {
+            _velocityController.SubmitVelocityRequest(_requestList[i].velocityRequest);
+
+            _requestList[i].timeLeft -= Time.deltaTime;
         }
     }
 

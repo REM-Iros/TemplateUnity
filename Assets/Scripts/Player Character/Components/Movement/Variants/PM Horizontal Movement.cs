@@ -11,10 +11,8 @@ public class PMHorizontalMovement : MovementComponentParent
     /// This handles the two way movement.
     /// </summary>
     /// <param name="input"></param>
-    public override void Move(Vector2 input)
+    public override VelocityRequest Move(Vector2 input)
     {
-        base.Move(input);
-
-        _rb2d.linearVelocityX = input.x * _speed;
+        return new VelocityRequest(input * _speed, VelocityPriority.Normal, "Movement");
     }
 }

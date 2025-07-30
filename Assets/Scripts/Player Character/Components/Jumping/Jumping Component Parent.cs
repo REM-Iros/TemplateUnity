@@ -15,10 +15,6 @@ public class JumpingComponentParent : MonoBehaviour, IJumpInterface
 {
     #region Vars
 
-    [Tooltip("This is the rigidbody we need for movement.")]
-    [SerializeField]
-    protected Rigidbody2D _rb2d;
-
     [Tooltip("This is the jump force for the player.")]
     [SerializeField, Header("Jump Vars")]
     protected float _jumpForce;
@@ -26,32 +22,6 @@ public class JumpingComponentParent : MonoBehaviour, IJumpInterface
     #endregion
 
     #region Methods
-
-    #region Startup Methods
-
-    /// <summary>
-    /// On startup, we need to initialize
-    /// </summary>
-    private void Awake()
-    {
-        InitDependencies();
-    }
-
-    /// <summary>
-    /// Finds the components necessary for this script to operate
-    /// </summary>
-    private void InitDependencies()
-    {
-        // Check for player input and rigidbody
-        if (_rb2d == null)
-        {
-            _rb2d = GetComponent<Rigidbody2D>();
-            Debug.LogError("No Rigidbody2D found, script will NOT work!");
-            return;
-        }
-    }
-
-    #endregion
 
     #region Jumping Methods
 
@@ -62,13 +32,6 @@ public class JumpingComponentParent : MonoBehaviour, IJumpInterface
     /// <returns></returns>
     public bool CanJump()
     {
-        // Check for player input and rigidbody
-        if (_rb2d == null)
-        {
-            Debug.LogError("No Rigidbody2D found, jump being skipped");
-            return false;
-        }
-
         return CheckForCanJump();
     }
 
@@ -87,18 +50,41 @@ public class JumpingComponentParent : MonoBehaviour, IJumpInterface
     /// This is the method that will be called to apply force to make
     /// the player jump. Will need to be implemented in different variants.
     /// </summary>
-    public void Jump()
+    public virtual VelocityRequest Jump()
     {
-        ApplyJumpForce();
+        return VelocityRequest.None;
     }
 
     /// <summary>
-    /// This is the script the children variants will inherit and override
-    /// to provide functionality.
+    /// This method is used to determine eligibility for a persistant force after the initial
+    /// jump.
     /// </summary>
-    protected virtual void ApplyJumpForce()
+    /// <returns></returns>
+    public bool IsPersistantForce()
     {
-        // Implement functionality in child scripts here
+        return CheckForPersistantForce();
+    }
+
+    /// <summary>
+    /// This is the method that will be overwritten to check for whether
+    /// a persistant force should be applied.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool CheckForPersistantForce()
+    {
+        // Override this for the behavior you want.
+        return true;
+    }
+
+    /// <summary>
+    /// This is the method that will be called to cue up a force to use
+    /// for persistant jump forces.
+    /// </summary>
+    /// <returns></returns>
+    public virtual TimedVelocityRequest PersistantJump()
+    {
+        // Override this for the behavior you want.
+        return TimedVelocityRequest.None;
     }
 
     #endregion

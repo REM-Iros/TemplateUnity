@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -17,14 +19,10 @@ public class PMVelocityController : MonoBehaviour
     [SerializeField, Header("Rigidbody")]
     private Rigidbody2D _rb2d;
 
-    // This is the cumulative velocity that will be calculated each frame
-    private Vector2 _cumulativeVelocity;
+    // This is the list of velocity requests we have to process
+    private List<VelocityRequest> _velocityRequests;
 
-    // This is the override velocity. This will be used to override the cumulative velocity if needed
-    private Vector2 _overrideVelocity;
 
-    // This is the override active flag. If this is true, the override velocity will be used instead of the cumulative velocity
-    private bool _isOverrideActive;
 
     #endregion
 
@@ -35,49 +33,32 @@ public class PMVelocityController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        InitDependencies();
+    }
+
+    /// <summary>
+    /// Checks for rb, and then initializes the velocity request list
+    /// </summary>
+    private void InitDependencies()
+    {
         // Check for rigidbody
         if (_rb2d == null)
         {
             Debug.LogError("No Rigidbody2D found, script will not work.");
         }
+
+        _velocityRequests = new List<VelocityRequest>();
     }
 
     #region Velocity Methods
 
     /// <summary>
-    /// Adds a velocity to the cumulative velocity. This will be used to calculate the final velocity.
+    /// This is used by movement managers to submit velocity requests
     /// </summary>
-    /// <param name="velocity"></param>
-    public void AddToCumulativeVelocity(Vector2 velocity)
+    /// <param name="velocityRequest"></param>
+    public void SubmitVelocityRequest(VelocityRequest velocityRequest)
     {
-        // Add the velocity to the cumulative velocity
-        _cumulativeVelocity += velocity;
-    }
-
-    /// <summary>
-    /// Adds a velocity to the override velocity. This will override the cumulative velocity until the override is removed.
-    /// </summary>
-    /// <param name="velocity"></param>
-    public void AddOverrideVelocity(Vector2 velocity)
-    {
-        // If the override is already active, then we don't want to add a new force
-        if (_isOverrideActive)
-        {
-            return;
-        }
-
-        // Set the override velocity and activate the override
-        _overrideVelocity = velocity;
-        _isOverrideActive = true;
-    }
-
-    /// <summary>
-    /// Turns off the override enabling cumulative velocity to be used again.
-    /// </summary>
-    public void EndOverride()
-    {
-        // End the override by setting the active flag to false
-        _isOverrideActive = false;
+        _velocityRequests.Add(velocityRequest);
     }
 
     /// <summary>
@@ -100,21 +81,54 @@ public class PMVelocityController : MonoBehaviour
             return;
         }
 
-        // Reset the cumulative velocity to zero before applying new forces
-        if (_isOverrideActive)
+        // Check if we have any velocity requests.
+        if (_velocityRequests.Count == 0)
         {
-            // If the override is active, apply the override velocity
-            _rb2d.linearVelocity = _overrideVelocity;
-        }
-        else
-        {
-            // If the override is not active, apply the cumulative velocity
-            _rb2d.linearVelocity = _cumulativeVelocity;
+            return;
         }
 
-        // Reset both velocities after applying them
-        _overrideVelocity = Vector2.zero;
-        _cumulativeVelocity = Vector2.zero;
+        // We want to get the highest priority we need in the list
+        VelocityPriority highestPriority = _velocityRequests.Max(r => r.priority);
+
+        // We need to get every single request at the highest priority
+        var topPriorityRequests = _velocityRequests.Where(r => r.priority == highestPriority).ToList();
+
+        // Start with an initial velocity of zero
+        Vector2 totalVelocity = Vector2.zero;
+
+        // Get each value added into the total
+        foreach (var request in topPriorityRequests)
+        {
+            totalVelocity += request.vector;
+
+            // Reset the y-velocity when a jump occurs. This is just a personal preference
+            if (request.tag == "Jump")
+            {
+                _rb2d.linearVelocityY = 0;
+            }
+        }
+
+        // Set the velocity
+        ApplyVelocity(totalVelocity);
+        _velocityRequests.Clear();
+    }
+
+    /// <summary>
+    /// This is the direct applicator of the velocity after it's been calculated.
+    /// </summary>
+    /// <param name="velocity"></param>
+    private void ApplyVelocity(Vector2 velocity)
+    {
+        // Always apply the x velocity
+        _rb2d.linearVelocityX = velocity.x;
+
+        // If we have a velocity of 0 and the gravity scale isn't 0, we set it.
+        if (velocity.y == 0 && _rb2d.gravityScale != 0)
+        {
+            return;
+        }
+
+        _rb2d.linearVelocityY = velocity.y;
     }
 
     #endregion

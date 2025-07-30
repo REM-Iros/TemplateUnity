@@ -151,6 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveComponent:
     _object: {fileID: 201653788}
+  _velocityController: {fileID: 1247440889}
   _wallDetection: {fileID: 1528951194}
 --- !u!114 &201653788
 MonoBehaviour:
@@ -164,7 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063b2c7e48dbc874b921b0f78cb6121f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb2d: {fileID: 1523942088273598765}
   _speed: 5
 --- !u!4 &201653789
 Transform:
@@ -179,7 +179,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4748219833015128385}
+  m_Father: {fileID: 1247440890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &619576140
 PrefabInstance:
@@ -250,8 +250,6 @@ GameObject:
   - component: {fileID: 720092775}
   - component: {fileID: 720092774}
   - component: {fileID: 720092776}
-  - component: {fileID: 720092777}
-  - component: {fileID: 720092778}
   m_Layer: 0
   m_Name: Jumping
   m_TagString: Untagged
@@ -267,12 +265,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720092772}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4748219833015128385}
+  m_Father: {fileID: 1247440890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &720092774
 MonoBehaviour:
@@ -287,10 +285,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb2d: {fileID: 1523942088273598765}
-  _jumpForce: 2.5
+  _jumpForce: 5
   _groundDetection: {fileID: 1528951195}
   _coyoteTimeModifier: {fileID: 720092776}
-  _variableHeightModifier: {fileID: 720092777}
+  _variableHeightModifier: {fileID: 0}
 --- !u!114 &720092775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,9 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jumpComponentList:
   - _object: {fileID: 720092774}
-  - _object: {fileID: 720092778}
-  _jumpReleaseListenerList:
-  - _object: {fileID: 720092777}
+  _jumpReleaseListenerList: []
+  _velocityController: {fileID: 1247440889}
 --- !u!114 &720092776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,40 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _groundDetection: {fileID: 1528951195}
-  _coyoteTimeMax: 0.1
---- !u!114 &720092777
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720092772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb49b86e23358264fbcf1969715edb4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb2d: {fileID: 1523942088273598765}
-  _jumpHeldForce: 10
-  _maxHoldTime: 0.1
-  _jumpGravityScale: 0.6
-  _baseGravityScale: 1
---- !u!114 &720092778
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 720092772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39e1724f0638bd94fb1f8e4422bdb1d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb2d: {fileID: 1523942088273598765}
-  _jumpForce: 3
-  _wallDetection: {fileID: 1528951194}
-  _wallJumpForce: 10
+  _coyoteTimeMax: 0.5
 --- !u!1001 &899943773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -416,6 +380,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d2aeb514d3424df4dbf9080493ad505f, type: 3}
+--- !u!1 &1247440888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247440890}
+  - component: {fileID: 1247440889}
+  m_Layer: 0
+  m_Name: Movement Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1247440889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247440888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49ed82b6477ed34b92441759ae3fbdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb2d: {fileID: 1523942088273598765}
+--- !u!4 &1247440890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247440888}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 201653789}
+  - {fileID: 720092773}
+  m_Father: {fileID: 4748219833015128385}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1528951192
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,8 +960,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 201653789}
-  - {fileID: 720092773}
+  - {fileID: 1247440890}
   - {fileID: 1528951193}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
