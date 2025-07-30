@@ -21,6 +21,7 @@ public class PMMovementManager : MonoBehaviour
     private PMVelocityController _velocityController;
 
     // Movement vector for player moving
+    private Vector2 _rawMoveVector;
     private Vector2 _moveVector;
 
     [Tooltip("This is the wall detector to disable movement against a wall.")]
@@ -88,7 +89,7 @@ public class PMMovementManager : MonoBehaviour
             return;
         }
 
-        _moveVector = MoveVector;
+        _rawMoveVector = MoveVector;
         
     }
 
@@ -103,6 +104,8 @@ public class PMMovementManager : MonoBehaviour
             Debug.LogError("No move component found");
             return;
         }
+
+        _moveVector = _rawMoveVector;
 
         // Alter the movement vector if we are against a wall
         if (_wallDetection != null)

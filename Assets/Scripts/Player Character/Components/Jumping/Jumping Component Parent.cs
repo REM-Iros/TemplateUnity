@@ -84,7 +84,25 @@ public class JumpingComponentParent : MonoBehaviour, IJumpInterface
     public virtual TimedVelocityRequest PersistantJump()
     {
         // Override this for the behavior you want.
-        return TimedVelocityRequest.None;
+        return new TimedVelocityRequest(VelocityRequest.None, 0f);
+    }
+
+    /// <summary>
+    /// This method is checked if we need to override for a duration.
+    /// </summary>
+    /// <returns></returns>
+    public virtual bool HasOverride()
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// This is the float that we will need to return if we are overriding.
+    /// </summary>
+    /// <returns></returns>
+    public virtual float GetOverrideDuration()
+    {
+        return 0f;
     }
 
     #endregion

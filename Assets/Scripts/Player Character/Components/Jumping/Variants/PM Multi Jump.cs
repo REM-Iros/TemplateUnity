@@ -91,14 +91,31 @@ public class PMMultiJump : JumpingComponentParent
         _currentExtraJumps += 1;
 
         return new VelocityRequest(new Vector2(0, _jumpForce), VelocityPriority.Normal, "Jump");
+    }
 
-        /*
-        // Notify variable height if it is present
-        if (_variableHeightModifier != null)
+    /// <summary>
+    /// We want to check for the variable height jump, which means we need to
+    /// apply a persistant force.
+    /// </summary>
+    /// <returns></returns>
+    protected override bool CheckForPersistantForce()
+    {
+        // If the modifier isn't present, ignore this.
+        if (_variableHeightModifier == null)
         {
-            _variableHeightModifier.NotifyJumping();
+            return false;
         }
-        */
+
+        return true;
+    }
+
+    /// <summary>
+    /// Get the variable height timed request
+    /// </summary>
+    /// <returns></returns>
+    public override TimedVelocityRequest PersistantJump()
+    {
+        return new TimedVelocityRequest(_variableHeightModifier.GetVelocityRequest(), _variableHeightModifier.MaxHoldTime);
     }
 
     #endregion

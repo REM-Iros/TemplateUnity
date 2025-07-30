@@ -26,7 +26,7 @@ public class PMJumpManager : MonoBehaviour
     private PMVelocityController _velocityController;
 
     // This is a list of timed velocity requests that get passed into the velocity manager.
-    private List<(VelocityRequest, float)> _requestList;
+    private List<TimedVelocityRequest> _requestList;
 
     #endregion
 
@@ -46,7 +46,7 @@ public class PMJumpManager : MonoBehaviour
             Debug.LogError("Jump Manager attached but no jump components, player will not be able to jump.");
         }
 
-        _requestList = new List<(VelocityRequest, float)>();
+        _requestList = new List<TimedVelocityRequest>();
     }
 
     #region Event Methods
@@ -94,6 +94,11 @@ public class PMJumpManager : MonoBehaviour
                     _requestList.Add(jump.Value.PersistantJump());
                 }
 
+                if (jump.Value.HasOverride())
+                {
+                    _velocityController.ActivateOverride(jump.Value.GetOverrideDuration());
+                }
+
                 break;
             }
         }
@@ -106,6 +111,15 @@ public class PMJumpManager : MonoBehaviour
     /// </summary>
     private void NotifyJumpReleased()
     {
+        // Clear out the variable height list if they are present
+        for (int i = _requestList.Count - 1; i >= 0; i--)
+        {
+            if (_requestList[i].request.tag == "VariableHeight")
+            {
+                _requestList.RemoveAt(i);
+            }
+        }
+
         // Check if we even have any listeners we need to notify
         if (_jumpReleaseListenerList == null)
         {
@@ -120,7 +134,7 @@ public class PMJumpManager : MonoBehaviour
     }
 
     /// <summary>
-    /// This will apply 
+    /// This will apply any persistant forces that we need to until the duration ends
     /// </summary>
     private void FixedUpdate()
     {
@@ -129,11 +143,21 @@ public class PMJumpManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < _requestList.Count; i++)
+        for (int i = _requestList.Count - 1; i >= 0; i--)
         {
-            _velocityController.SubmitVelocityRequest(_requestList[i].velocityRequest);
+            var request = _requestList[i];
 
-            _requestList[i].timeLeft -= Time.deltaTime;
+            // Decrement the timer
+            request.duration -= Time.fixedDeltaTime;
+
+            // Submit the velocity request again this frame
+            _velocityController.SubmitVelocityRequest(request.request);
+
+            // Remove it if the time has expired
+            if (request.duration <= 0f)
+            {
+                _requestList.RemoveAt(i);
+            }
         }
     }
 

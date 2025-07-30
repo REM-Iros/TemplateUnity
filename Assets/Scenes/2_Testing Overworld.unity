@@ -250,6 +250,9 @@ GameObject:
   - component: {fileID: 720092775}
   - component: {fileID: 720092774}
   - component: {fileID: 720092776}
+  - component: {fileID: 720092777}
+  - component: {fileID: 720092778}
+  - component: {fileID: 720092779}
   m_Layer: 0
   m_Name: Jumping
   m_TagString: Untagged
@@ -284,11 +287,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 689640b51ddf62c498a9d4068a5d62c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rb2d: {fileID: 1523942088273598765}
-  _jumpForce: 5
+  _jumpForce: 3
   _groundDetection: {fileID: 1528951195}
   _coyoteTimeModifier: {fileID: 720092776}
-  _variableHeightModifier: {fileID: 0}
+  _variableHeightModifier: {fileID: 720092777}
 --- !u!114 &720092775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +305,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _jumpComponentList:
   - _object: {fileID: 720092774}
+  - _object: {fileID: 720092778}
+  - _object: {fileID: 720092779}
   _jumpReleaseListenerList: []
   _velocityController: {fileID: 1247440889}
 --- !u!114 &720092776
@@ -319,6 +323,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _groundDetection: {fileID: 1528951195}
   _coyoteTimeMax: 0.5
+--- !u!114 &720092777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720092772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb49b86e23358264fbcf1969715edb4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpHeldForce: 2
+  _maxHoldTime: 0.5
+--- !u!114 &720092778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720092772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39e1724f0638bd94fb1f8e4422bdb1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpForce: 5
+  _wallDetection: {fileID: 1528951194}
+  _wallJumpForce: 5
+  _velocityOverrideTimer: 0.15
+--- !u!114 &720092779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720092772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4ed66198d0e33c44b89b06808376bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpForce: 3
+  _groundDetection: {fileID: 1528951195}
+  _maxExtraJumps: 1
+  _variableHeightModifier: {fileID: 720092777}
 --- !u!1001 &899943773
 PrefabInstance:
   m_ObjectHideFlags: 0

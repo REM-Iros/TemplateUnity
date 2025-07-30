@@ -19,10 +19,9 @@ public class PMWallJump : JumpingComponentParent
     [SerializeField, Header("Wall Jump Force")]
     private float _wallJumpForce;
 
-    // This is the timer for the velocity override
+    [Tooltip("This is the timer for the velocity override")]
     [SerializeField, Header("Velocity Override Timer")]
-    private const float _velocityOverrideTimer = 0.2f;
-    private float _velocityOverrideTimerCurrent = 0f;
+    private float _velocityOverrideTimer = 0.2f;
 
     #endregion
 
@@ -33,7 +32,7 @@ public class PMWallJump : JumpingComponentParent
     /// </summary>
     private void Awake()
     {
-        // Check for rigidbody
+        // Check for wall detection
         if (_wallDetection == null)
         {
             Debug.LogError("No wall detection found, script will not work.");
@@ -61,35 +60,23 @@ public class PMWallJump : JumpingComponentParent
                                     VelocityPriority.Override, "Walljump");
     }
 
-    #region Override Timer
+    /// <summary>
+    /// We do need to set an override with this.
+    /// </summary>
+    /// <returns></returns>
+    public override bool HasOverride()
+    {
+        return true;
+    }
 
     /// <summary>
-    /// A timer before regular movement can take over again
+    /// We need to return the velocity override timer for the velocity controller.
     /// </summary>
-    private void Update()
+    /// <returns></returns>
+    public override float GetOverrideDuration()
     {
-        // Only run the override timer if the override is active
-        if (_velocityOverrideTimerCurrent > 0)
-        {
-            RunMomentumOverrideTimer();
-        }
+        return _velocityOverrideTimer;
     }
-
-    private void RunMomentumOverrideTimer()
-    {
-        // Decrease the timer
-        _velocityOverrideTimerCurrent -= Time.deltaTime;
-
-        // If the timer is done, reset the override
-        if (_velocityOverrideTimerCurrent <= 0)
-        {
-            
-
-            _velocityOverrideTimerCurrent = 0f;
-        }
-    }
-
-    #endregion
 
     #endregion
 

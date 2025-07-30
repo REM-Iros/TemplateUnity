@@ -16,4 +16,10 @@ public interface IJumpInterface
 
     // If there is a persistant force, we need to continue applying it
     TimedVelocityRequest PersistantJump();
+
+    // If we want a jump to override other movement for a time, we need this
+    bool HasOverride();
+
+    // Override duration
+    float GetOverrideDuration();
 }

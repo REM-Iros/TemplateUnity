@@ -22,7 +22,9 @@ public class PMVelocityController : MonoBehaviour
     // This is the list of velocity requests we have to process
     private List<VelocityRequest> _velocityRequests;
 
-
+    // Vars for the override
+    private bool _overrideActive = false;
+    private float _overrideTimer = 0f;
 
     #endregion
 
@@ -66,7 +68,14 @@ public class PMVelocityController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        // Apply the velocity
         HandleVelocityApplication();
+
+        // Handle the override timer if it's present
+        if (_overrideActive)
+        {
+            HandleOverrideTimer();
+        }
     }
 
     /// <summary>
@@ -92,6 +101,13 @@ public class PMVelocityController : MonoBehaviour
 
         // We need to get every single request at the highest priority
         var topPriorityRequests = _velocityRequests.Where(r => r.priority == highestPriority).ToList();
+
+        // If we don't end up with a priority at override, we can't move yet
+        if (_overrideActive && highestPriority != VelocityPriority.Override)
+        {
+            _velocityRequests.Clear();
+            return;
+        }
 
         // Start with an initial velocity of zero
         Vector2 totalVelocity = Vector2.zero;
@@ -130,6 +146,36 @@ public class PMVelocityController : MonoBehaviour
 
         _rb2d.linearVelocityY = velocity.y;
     }
+
+    #region Velocity Override Methods
+
+    /// <summary>
+    /// This is used by movement managers to activate the override.
+    /// </summary>
+    /// <param name="overrideTimer"></param>
+    public void ActivateOverride(float overrideTimer)
+    {
+        _overrideActive = true;
+        _overrideTimer = overrideTimer;
+    }
+
+    /// <summary>
+    /// Decrements the override timer until it's over and undoes the override.
+    /// </summary>
+    private void HandleOverrideTimer()
+    {
+        if (_overrideTimer > 0)
+        {
+            _overrideTimer -= Time.deltaTime;
+        }
+        else
+        {
+            _overrideActive = false;
+            _overrideTimer = 0;
+        }
+    }
+
+    #endregion
 
     #endregion
 
