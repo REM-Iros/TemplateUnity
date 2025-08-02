@@ -28,6 +28,7 @@ public class SaveManager : EagerSingleton<SaveManager>
 
     // Const variable that determines how many save files the manager checks for
     private const int _maxSaveFileIndex = 6;
+    public int MaxSaveFileIndex { get { return _maxSaveFileIndex; } }
 
     // Private array for having game data loaded in
     private GameData[] _files;
