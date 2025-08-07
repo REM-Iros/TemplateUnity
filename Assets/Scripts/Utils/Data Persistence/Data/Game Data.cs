@@ -16,8 +16,8 @@ public class GameData
     #region Current Scene Values
 
     // Current Scene Data Values
-    public Vector3 _currPlayerPosition;
-    public string _currPlayerScene;
+    public Vector3 currPlayerPosition;
+    public string currPlayerScene;
 
     #endregion
 
@@ -32,8 +32,8 @@ public class GameData
     public GameData()
     {
         // Store the current scene data
-        _currPlayerPosition = Vector3.zero;
-        _currPlayerScene = "";
+        currPlayerPosition = Vector3.zero;
+        currPlayerScene = "2_Testing Overworld";
 
         _someVal = 0;
     }

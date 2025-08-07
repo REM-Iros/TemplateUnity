@@ -37,13 +37,13 @@ public class Bootstrap : MonoBehaviour
         SaveManager.Instance.Generate();
         DataManager.Instance.Generate();
         SceneControlManager.Instance.Generate();
-        InputManager.Instance.Generate();
+        GameStateManager.Instance.Generate();
 
         // Register major game managers that need to persist throughout scenes.
         ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
         ServiceLocator.Register(FindAnyObjectByType<SaveManager>());
         ServiceLocator.Register(FindAnyObjectByType<DataManager>());
         ServiceLocator.Register(FindAnyObjectByType<SceneControlManager>());
-        ServiceLocator.Register(FindAnyObjectByType<InputManager>());
+        ServiceLocator.Register(FindAnyObjectByType<GameStateManager>());
     }
 }

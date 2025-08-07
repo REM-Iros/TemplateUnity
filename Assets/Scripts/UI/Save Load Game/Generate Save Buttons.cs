@@ -36,10 +36,22 @@ public class GenerateSaveButtons : MonoBehaviour
     private void InstantiateSaveButtons()
     {
         // Run through the max save files and generate save blocks with snapshots
-        for (int i = 0; i < ServiceLocator.Get<SaveManager>().MaxSaveFileIndex; i++)
+        for (int i = 1; i < ServiceLocator.Get<SaveManager>().MaxSaveFileIndex; i++)
         {
-            // Check if we have a save at index
-            if (ServiceLocator.Get<SaveManager>().)
+            // Spawn the save button in
+            GameObject saveButton = Instantiate(_savePrefab, _parentObj.transform);
+
+            // Name the save button
+            saveButton.name = "SaveButton_" + (i + 1);
+
+            // Get the SaveButton component for setting details
+            PopulateSaveButton snapshotPopulator = saveButton.GetComponent<PopulateSaveButton>();
+
+            // Set the save index for the button
+            snapshotPopulator.SetSaveIndex(i);
+
+            // Fill the save fields
+            snapshotPopulator.PopulateSaveFields();
         }
     }
 

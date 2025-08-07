@@ -80,6 +80,9 @@ public class PlayerInputController : MonoBehaviour
 
         // Need to attach the input actions now
         InitActions();
+
+        // Enable this to dynamically respond to game state changes
+        ServiceLocator.Get<GameStateManager>().OnGameStateChanged += HandleGameStateChanged;
     }
 
     /// <summary>
@@ -116,6 +119,47 @@ public class PlayerInputController : MonoBehaviour
         if (_playerInput.actions["Jump"] != null)
         {
             _jumpAction = _playerInput.actions["Jump"];
+        }
+    }
+
+    /// <summary>
+    /// This method is called when the game state changes. It updates the input action states based on game state.
+    /// </summary>
+    /// <param name="gameState"></param>
+    private void HandleGameStateChanged(GameState gameState)
+    {
+        bool isGameplay = gameState == GameState.Playing;
+
+        // Enable or disable input actions based on the game state
+        SetInputActionState(_moveAction, isGameplay);
+        SetInputActionState(_attackAction, isGameplay);
+        SetInputActionState(_dashAction, isGameplay);
+        SetInputActionState(_menuAction, isGameplay);
+        SetInputActionState(_jumpAction, isGameplay);
+    }
+
+    /// <summary>
+    /// This script is used to enable/disable input actions based on the game state or other conditions.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="enable"></param>
+    private void SetInputActionState(InputAction action, bool enable)
+    {
+        // Only set the state if the action is not null
+        if (action == null)
+        {
+            Debug.LogError("Input action is null, cannot set state.");
+            return;
+        }
+
+        // Enable or disable the action based on the enable parameter
+        if (enable && !action.enabled)
+        {
+            action.Enable();
+        }
+        else if (!enable && action.enabled)
+        {
+            action.Disable();
         }
     }
 

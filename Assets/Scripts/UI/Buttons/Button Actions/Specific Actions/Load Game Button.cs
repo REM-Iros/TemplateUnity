@@ -26,6 +26,6 @@ public class LoadGameButton : ButtonBase
         }
 
         // Change to the next scene
-        ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData._currPlayerScene);
+        ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);
     }
 }

@@ -28,6 +28,9 @@ public class PMJumpManager : MonoBehaviour
     // This is a list of timed velocity requests that get passed into the velocity manager.
     private List<TimedVelocityRequest> _requestList;
 
+    // This bool is for the freeze movement functionality
+    private bool _freezeMovement = false;
+
     #endregion
 
     #region Methods
@@ -75,6 +78,12 @@ public class PMJumpManager : MonoBehaviour
     /// </summary>
     private void ExecuteJumpList()
     {
+        // Freeze the movement if we are frozen
+        if (_freezeMovement)
+        {
+            return;
+        }
+
         // Check if we even have jumps to be able to do
         if (_jumpComponentList == null)
         {
@@ -138,11 +147,19 @@ public class PMJumpManager : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        // If we are frozen, we don't want to do anything
+        if (_freezeMovement)
+        {
+            return;
+        }
+
+        // If we don't have any requests, we don't need to do anything
         if (_requestList.Count == 0)
         {
             return;
         }
 
+        // Iterate through the request list in reverse order
         for (int i = _requestList.Count - 1; i >= 0; i--)
         {
             var request = _requestList[i];
@@ -159,6 +176,22 @@ public class PMJumpManager : MonoBehaviour
                 _requestList.RemoveAt(i);
             }
         }
+    }
+
+    /// <summary>
+    /// Disables user input by freezing movement.
+    /// </summary>
+    public void FreezeInput()
+    {
+        _freezeMovement = true;
+    }
+
+    /// <summary>
+    /// Enables user input by unfreezing movement.
+    /// </summary>
+    public void UnfreezeInput()
+    {
+        _freezeMovement = false;
     }
 
     #endregion

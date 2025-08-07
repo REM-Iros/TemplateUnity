@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/1_Main Menu.unity
     guid: ef5052c2a25dbf14685d14f72c8ef0fb
+  - enabled: 1
+    path: Assets/Scenes/2_Testing Overworld.unity
+    guid: 7c2901d8bdfa83b4db634e7d8a816ffc
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: eab17a9976e75c94aba32cc182e1ab18, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}

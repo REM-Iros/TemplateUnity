@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    // This is the data manager, used to store player data
+    private DataManager _dataManager;
+
     #endregion
 
     #region Methods
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _dataManager = ServiceLocator.Get<DataManager>();
+
         InitializeComponents();
     }
 
@@ -153,7 +158,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     protected virtual void FixedUpdate()
     {
-
+        // Update the datamanager's current position
+        if (_dataManager != null)
+        {
+            _dataManager.GameData.currPlayerPosition = transform.position;
+        }
     }
 
     #endregion

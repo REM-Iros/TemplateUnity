@@ -32,6 +32,7 @@ public class SaveManager : EagerSingleton<SaveManager>
 
     // Private array for having game data loaded in
     private GameData[] _files;
+    public GameData[] Files { get { return _files; } }
 
     // Store the array for the save file
     private int _fileIndex;
@@ -85,7 +86,14 @@ public class SaveManager : EagerSingleton<SaveManager>
     /// <param name="index"></param>
     public void SaveGame(int index)
     {
-        _handler.Save(DataManager.Instance.GameData, index);
+        // Store the current gamedata
+        var gameData = DataManager.Instance.GameData;
+
+        // Save the data to a file
+        _handler.Save(gameData, index);
+
+        // Update the file array with the new data
+        _files[index] = gameData;
     }
 
     /// <summary>
@@ -154,12 +162,12 @@ public class SaveManager : EagerSingleton<SaveManager>
 
     public Vector3 GetSnapshotPos()
     {
-        return _files[_fileIndex]._currPlayerPosition;
+        return _files[_fileIndex].currPlayerPosition;
     }
 
     public string GetSnapshotScene()
     {
-        return _files[_fileIndex]._currPlayerScene;
+        return _files[_fileIndex].currPlayerScene;
     }
 
     public int GetSnapshotValue()
