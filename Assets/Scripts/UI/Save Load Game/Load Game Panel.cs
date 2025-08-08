@@ -46,7 +46,7 @@ public class LoadGamePanel : MonoBehaviour
     private void UpdateTexts()
     {
         // Check if we have an available file
-        if (ServiceLocator.Get<SaveManager>().IsThereAvailableFile())
+        if (!ServiceLocator.Get<SaveManager>().IsThereAvailableFile())
         {
             _noFilesFoundPanel.SetActive(true);
             _fileInfoPanel.SetActive(false);
@@ -56,7 +56,7 @@ public class LoadGamePanel : MonoBehaviour
         ServiceLocator.Get<SaveManager>().LoadFirstFileSnapshot();
 
         // Update the texts
-        _indexText.text = "File: " + ServiceLocator.Get<SaveManager>().GetSnapshotIndex();
+        _indexText.text = "File: " + (ServiceLocator.Get<SaveManager>().GetSnapshotIndex() + 1);
         _positionText.text = ServiceLocator.Get<SaveManager>().GetSnapshotPos().ToString();
         _sceneText.text = ServiceLocator.Get<SaveManager>().GetSnapshotScene().ToString();
         _someValText.text = ServiceLocator.Get<SaveManager>().GetSnapshotValue().ToString();

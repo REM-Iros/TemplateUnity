@@ -16,14 +16,14 @@ public class LoadGameButton : ButtonBase
     /// </summary>
     protected override void OnButtonPressed()
     {
-        
-
         // Check for if the load file is present at the index
         if (!ServiceLocator.Get<SaveManager>().LoadGame(ServiceLocator.Get<SaveManager>().GetSnapshotIndex()))
         {
             Debug.LogError($"Save file at index {ServiceLocator.Get<SaveManager>().GetSnapshotIndex()} could not be found.");
             return;
         }
+
+        ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Playing);
 
         // Change to the next scene
         ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);

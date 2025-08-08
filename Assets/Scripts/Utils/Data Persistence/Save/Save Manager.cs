@@ -87,7 +87,7 @@ public class SaveManager : EagerSingleton<SaveManager>
     public void SaveGame(int index)
     {
         // Store the current gamedata
-        var gameData = DataManager.Instance.GameData;
+        var gameData = ServiceLocator.Get<DataManager>().GameData;
 
         // Save the data to a file
         _handler.Save(gameData, index);
@@ -122,7 +122,7 @@ public class SaveManager : EagerSingleton<SaveManager>
         // If we have a file, return true
         for (int i = 0; i < _files.Length; i++) 
         {
-            if (_files != null)
+            if (_files[i] != null)
             {
                 return true;
             }

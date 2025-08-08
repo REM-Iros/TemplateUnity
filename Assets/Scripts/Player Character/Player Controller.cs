@@ -28,9 +28,6 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
-    // This is the data manager, used to store player data
-    private DataManager _dataManager;
-
     #endregion
 
     #region Methods
@@ -42,8 +39,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _dataManager = ServiceLocator.Get<DataManager>();
-
         InitializeComponents();
     }
 
@@ -91,6 +86,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        // Sub the logging method to the menu script.
+        _inputController.RegisterMenuPerformed(LogCurrentPosition);
+
         // Attach the scripts that need to be attached between movement and input
         if (_movementController != null)
         {
@@ -130,6 +128,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        // Unsub the logging method to the menu script.
+        _inputController.UnregisterMenuPerformed(LogCurrentPosition);
+
         // Attach the scripts that need to be attached between movement and input
         if (_movementController != null)
         {
@@ -158,11 +159,15 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     protected virtual void FixedUpdate()
     {
-        // Update the datamanager's current position
-        if (_dataManager != null)
-        {
-            _dataManager.GameData.currPlayerPosition = transform.position;
-        }
+        
+    }
+
+    /// <summary>
+    /// Called whenever the menu is open to store the current player position.
+    /// </summary>
+    private void LogCurrentPosition()
+    {
+        ServiceLocator.Get<DataManager>().GameData.currPlayerPosition = transform.position;
     }
 
     #endregion

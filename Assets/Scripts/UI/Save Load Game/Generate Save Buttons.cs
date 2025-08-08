@@ -48,7 +48,7 @@ public class GenerateSaveButtons : MonoBehaviour
             PopulateSaveButton snapshotPopulator = saveButton.GetComponent<PopulateSaveButton>();
 
             // Set the save index for the button
-            snapshotPopulator.SetSaveIndex(i);
+            snapshotPopulator.SetSaveIndex(i - 1);
 
             // Fill the save fields
             snapshotPopulator.PopulateSaveFields();

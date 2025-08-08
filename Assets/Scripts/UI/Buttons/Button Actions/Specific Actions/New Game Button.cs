@@ -17,6 +17,9 @@ public class NewGameButton : ButtonBase
         // Call the new game method to set the values of the data manager
         ServiceLocator.Get<SaveManager>().NewGame();
 
+        // Set the game state to playing
+        ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Playing);
+
         // Load up the first scene for the new game
         ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);
     }
