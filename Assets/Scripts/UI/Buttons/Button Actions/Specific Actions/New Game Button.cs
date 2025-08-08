@@ -19,6 +19,7 @@ public class NewGameButton : ButtonBase
 
         // Set the game state to playing
         ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Playing);
+        ServiceLocator.Get<GameStateManager>().SetTimeScale(1f);
 
         // Load up the first scene for the new game
         ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);

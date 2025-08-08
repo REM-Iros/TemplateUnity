@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 /// <summary>
 /// This is the game state manager, which is used to manage the state of the game.
@@ -29,5 +30,14 @@ public class GameStateManager : EagerSingleton<GameStateManager>
 
         // Invoke the event to notify any listeners that the game state has changed
         OnGameStateChanged?.Invoke(CurrentGameState);
+    }
+
+    /// <summary>
+    /// Called by other scripts to set the timescale of the game
+    /// </summary>
+    /// <param name="timeScale"></param>
+    public void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
     }
 }

@@ -187,6 +187,17 @@
                 },
                 {
                     "name": "",
+                    "id": "991892ef-9116-4de6-9706-62976dae8566",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KBM",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f8ab8e2a-eb26-45ef-ac5c-274c43725031",
                     "path": "<Keyboard>/k",
                     "interactions": "",

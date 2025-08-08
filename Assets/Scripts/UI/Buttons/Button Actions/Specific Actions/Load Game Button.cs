@@ -24,6 +24,7 @@ public class LoadGameButton : ButtonBase
         }
 
         ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Playing);
+        ServiceLocator.Get<GameStateManager>().SetTimeScale(1f);
 
         // Change to the next scene
         ServiceLocator.Get<SceneControlManager>().ChangeScene(ServiceLocator.Get<DataManager>().GameData.currPlayerScene);

@@ -16,7 +16,7 @@ public class PauseMenu : MenuBase
         base.Open();
 
         // Pause the game time
-        Time.timeScale = 0f;
+        ServiceLocator.Get<GameStateManager>().SetTimeScale(0f);
 
         // Set the game state to paused
         ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Paused);
@@ -27,7 +27,7 @@ public class PauseMenu : MenuBase
         base.Close();
 
         // Resume the game time
-        Time.timeScale = 1f;
+        ServiceLocator.Get<GameStateManager>().SetTimeScale(1f);
 
         // Set the game state to playing
         ServiceLocator.Get<GameStateManager>().SetGameState(GameState.Playing);
