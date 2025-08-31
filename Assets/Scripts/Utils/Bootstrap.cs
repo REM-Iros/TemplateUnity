@@ -38,6 +38,7 @@ public class Bootstrap : MonoBehaviour
         DataManager.Instance.Generate();
         SceneControlManager.Instance.Generate();
         GameStateManager.Instance.Generate();
+        UIFocusManager.Instance.Generate();
 
         // Register major game managers that need to persist throughout scenes.
         ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
@@ -45,5 +46,6 @@ public class Bootstrap : MonoBehaviour
         ServiceLocator.Register(FindAnyObjectByType<DataManager>());
         ServiceLocator.Register(FindAnyObjectByType<SceneControlManager>());
         ServiceLocator.Register(FindAnyObjectByType<GameStateManager>());
+        ServiceLocator.Register(FindAnyObjectByType<UIFocusManager>());
     }
 }

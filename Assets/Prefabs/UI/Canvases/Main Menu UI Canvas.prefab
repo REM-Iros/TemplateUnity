@@ -651,6 +651,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3741369828270919597}
+  - component: {fileID: 6864466973114831136}
   m_Layer: 5
   m_Name: Settings Menu
   m_TagString: Untagged
@@ -678,6 +679,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 1440, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6864466973114831136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672267746089226728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705e1020db3372c439724d957daf1494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultObj: {fileID: 5680842214195020835}
 --- !u!1 &1673117017006674042
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,6 +1746,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6640136045211762121}
   - component: {fileID: 4150159169144309856}
+  - component: {fileID: 8258677517399051735}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -1788,6 +1803,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &8258677517399051735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752549324387436043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705e1020db3372c439724d957daf1494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultObj: {fileID: 78174444000168064}
 --- !u!1 &4872182262390559896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1874,6 +1902,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5243715374709402859}
   - component: {fileID: 3952669676532588554}
+  - component: {fileID: 3907472909649330247}
   m_Layer: 5
   m_Name: Rebind Menu
   m_TagString: Untagged
@@ -1915,6 +1944,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actions: {fileID: -944628639613478452, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
+--- !u!114 &3907472909649330247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4967392787735860833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705e1020db3372c439724d957daf1494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultObj: {fileID: 5808536745761092588}
 --- !u!1 &5298274376141471783
 GameObject:
   m_ObjectHideFlags: 0
@@ -3048,6 +3090,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7643765275054389267}
   - component: {fileID: 2844395259923842041}
+  - component: {fileID: 4379278679790795567}
   m_Layer: 5
   m_Name: Load Menu
   m_TagString: Untagged
@@ -3096,6 +3139,19 @@ MonoBehaviour:
   _someValText: {fileID: 2819509377937219707}
   _noFilesFoundPanel: {fileID: 4493230768046839061}
   _fileInfoPanel: {fileID: 6698829600049045691}
+--- !u!114 &4379278679790795567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7966723503544834317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 705e1020db3372c439724d957daf1494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultObj: {fileID: 4319399944326051776}
 --- !u!1 &7975130817520211052
 GameObject:
   m_ObjectHideFlags: 0
