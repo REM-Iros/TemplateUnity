@@ -1,0 +1,22 @@
+# Ignore the Build folder — contains generated .bank files
+Build/
+
+# Ignore FMOD Studio cache data — local machine-specific
+.cache/
+
+# User-specific configuration (e.g., window layout, recent files)
+*.user
+
+# Backup files
+*.bak
+
+# Temporary or autosave files
+*.autosave
+
+# FMOD logs
+fmod_editor.log
+
+# Platform-specific system files
+.DS_Store
+Thumbs.db
+desktop.ini

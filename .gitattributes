@@ -1,0 +1,6 @@
+# Normalize text files to LF for consistency across OSes
+* text=auto eol=lf
+
+# FMOD macOS plugin bundles and plist files
+TemplateUnityProject/Assets/Plugins/FMOD/**/*.bundle text eol=lf
+TemplateUnityProject/Assets/Plugins/FMOD/**/Info.plist text eol=lf
