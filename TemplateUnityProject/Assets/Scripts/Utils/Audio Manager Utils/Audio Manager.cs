@@ -10,16 +10,16 @@ using FMOD.Studio;
 /// 
 /// REM-i
 /// </summary>
-public class AudioManager : EagerSingleton<AudioManager>
+public class AudioManager : MonoBehaviour
 {
     #region Vars
 
-    //Store the events in the editor and then ref them in the dictionary
+    // Store the events in the editor and then ref them in the dictionary
     [Header("Audio Events"), SerializeField]
     private List<AudioEvents> events;
     private Dictionary<string, AudioEvents> audioEventDict;
 
-    //Dictionary for currently running events
+    // Dictionary for currently running events
     private Dictionary<string, EventInstance> runningEvents;
 
     #endregion
@@ -27,13 +27,10 @@ public class AudioManager : EagerSingleton<AudioManager>
     #region Callable Methods
 
     /// <summary>
-    /// Calls the base awake for the eager singleton, then initializes the audio dictionary
+    /// Want to initialize the audio dictionary on creation.
     /// </summary>
-    protected override void Awake()
+    private void Awake()
     {
-        //Call the base method
-        base.Awake();
-
         InitDictionary();
     }
 
@@ -42,10 +39,10 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// </summary>
     private void InitDictionary()
     {
-        //Init dictionary
+        // Init dictionary
         audioEventDict = new Dictionary<string, AudioEvents>();
 
-        //Go through each event, check if it's in the dict, if not, add it
+        // Go through each event, check if it's in the dict, if not, add it
         if(events != null)
         {
             foreach (var e in events)
@@ -70,31 +67,31 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// <param name="parameters"></param>
     public void PlayAudio(string eventName, float volume = 1f, Dictionary<string, float> parameters = null)
     {
-        //Try to get the event based on the name, if it works, play a oneshot
+        // Try to get the event based on the name, if it works, play a oneshot
         if (audioEventDict.TryGetValue(eventName, out var audioEvent))
         {
-            //Make sure the event isn't already playing
+            // Make sure the event isn't already playing
             if (runningEvents.ContainsKey(eventName))
             {
                 Debug.LogWarning($"{audioEvent.name} is already playing.");
                 return;
             }
 
-            //Get the instance for FMOD
+            // Get the instance for FMOD
             var instance = RuntimeManager.CreateInstance(audioEvent.path);
 
-            //Set volume
+            // Set volume
             instance.setVolume(volume);
 
-            //Set parameters
+            // Set parameters
             if (parameters != null)
             {
                 foreach (var parameter in parameters)
                 {
-                    //Store the result for parameter setting
+                    // Store the result for parameter setting
                     FMOD.RESULT result = instance.setParameterByName(parameter.Key, parameter.Value);
 
-                    //Check if the result returns an error
+                    // Check if the result returns an error
                     if(result != FMOD.RESULT.OK)
                     {
                         Debug.LogWarning($"Could not alter parameter {parameter.Key} to value {parameter.Value}");
@@ -102,13 +99,13 @@ public class AudioManager : EagerSingleton<AudioManager>
                 }
             }
 
-            //Play the audio
+            // Play the audio
             instance.start();
 
-            //Add the audio to the events
+            // Add the audio to the events
             runningEvents.Add(eventName, instance);
         }
-        //Else display a warning
+        // Else display a warning
         else
         {
             Debug.LogWarning($"Audio Event name is not present: {eventName}");
@@ -122,23 +119,23 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// <param name="parameters"></param>
     public void ChangeAudioParameters(string eventName, Dictionary<string, float> parameters)
     {
-        //Try to get the event based on the name, if it works, play a oneshot
+        // Try to get the event based on the name, if it works, play a oneshot
         if (runningEvents.TryGetValue(eventName, out var fmodInstance))
         {
-            //Check for each parameter to see if it's in the event
+            // Check for each parameter to see if it's in the event
             foreach (var parameter in parameters)
             {
-                //Store the result for parameter setting
+                // Store the result for parameter setting
                 FMOD.RESULT result = fmodInstance.setParameterByName(parameter.Key, parameter.Value);
 
-                //Check if the result returns an error
+                // Check if the result returns an error
                 if (result != FMOD.RESULT.OK)
                 {
                     Debug.LogWarning($"Could not alter parameter {parameter.Key} to value {parameter.Value}");
                 }
             }
         }
-        //Else display a warning
+        // Else display a warning
         else
         {
             Debug.LogWarning($"Audio Event name is not present: {eventName}");
@@ -152,15 +149,15 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// <param name="allowFadeOut"></param>
     public void StopAudio(string eventName, bool allowFadeOut = true)
     {
-        //Try to get the event through the name
+        // Try to get the event through the name
         if (runningEvents.TryGetValue (eventName, out var fmodInstance))
         {
-            //If the instance exists, stop and free it from mem
+            // If the instance exists, stop and free it from mem
             fmodInstance.stop(allowFadeOut ? FMOD.Studio.STOP_MODE.ALLOWFADEOUT : FMOD.Studio.STOP_MODE.IMMEDIATE);
             fmodInstance.release();
             runningEvents.Remove(eventName);
         }
-        //Else display a warning
+        // Else display a warning
         else
         {
             Debug.LogWarning($"Audio Event name is not present: {eventName}");
@@ -173,13 +170,13 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// <param name="eventName"></param>
     public void PauseAudio(string eventName)
     {
-        //Try to get the event through the name
+        // Try to get the event through the name
         if (runningEvents.TryGetValue(eventName, out var fmodInstance))
         {
-            //If the instance exists, pause it
+            // If the instance exists, pause it
             fmodInstance.setPaused(true);
         }
-        //Else display a warning
+        // Else display a warning
         else
         {
             Debug.LogWarning($"Audio Event name is not present: {eventName}");
@@ -192,13 +189,13 @@ public class AudioManager : EagerSingleton<AudioManager>
     /// <param name="eventName"></param>
     public void ResumeAudio(string eventName)
     {
-        //Try to get the event through the name
+        // Try to get the event through the name
         if (runningEvents.TryGetValue(eventName, out var fmodInstance))
         {
-            //If the instance exists, resume it
+            // If the instance exists, resume it
             fmodInstance.setPaused(false);
         }
-        //Else display a warning
+        // Else display a warning
         else
         {
             Debug.LogWarning($"Audio Event name is not present: {eventName}");

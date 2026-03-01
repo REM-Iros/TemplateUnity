@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Save manager singleton will directly handle saving and loading data, pulling from files and
+/// Save manager will directly handle saving and loading data, pulling from files and
 /// storing the data in the data manager. The save manager is not to be interfaced with by
 /// other scripts and simply handles the saving and loading of data, the data manager will
 /// be the one that every script will reference when they need save data. 
@@ -13,7 +13,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class SaveManager : EagerSingleton<SaveManager>
+public class SaveManager : MonoBehaviour
 {
     #region Vars
 
@@ -44,10 +44,8 @@ public class SaveManager : EagerSingleton<SaveManager>
     /// <summary>
     /// Start creates the file handler and immediately pulls data
     /// </summary>
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
-
         // Init handler
         _handler = new FileHandler(Application.persistentDataPath, _saveName, _encryptSave);
 

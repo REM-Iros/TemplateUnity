@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 /// 
 /// REM-i
 /// </summary>
-public class UIFocusManager : EagerSingleton<UIFocusManager>
+public class UIFocusManager : MonoBehaviour
 {
     // Event System reference
     private EventSystem _currEventSystem;

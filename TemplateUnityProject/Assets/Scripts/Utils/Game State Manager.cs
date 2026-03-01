@@ -8,7 +8,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class GameStateManager : EagerSingleton<GameStateManager>
+public class GameStateManager : MonoBehaviour
 {
     public GameState CurrentGameState { get; private set; } = GameState.Playing;
     public event Action<GameState> OnGameStateChanged;

@@ -33,19 +33,32 @@ public class Bootstrap : MonoBehaviour
     /// </summary>
     private void InitServiceLocator()
     {
-        AudioManager.Instance.Generate();
-        SaveManager.Instance.Generate();
-        DataManager.Instance.Generate();
-        SceneControlManager.Instance.Generate();
-        GameStateManager.Instance.Generate();
-        UIFocusManager.Instance.Generate();
+        var audioManager = CreateManager<AudioManager>();
+        var saveManager = CreateManager<SaveManager>();
+        var dataManager = CreateManager<DataManager>();
+        var sceneControlManager = CreateManager<SceneControlManager>();
+        var gameStateManager = CreateManager<GameStateManager>();
+        var uiFocusManager = CreateManager<UIFocusManager>();
 
         // Register major game managers that need to persist throughout scenes.
-        ServiceLocator.Register(FindAnyObjectByType<AudioManager>());
-        ServiceLocator.Register(FindAnyObjectByType<SaveManager>());
-        ServiceLocator.Register(FindAnyObjectByType<DataManager>());
-        ServiceLocator.Register(FindAnyObjectByType<SceneControlManager>());
-        ServiceLocator.Register(FindAnyObjectByType<GameStateManager>());
-        ServiceLocator.Register(FindAnyObjectByType<UIFocusManager>());
+        ServiceLocator.Register(audioManager);
+        ServiceLocator.Register(saveManager);
+        ServiceLocator.Register(dataManager);
+        ServiceLocator.Register(sceneControlManager);
+        ServiceLocator.Register(gameStateManager);
+        ServiceLocator.Register(uiFocusManager);
+    }
+
+    /// <summary>
+    /// Method called on startup that creates a manager of type T, adds it to the service locator, and marks it as DontDestroyOnLoad.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    private T CreateManager<T>() where T : MonoBehaviour
+    {
+        GameObject managerObj = new GameObject(typeof(T).Name);
+        T manager = managerObj.AddComponent<T>();
+        DontDestroyOnLoad(managerObj);
+        return manager;
     }
 }
