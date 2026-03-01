@@ -1,0 +1,302 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+/// <summary>
+/// This is the basic RPG Actor class. It will be used as the orchestrator of all character
+/// components.
+/// 
+/// REM-i
+/// </summary>
+public class RPGActor : MonoBehaviour
+{
+    #region Vars
+
+    [Tooltip("This is the index for this character. Chosen on runtime by the team controllers.")]
+    private int _index;
+
+    [Tooltip("This is the scriptable object that will store the chracter data. It should be filled by the team manager on combat start.")]
+    private RPGCharacterStats _characterStats;
+
+    [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
+    private List<ActionInstance> _actions;
+
+    [Tooltip("This is a get method for the actions list count.")]
+    public int ActionCount => _actions.Count;
+
+    [Tooltip("This is the RPG stats component for the actor.")]
+    private RPGStats _stats;
+
+    [Tooltip("This is the current hp of the actor.")]
+    private float _currHP;
+
+    [Tooltip("This is the boolean that determines if the actor is koed")]
+    private bool _isKOed;
+
+    [Tooltip("This is a public version of the koed bool for outside scripts.")]
+    public bool IsKOed => _isKOed;
+
+    [Tooltip("This is the event that fires when an actor is KOed.")]
+    public event Action OnActorKO;
+
+    [Tooltip("This is the Health Bar that will be attached to the actor.")]
+    [SerializeField, Header("UI Components")]
+    private HealthBar _healthBar;
+
+    [Tooltip("This is the time coordinator for the actor.")]
+    [SerializeField]
+    private RPGActorTimeCoordinator _timeCoordinator;
+
+    [Tooltip("This is a get method for the time coordinator.")]
+    public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
+
+    [Tooltip("This is the Image component that will display the actor.")]
+    [SerializeField]
+    private Image _actorImage;
+
+    #endregion
+
+    #region Methods
+
+    #region Initialize Methods
+
+    /// <summary>
+    /// This initializes the actor with the given components it needs to function. It should be called by
+    /// the RPG Party Manager when the combat starts
+    /// </summary>
+    /// <param name="characterStats"></param>
+    public void InitializeActor(int index, RPGCharacterStats characterStats)
+    {
+        // Check that a character can even instantiate with the given data, if not, log an error and return
+        if (!ValidateInitialization(index, characterStats, characterStats.actionData))
+        {
+            return;
+        }
+
+        _index = index;
+        
+        // Initialize components
+        InitializeCharacterStats(characterStats);
+        InitializeActionInstancesList(characterStats.actionData);
+        InitializeHealthBar();
+        InitializeTimeCoordinator();
+
+        // Leaving this here for when animations get added and this needs to be refactored.
+        _actorImage.sprite = characterStats.characterFullBodyImage;
+    }
+
+    /// <summary>
+    /// This method checks that all the necessary components for the RPG Actor are present and valid. 
+    /// If any of the checks fail, it logs an error and returns false, preventing the actor from being initialized.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="characterStats"></param>
+    /// <param name="actionData"></param>
+    /// <returns></returns>
+    private bool ValidateInitialization(int index, RPGCharacterStats characterStats, List<ActionData> actionData)
+    {
+        // Check for index and if it is valid
+        if (index < 0)
+        {
+            Debug.LogError("RPG Actor index cannot be less than 0 and will not work.");
+            return false;
+        }
+
+        // Check for character stats and if it is present
+        if (characterStats == null)
+        {
+            Debug.LogError("RPG Actor could not find a character stat and will not work.");
+            return false;
+        }
+
+        // Check for action data and if it is present
+        if (actionData == null || actionData.Count == 0)
+        {
+            Debug.LogError("RPG Actor could not find any action data and will not work.");
+            return false;
+        }
+
+        // Check for health bar and if it is present
+        if (_healthBar == null)
+        {
+            Debug.LogError("Health Bar not found, RPG actor will not work.");
+            return false;
+        }
+
+        // Check for the time coordinator
+        if (_timeCoordinator == null)
+        {
+            Debug.LogError("Time Coordinator not found, RPG actor will not work.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// This method initializes the character stats for the actor. 
+    /// It should only be called by the InitializeActor method, and it sets the character stats.
+    /// </summary>
+    /// <param name="characterStats"></param>
+    private void InitializeCharacterStats(RPGCharacterStats characterStats)
+    {
+        // Setting stats
+        _characterStats = characterStats;
+        _stats = characterStats.baseStats;
+    }
+
+    /// <summary>
+    /// This method initializes the action instances list for the actor. 
+    /// It should only be called by the InitializeActor method, and it fills the list with the given action data.
+    /// </summary>
+    /// <param name="actionData"></param>
+    private void InitializeActionInstancesList(List<ActionData> actionData)
+    {
+        List<ActionInstance> _actions = new List<ActionInstance>();
+
+        // Initialize the actions list and fill it with the action data
+        foreach (ActionData data in actionData)
+        {
+            _actions.Add(new ActionInstance(data));
+        }
+    }
+
+    /// <summary>
+    /// This method initializes the health bar for the actor. It should only be called by the InitializeActor method, 
+    /// and it sets the max value of the health bar to the max hp of the character stats.
+    /// </summary>
+    private void InitializeHealthBar()
+    {
+        _healthBar.Initialize(_stats.maxHP);
+    }
+
+    /// <summary>
+    /// This method initializes the time coordinator for the actor. It should only be called by the InitializeActor method, 
+    /// and it sets the max time value for the time coordinator to the max time of the character stats.
+    /// </summary>
+    private void InitializeTimeCoordinator()
+    {
+        _timeCoordinator.Initialize(_stats.maxTime);
+    }
+
+    #endregion
+
+    /// <summary>
+    /// This method is called when damage or healing occurs in combat.
+    /// </summary>
+    /// <param name="valueToChange"></param>
+    public void UpdateHealth(int valueToChange)
+    {
+        // Update the current hp clamped within max and 0
+        _currHP = Mathf.Clamp(_currHP + valueToChange, 0, _stats.maxHP);
+
+        // Update the visual
+        _healthBar.UpdateSliderValue(_currHP);
+
+        // If hp is greater than 0, don't continue
+        if(_currHP > 0)
+        {
+            return;
+        }
+
+        // Ko the actor
+        KOActor();
+    }
+
+    /// <summary>
+    /// Called when an actor goes to 0 hp, KOes the actor and notifies other scripts.
+    /// </summary>
+    private void KOActor()
+    {
+        // Set ko and invoke event
+        _isKOed = true;
+        OnActorKO?.Invoke();
+
+        // Disable the time coordinator for now
+        _timeCoordinator.DeactivateAndResetTimer();
+    }
+
+    #region Action Methods
+
+    /// <summary>
+    /// Get method for returning the action instance name at a given index.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public string GetActionNameAtIndex(int index)
+    {
+        // Exception handling for index out of range, if it is, log an error and return an empty string
+        if (index < 0 || index >= _actions.Count)
+        {
+            Debug.LogError("Index out of range for action instances list.");
+            return string.Empty;
+        }
+
+        // Return the action name at the given index
+        return _actions[index].ActionName;
+    }
+
+    /// <summary>
+    /// Get method for returning the action damage modifier at a given index.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public int GetActionDamageAtIndex(int index)
+    {
+        // Exception handling for index out of range, if it is, log an error and return 0
+        if (index < 0 || index >= _actions.Count)
+        {
+            Debug.LogError("Index out of range for action instances list.");
+            return 0;
+        }
+        // Return the action damage at the given index
+        return _actions[index].DamageModifier;
+    }
+
+    /// <summary>
+    /// Get method for returning the action effect index at a given index.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public int GetActionEffectAtIndex(int index)
+    {
+        // Exception handling for index out of range, if it is, log an error and return 0
+        if (index < 0 || index >= _actions.Count)
+        {
+            Debug.LogError("Index out of range for action instances list.");
+            return 0;
+        }
+        // Return the action effect at the given index
+        return _actions[index].EffectIndex;
+    }
+
+    /// <summary>
+    /// Completes the current action, and resets the time bar for the actor.
+    /// </summary>
+    public void FinishAction()
+    {
+        _timeCoordinator.ResetTimer();
+    }
+
+    /// <summary>
+    /// Called when the user's action is interrupted, such as by death, or stagger.
+    /// </summary>
+    public void InterruptAction()
+    {
+        _timeCoordinator.DeactivateAndResetTimer();
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Get method for returning the actor's index.
+    /// </summary>
+    /// <returns></returns>
+    public int GetActorIndex()
+    {
+        return _index;
+    }
+
+    #endregion
+}
