@@ -16,8 +16,8 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the index for this character. Chosen on runtime by the team controllers.")]
     private int _index;
 
-    [Tooltip("This is the scriptable object that will store the chracter data. It should be filled by the team manager on combat start.")]
-    private RPGCharacterStats _characterStats;
+    [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
+    private CharacterStats _characterStats;
 
     [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
     private List<ActionInstance> _actions;
@@ -26,7 +26,7 @@ public class RPGActor : MonoBehaviour
     public int ActionCount => _actions.Count;
 
     [Tooltip("This is the RPG stats component for the actor.")]
-    private RPGStats _stats;
+    private Stats _stats;
 
     [Tooltip("This is the current hp of the actor.")]
     private float _currHP;
@@ -43,6 +43,9 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the Health Bar that will be attached to the actor.")]
     [SerializeField, Header("UI Components")]
     private HealthBar _healthBar;
+
+    [Tooltip("This is the Player Actions UI that will be used to display the actions for the player when ready to attack.")]
+    private PlayerActionsUI _playerActionsUI;
 
     [Tooltip("This is the time coordinator for the actor.")]
     [SerializeField]
@@ -66,7 +69,7 @@ public class RPGActor : MonoBehaviour
     /// the RPG Party Manager when the combat starts
     /// </summary>
     /// <param name="characterStats"></param>
-    public void InitializeActor(int index, RPGCharacterStats characterStats)
+    public void InitializeActor(int index, CharacterStats characterStats)
     {
         // Check that a character can even instantiate with the given data, if not, log an error and return
         if (!ValidateInitialization(index, characterStats, characterStats.actionData))
@@ -94,7 +97,7 @@ public class RPGActor : MonoBehaviour
     /// <param name="characterStats"></param>
     /// <param name="actionData"></param>
     /// <returns></returns>
-    private bool ValidateInitialization(int index, RPGCharacterStats characterStats, List<ActionData> actionData)
+    private bool ValidateInitialization(int index, CharacterStats characterStats, List<ActionData> actionData)
     {
         // Check for index and if it is valid
         if (index < 0)
@@ -139,7 +142,7 @@ public class RPGActor : MonoBehaviour
     /// It should only be called by the InitializeActor method, and it sets the character stats.
     /// </summary>
     /// <param name="characterStats"></param>
-    private void InitializeCharacterStats(RPGCharacterStats characterStats)
+    private void InitializeCharacterStats(CharacterStats characterStats)
     {
         // Setting stats
         _characterStats = characterStats;

@@ -4,7 +4,7 @@
 /// REM-i
 /// </summary>
 [System.Serializable]
-public struct RPGStats
+public struct Stats
 {
     public int maxHP;
     public int maxTime;

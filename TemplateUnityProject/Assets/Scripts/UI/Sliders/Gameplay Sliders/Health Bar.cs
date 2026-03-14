@@ -27,13 +27,17 @@ public class HealthBar : UISliderParent
     {
         base.UpdateSliderValue(newValue);
 
-        UpdateHealthSlider();
+        // Update the health text if it exists
+        if (_hpText != null)
+        {
+            UpdateHealthSliderText();
+        }
     }
 
     /// <summary>
     /// Called when the health value is updated, updates the text display accordingly.
     /// </summary>
-    private void UpdateHealthSlider()
+    private void UpdateHealthSliderText()
     {
         _hpText.text = _uiSlider.value + "/" + _uiSlider.maxValue;
     }

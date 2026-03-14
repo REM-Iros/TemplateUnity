@@ -8,7 +8,7 @@ using UnityEngine;
 /// REM-i
 /// </summary>
 [CreateAssetMenu(fileName = "RPGCharacterStats", menuName = "Scriptable Objects/RPGCharacterStats")]
-public class RPGCharacterStats : ScriptableObject
+public class CharacterStats : ScriptableObject
 {
     [Tooltip("This is the unique ID for the character.")]
     public string characterID;
@@ -23,7 +23,7 @@ public class RPGCharacterStats : ScriptableObject
     public Sprite characterFullBodyImage;
 
     [Tooltip("This is the stat block for the character")]
-    public RPGStats baseStats;
+    public Stats baseStats;
 
     // Holy hack, but without setting up other things, this will work for now. 
     public List<ActionData> actionData;

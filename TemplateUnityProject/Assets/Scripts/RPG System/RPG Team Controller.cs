@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /// <summary>
 /// This is the player team controller. This controls all of the actors for the player party,
@@ -8,37 +7,44 @@ using UnityEngine.InputSystem;
 /// 
 /// REM-i
 /// </summary>
-public class PlayerTeamController : MonoBehaviour
+public class TeamController : MonoBehaviour
 {
     #region Vars
 
-    // Player input ref
-    // Remove this eventually when I have an overall combat manager.
-    [Tooltip("This is the Player Input Script from the new Input System for passing current control scheme to actions")]
-    private PlayerInput _playerInput;
-
     // Actor team info - This should be set by a global manager but is currently set as serialize for testing purposes
-    public List<RPGCharacterStats> characterStats;
+    public List<CharacterStats> characterStats;
 
     [Tooltip("This is the list of RPGActors on the team. Set by a global manager but hacked in as serialize for now.")]
-    [SerializeField, Header("Actor Components")] 
+    [SerializeField, Header("Actor Stat Components")]
     private List<RPGActor> _teamMembers;
 
-    [Tooltip("This is the prefab template game actor that is initialized when creating a character.")]
-    [SerializeField]
-    private GameObject _actorPrefab;
+    [Tooltip("This is the prefab template game actor sprite that is initialized when creating a character.")]
+    [SerializeField, Header("Actor Sprite Components")]
+    private GameObject _actorSpritePrefab;
 
     [Tooltip("This is the parent transform for instantiating actors.")]
     [SerializeField]
-    private Transform _actorParentTransform;
+    private Transform _actorSpriteParentTransform;
 
-    [Tooltip("This is the action UI for the player character's actions. This UI follows the player.")]
-    [SerializeField, Header("UI Components")] 
-    private PlayerActionsUI _playerActionsUI;
+    [Tooltip("This is the actor status UI prefab that is instantiated for each character.")]
+    [SerializeField, Header("Actor UI Components")]
+    private GameObject _actorStatusUIPrefab;
 
-    [Tooltip("This is the larger action UI that is stationary.")]
+    [Tooltip("This is the parent transform for instantiating actor status UIs.")]
     [SerializeField]
-    private PlayerActionsUI _playerActionsStationaryUI;
+    private Transform _actorStatusUIParentTransform;
+
+    [Tooltip("This is the action menu prefab that is instantiated for each character.")]
+    [SerializeField]
+    private GameObject _actionMenuPrefab;
+
+    /// <summary>
+    /// TODO: Start Here - I'm moving the action UI to each character now. They will own the action menu as I don't plan to have a menu that just follows the player around anymore.
+    /// </summary>
+
+    [Tooltip("This is the parent transform for instantiating action menus.")]
+    [SerializeField]
+    private Transform _actionMenuParentTransform;
 
     [Tooltip("This is the priority list for actions, it stores references to actor indexes and then ")]
     private List<int> priorityList;
@@ -50,21 +56,21 @@ public class PlayerTeamController : MonoBehaviour
     /// <summary>
     /// On startup, this is called to initialize the necessary components for actor teams
     /// </summary>
-    private void InitializeActorTeam()
+    public void InitializeActorTeam(List<CharacterStats> teamActorStats)
     {
         // Initialize priority list
         priorityList = new List<int>();
 
-        InitializePlayerActors();
+        InitializePlayerActors(teamActorStats);
     }
 
     /// <summary>
     /// This runs through the list of player actors and initializes them.
     /// </summary>
-    private void InitializePlayerActors()
+    private void InitializePlayerActors(List<CharacterStats> teamActorStats)
     {
         // Don't run if we are missing something
-        if (_actorPrefab == null || _teamMembers == null)
+        if (_actorSpritePrefab == null || _teamMembers == null)
         {
             Debug.LogError("No actors found for team creator. Stopping.");
             return;
@@ -73,19 +79,22 @@ public class PlayerTeamController : MonoBehaviour
         int index = 0;
 
         // Run through each actor and initialize it
-        foreach (RPGCharacterStats stats in characterStats)
+        foreach (CharacterStats stats in teamActorStats)
         {
             //TODO: This shit is super hacky but for now it will work
-            GameObject obj = Instantiate(_actorPrefab, _actorParentTransform);
+            GameObject obj = Instantiate(_actorSpritePrefab, _actorSpriteParentTransform);
             RPGActor actor = obj.GetComponent<RPGActor>();
-            actor.InitializeActor(index, characterStats[index]);
+            actor.InitializeActor(index, stats);
             _teamMembers.Add(actor);
 
+            index++;
         }
 
+        /*
         // Initialize the two player action UI's
         _playerActionsUI.Init(_playerInput);
         _playerActionsStationaryUI.Init(_playerInput);
+        */
     }
 
     /// <summary>
@@ -141,13 +150,13 @@ public class PlayerTeamController : MonoBehaviour
         // Set the action names for the top priority character
         for (int i = 0; i < _teamMembers[priorityList[0]].ActionCount; i++)
         {
-            _playerActionsUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
-            _playerActionsStationaryUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
+            //_playerActionsUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
+            //_playerActionsStationaryUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
         }
 
         // Activate the action menu UI
-        _playerActionsUI.ActivateActionMenu();
-        _playerActionsStationaryUI.ActivateActionMenu();
+        //_playerActionsUI.ActivateActionMenu();
+        //_playerActionsStationaryUI.ActivateActionMenu();
     }
 
     /// <summary>
@@ -216,8 +225,8 @@ public class PlayerTeamController : MonoBehaviour
         {
             Debug.Log("Stop Showing Menu");
             // Update the action UI
-            _playerActionsUI.DeactivateActionMenu();
-            _playerActionsStationaryUI.DeactivateActionMenu();
+            //_playerActionsUI.DeactivateActionMenu();
+            //_playerActionsStationaryUI.DeactivateActionMenu();
         }
     }
 
