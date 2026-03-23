@@ -168,7 +168,7 @@ public class TeamController : MonoBehaviour
         // Check each team member
         foreach (RPGActor member in _teamMembers)
         {
-            if (!member.IsKOed)
+            if (!member.HealthCoordinator.IsKOed)
                 return false;
         }
 
@@ -185,7 +185,7 @@ public class TeamController : MonoBehaviour
     public void TakeDamage(int index, int damage)
     {
         // Update health for the specific team member
-        _teamMembers[index].UpdateHealth(damage);
+        _teamMembers[index].HealthCoordinator.UpdateHealth(damage);
 
         // If the whole team is KOed, kill the player
         if (!IsTeamKOed())
@@ -240,7 +240,7 @@ public class TeamController : MonoBehaviour
 
         for (int i = 0; i < _teamMembers.Count; i++)
         {
-            if (!_teamMembers[i].IsKOed)
+            if (!_teamMembers[i].HealthCoordinator.IsKOed)
             {
                 aliveIndices.Add(i);
             }

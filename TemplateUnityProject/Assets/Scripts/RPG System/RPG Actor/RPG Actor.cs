@@ -16,6 +16,20 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the index for this character. Chosen on runtime by the team controllers.")]
     private int _index;
 
+    [Tooltip("This is the health coordinator for the actor.")]
+    [SerializeField, Header("Actor Components")]
+    private RPGActorHealthCoordinator _healthCoordinator;
+
+    [Tooltip("This is a get method for the health coordinator.")]
+    public RPGActorHealthCoordinator HealthCoordinator => _healthCoordinator;
+
+    [Tooltip("This is the time coordinator for the actor.")]
+    [SerializeField]
+    private RPGActorTimeCoordinator _timeCoordinator;
+
+    [Tooltip("This is a get method for the time coordinator.")]
+    public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
+
     [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
     private CharacterStats _characterStats;
 
@@ -28,31 +42,8 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the RPG stats component for the actor.")]
     private Stats _stats;
 
-    [Tooltip("This is the current hp of the actor.")]
-    private float _currHP;
-
-    [Tooltip("This is the boolean that determines if the actor is koed")]
-    private bool _isKOed;
-
-    [Tooltip("This is a public version of the koed bool for outside scripts.")]
-    public bool IsKOed => _isKOed;
-
-    [Tooltip("This is the event that fires when an actor is KOed.")]
-    public event Action OnActorKO;
-
-    [Tooltip("This is the Health Bar that will be attached to the actor.")]
-    [SerializeField, Header("UI Components")]
-    private HealthBar _healthBar;
-
     [Tooltip("This is the Player Actions UI that will be used to display the actions for the player when ready to attack.")]
     private PlayerActionsUI _playerActionsUI;
-
-    [Tooltip("This is the time coordinator for the actor.")]
-    [SerializeField]
-    private RPGActorTimeCoordinator _timeCoordinator;
-
-    [Tooltip("This is a get method for the time coordinator.")]
-    public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
 
     [Tooltip("This is the Image component that will display the actor.")]
     [SerializeField]
@@ -82,8 +73,10 @@ public class RPGActor : MonoBehaviour
         // Initialize components
         InitializeCharacterStats(characterStats);
         InitializeActionInstancesList(characterStats.actionData);
-        InitializeHealthBar();
+        InitializeHealthCoordinator();
         InitializeTimeCoordinator();
+
+        HealthCoordinator.OnActorKO += TimeCoordinator.DeactivateAndResetTimer;
 
         // Leaving this here for when animations get added and this needs to be refactored.
         _actorImage.sprite = characterStats.characterFullBodyImage;
@@ -121,9 +114,9 @@ public class RPGActor : MonoBehaviour
         }
 
         // Check for health bar and if it is present
-        if (_healthBar == null)
+        if (_healthCoordinator == null)
         {
-            Debug.LogError("Health Bar not found, RPG actor will not work.");
+            Debug.LogError("Health Coordinator not found, RPG actor will not work.");
             return false;
         }
 
@@ -169,9 +162,9 @@ public class RPGActor : MonoBehaviour
     /// This method initializes the health bar for the actor. It should only be called by the InitializeActor method, 
     /// and it sets the max value of the health bar to the max hp of the character stats.
     /// </summary>
-    private void InitializeHealthBar()
+    private void InitializeHealthCoordinator()
     {
-        _healthBar.Initialize(_stats.maxHP);
+        _healthCoordinator.Initialize(_stats.maxHP);
     }
 
     /// <summary>
@@ -184,41 +177,6 @@ public class RPGActor : MonoBehaviour
     }
 
     #endregion
-
-    /// <summary>
-    /// This method is called when damage or healing occurs in combat.
-    /// </summary>
-    /// <param name="valueToChange"></param>
-    public void UpdateHealth(int valueToChange)
-    {
-        // Update the current hp clamped within max and 0
-        _currHP = Mathf.Clamp(_currHP + valueToChange, 0, _stats.maxHP);
-
-        // Update the visual
-        _healthBar.UpdateSliderValue(_currHP);
-
-        // If hp is greater than 0, don't continue
-        if(_currHP > 0)
-        {
-            return;
-        }
-
-        // Ko the actor
-        KOActor();
-    }
-
-    /// <summary>
-    /// Called when an actor goes to 0 hp, KOes the actor and notifies other scripts.
-    /// </summary>
-    private void KOActor()
-    {
-        // Set ko and invoke event
-        _isKOed = true;
-        OnActorKO?.Invoke();
-
-        // Disable the time coordinator for now
-        _timeCoordinator.DeactivateAndResetTimer();
-    }
 
     #region Action Methods
 
