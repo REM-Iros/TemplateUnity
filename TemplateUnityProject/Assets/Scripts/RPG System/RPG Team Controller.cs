@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// This is the player team controller. This controls all of the actors for the player party,
@@ -87,14 +88,20 @@ public class TeamController : MonoBehaviour
             actor.InitializeActor(index, stats);
             _teamMembers.Add(actor);
 
+            SubscribeToActorEvents(actor);
+
             index++;
         }
+    }
 
-        /*
-        // Initialize the two player action UI's
-        _playerActionsUI.Init(_playerInput);
-        _playerActionsStationaryUI.Init(_playerInput);
-        */
+    /// <summary>
+    /// This method is used by the team controller
+    /// </summary>
+    /// <param name="actor"></param>
+    private void SubscribeToActorEvents(RPGActor actor)
+    {
+        actor.OnActorKO += UnSubscribeToPriorityList;
+        actor.OnActorActionStart += SubscribeToPriorityList;
     }
 
     /// <summary>
@@ -147,16 +154,7 @@ public class TeamController : MonoBehaviour
         if (priorityList.Count == 0)
             return;
 
-        // Set the action names for the top priority character
-        for (int i = 0; i < _teamMembers[priorityList[0]].ActionCount; i++)
-        {
-            //_playerActionsUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
-            //_playerActionsStationaryUI.SetMenuElementAtIndex(i, _teamMembers[priorityList[0]].GetActionNameAtIndex(i));
-        }
-
-        // Activate the action menu UI
-        //_playerActionsUI.ActivateActionMenu();
-        //_playerActionsStationaryUI.ActivateActionMenu();
+        _teamMembers[priorityList[0]].ActivateActionMenu();
     }
 
     /// <summary>
@@ -216,17 +214,35 @@ public class TeamController : MonoBehaviour
         priorityList.RemoveAt(0);
 
         // If there are still members in the priority list, show the next menu
-        if (priorityList.Count > 0)
+        if (priorityList.Count <= 0)
         {
-            Debug.Log("Continue Showing Menu");
-            ShowTopPriorityMenu();
+            return;
         }
-        else
+
+        ShowTopPriorityMenu();
+    }
+
+    /// <summary>
+    /// Called by the team controller to initialize the action menu subscribing to the input controller.
+    /// </summary>
+    /// <param name="playerInput"></param>
+    public void InitializeActionMenuInputController(PlayerInput playerInput)
+    {
+        foreach(RPGActor member in _teamMembers)
         {
-            Debug.Log("Stop Showing Menu");
-            // Update the action UI
-            //_playerActionsUI.DeactivateActionMenu();
-            //_playerActionsStationaryUI.DeactivateActionMenu();
+            member.InitializeActionMenu(playerInput);
+        }
+    }
+
+    /// <summary>
+    /// Unsubscribe to the actor events on destroy.
+    /// </summary>
+    private void OnDestroy()
+    {
+        foreach (RPGActor member in _teamMembers)
+        {
+            member.OnActorKO -= UnSubscribeToPriorityList;
+            member.OnActorActionStart -= SubscribeToPriorityList;
         }
     }
 

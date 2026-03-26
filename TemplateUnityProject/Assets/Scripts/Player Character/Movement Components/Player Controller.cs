@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Sub the logging method to the menu script.
+        // TODO: Temporary fix to test logging player location. This should eventually become it's own component.
         _inputController.RegisterMenuPerformed(LogCurrentPosition);
 
         // Attach the scripts that need to be attached between movement and input

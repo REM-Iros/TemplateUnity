@@ -23,7 +23,7 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     public bool IsKOed => _isKOed;
 
     [Tooltip("This event is called when the player is KOed.")]
-    public event Action OnActorKO;
+    public event Action OnKO;
 
     [Tooltip("This is the health bar component for the health coordinator.")]
     [SerializeField, Header("UI Components")]
@@ -37,7 +37,7 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     /// Initializes the health bar component for the actor.
     /// </summary>
     /// <param name="maxHP"></param>
-    public void Initialize(int maxHP)
+    public void Initialize(int maxHP, int index)
     {
         _maxHP = maxHP;
         _currHP = _maxHP;
@@ -72,7 +72,7 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     {
         // Set ko and invoke event
         _isKOed = true;
-        OnActorKO?.Invoke();
+        OnKO?.Invoke();
     }
 
     #endregion

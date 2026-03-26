@@ -6,7 +6,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-[CreateAssetMenu(fileName = "ActionData", menuName = "Scriptable Objects/ActionData")]
+[CreateAssetMenu(fileName = "ActionData", menuName = "Scriptable Objects/RPG/Action/ActionData")]
 public class ActionData : ScriptableObject
 {
     public string actionName;

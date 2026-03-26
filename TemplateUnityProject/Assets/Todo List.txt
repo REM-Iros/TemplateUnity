@@ -1,3 +1,6 @@
-Todo List: I need to make it so each rpg actor owns their own action menu, which means some slight refactoring.
+Todo List: 
+
+Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
+
 After that, I should look at creating an enemy rpg team, and then look at different ways of timing attacks 
 (Pokémon where everyone attacks at once based on speed order? FF where when a character can attack, everyone else stops?)

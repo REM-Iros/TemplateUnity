@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// This script handles the UI for the player actions in the bullet hell segment. It will display the text for the actions the player can take,
+/// This script handles the UI for the player actions. It will display the text for the actions the player can take,
 /// as well as any relevant information such as cooldowns or costs.
 /// 
 /// REM-i
@@ -11,10 +11,6 @@ using UnityEngine.InputSystem;
 public class PlayerActionsUI : MonoBehaviour
 {
     #region Vars
-
-    // Player input ref
-    [Tooltip("This is the Player Input Script from the new Input System for passing current control scheme to actions")]
-    private PlayerInput _playerInput;
 
     [Tooltip("This is the player transform that we want to follow with the UI")]
     [SerializeField, Header("Player Transform Reference")]
@@ -41,12 +37,9 @@ public class PlayerActionsUI : MonoBehaviour
     /// </summary>
     public void Init(PlayerInput playerInput)
     {
-        // Set player input and pass to elements
-        _playerInput = playerInput;
-
         foreach (var actionUIElement in _actionUIElements)
         {
-            actionUIElement.Init(_playerInput);
+            actionUIElement.InitializeUIElement(playerInput);
         }
 
         // Store the ref for performance and ease of access

@@ -7,7 +7,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-[CreateAssetMenu(fileName = "RPGCharacterStats", menuName = "Scriptable Objects/RPGCharacterStats")]
+[CreateAssetMenu(fileName = "RPGCharacterStats", menuName = "Scriptable Objects/RPG/RPGCharacterStats")]
 public class CharacterStats : ScriptableObject
 {
     [Tooltip("This is the unique ID for the character.")]

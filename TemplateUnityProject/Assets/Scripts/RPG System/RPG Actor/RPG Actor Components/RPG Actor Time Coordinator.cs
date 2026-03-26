@@ -41,7 +41,7 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     /// fill rate being a better component to modify for different effects.
     /// </summary>
     /// <param name="newMaxTimeValue"></param>
-    public void Initialize(float newMaxTimeValue)
+    public void Initialize(float newMaxTimeValue, int index)
     {
         // Set max time and zero out current time
         _maxTime = newMaxTimeValue;

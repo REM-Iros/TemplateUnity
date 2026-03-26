@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// This is the basic RPG Actor class. It will be used as the orchestrator of all character
@@ -33,6 +34,9 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
     private CharacterStats _characterStats;
 
+    [Tooltip("This is the action menu UI for the actor. It should be initialized by the team manager after other components initialize.")]
+    private PlayerActionsUI _actionMenuUI;
+
     [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
     private List<ActionInstance> _actions;
 
@@ -48,6 +52,14 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the Image component that will display the actor.")]
     [SerializeField]
     private Image _actorImage;
+
+    #region Events
+
+    // Events for the actor, these will be used to notify the team controller and other components of important information such as when an action starts or ends, or when the actor is KOed.
+    public event Action<int> OnActorKO;
+    public event Action<int> OnActorActionStart;
+
+    #endregion
 
     #endregion
 
@@ -75,8 +87,6 @@ public class RPGActor : MonoBehaviour
         InitializeActionInstancesList(characterStats.actionData);
         InitializeHealthCoordinator();
         InitializeTimeCoordinator();
-
-        HealthCoordinator.OnActorKO += TimeCoordinator.DeactivateAndResetTimer;
 
         // Leaving this here for when animations get added and this needs to be refactored.
         _actorImage.sprite = characterStats.characterFullBodyImage;
@@ -164,7 +174,7 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void InitializeHealthCoordinator()
     {
-        _healthCoordinator.Initialize(_stats.maxHP);
+        _healthCoordinator.Initialize(_stats.maxHP, _index);
     }
 
     /// <summary>
@@ -173,12 +183,29 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void InitializeTimeCoordinator()
     {
-        _timeCoordinator.Initialize(_stats.maxTime);
+        _timeCoordinator.Initialize(_stats.maxTime, _index);
+    }
+
+    /// <summary>
+    /// Method is called after the actor is initialized to set the reference for the action menu UI. This is necessary for the actor to be able to control the UI and display it when necessary.
+    /// </summary>
+    /// <param name="inputController"></param>
+    public void InitializeActionMenu(PlayerInput inputController)
+    {
+        _playerActionsUI.Init(inputController);
     }
 
     #endregion
 
     #region Action Methods
+
+    /// <summary>
+    /// Activates the action menu for the actor.
+    /// </summary>
+    public void ActivateActionMenu()
+    {
+        _playerActionsUI.ActivateActionMenu();
+    }
 
     /// <summary>
     /// Get method for returning the action instance name at a given index.
@@ -238,6 +265,8 @@ public class RPGActor : MonoBehaviour
     public void FinishAction()
     {
         _timeCoordinator.ResetTimer();
+
+        _playerActionsUI.DeactivateActionMenu();
     }
 
     /// <summary>
@@ -257,6 +286,39 @@ public class RPGActor : MonoBehaviour
     public int GetActorIndex()
     {
         return _index;
+    }
+
+    /// <summary>
+    /// When the actor is KOed, activate this event and notify the team controller.
+    /// </summary>
+    private void ActorKOActivateEvent()
+    {
+        OnActorKO?.Invoke(_index);
+    }
+
+    /// <summary>
+    /// When the actor is ready to take an action, activate this event and notify the team controller.
+    /// </summary>
+    private void ActionReady()
+    {
+        OnActorActionStart?.Invoke(_index);
+    }
+
+    /// <summary>
+    /// Unsubscribe to the actor events on disable.
+    /// </summary>
+    private void OnDestroy()
+    {
+        if (_healthCoordinator != null)
+        {
+            _healthCoordinator.OnKO -= ActorKOActivateEvent;
+            _healthCoordinator.OnKO -= _timeCoordinator.DeactivateAndResetTimer;
+        }
+
+        if (_timeCoordinator != null)
+        {
+            _timeCoordinator.OnCanAct -= ActionReady;
+        }
     }
 
     #endregion

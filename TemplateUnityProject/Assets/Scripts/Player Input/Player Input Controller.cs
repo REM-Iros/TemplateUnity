@@ -18,6 +18,9 @@ public class PlayerInputController : MonoBehaviour
     [SerializeField, Header("Player Input")]
     private PlayerInput _playerInput;
 
+    [Tooltip("This is a get method for the player input component.")]
+    public PlayerInput PlayerInput => _playerInput;
+
     #region Input Actions
 
     /*
@@ -50,6 +53,8 @@ public class PlayerInputController : MonoBehaviour
 
     public event Action OnJumpPerformed;
     public event Action OnJumpCancelled;
+
+    public event Action OnControlSchemeChanged;
 
     #endregion
 
@@ -128,38 +133,17 @@ public class PlayerInputController : MonoBehaviour
     /// <param name="gameState"></param>
     private void HandleGameStateChanged(GameState gameState)
     {
-        bool isGameplay = gameState == GameState.Playing;
-
-        // Enable or disable input actions based on the game state
-        SetInputActionState(_moveAction, isGameplay);
-        SetInputActionState(_attackAction, isGameplay);
-        SetInputActionState(_dashAction, isGameplay);
-        SetInputActionState(_menuAction, isGameplay);
-        SetInputActionState(_jumpAction, isGameplay);
-    }
-
-    /// <summary>
-    /// This script is used to enable/disable input actions based on the game state or other conditions.
-    /// </summary>
-    /// <param name="action"></param>
-    /// <param name="enable"></param>
-    private void SetInputActionState(InputAction action, bool enable)
-    {
-        // Only set the state if the action is not null
-        if (action == null)
+        switch (gameState)
         {
-            Debug.LogError("Input action is null, cannot set state.");
-            return;
-        }
-
-        // Enable or disable the action based on the enable parameter
-        if (enable && !action.enabled)
-        {
-            action.Enable();
-        }
-        else if (!enable && action.enabled)
-        {
-            action.Disable();
+            case GameState.Playing:
+                _playerInput.SwitchCurrentActionMap("Player");
+                break;
+            case GameState.Paused:
+                _playerInput.SwitchCurrentActionMap("UI");
+                break;
+            case GameState.MenuOpen:
+                _playerInput.SwitchCurrentActionMap("UI");
+                break;
         }
     }
 
@@ -170,24 +154,40 @@ public class PlayerInputController : MonoBehaviour
     private void OnEnable()
     {
         // Move
-        _moveAction.performed += HandleMovePerformed;
-        _moveAction.canceled += HandleMoveCancelled;
+        if (_moveAction != null)
+        {
+            _moveAction.performed += HandleMovePerformed;
+            _moveAction.canceled += HandleMoveCancelled;
+        }
 
         // Attack
-        _attackAction.performed += HandleAttackPerformed;
-        _attackAction.canceled += HandleAttackCancelled;
+        if (_attackAction != null)
+        {
+            _attackAction.performed += HandleAttackPerformed;
+            _attackAction.canceled += HandleAttackCancelled;
+        }
+
 
         // Dash
-        _dashAction.performed += HandleDashPerformed;
-        _dashAction.canceled += HandleDashCancelled;
+        if (_dashAction != null)
+        {
+            _dashAction.performed += HandleDashPerformed;
+            _dashAction.canceled += HandleDashCancelled;
+        }
 
         // Menu
-        _menuAction.performed += HandleMenuPerformed;
-        _menuAction.canceled += HandleMenuCancelled;
+        if (_menuAction != null)
+        {
+            _menuAction.performed += HandleMenuPerformed;
+            _menuAction.canceled += HandleMenuCancelled;
+        }
 
         // Jump
-        _jumpAction.performed += HandleJumpPerformed;
-        _jumpAction.canceled += HandleJumpCancelled;
+        if (_jumpAction != null)
+        {
+            _jumpAction.performed += HandleJumpPerformed;
+            _jumpAction.canceled += HandleJumpCancelled;
+        }
     }
 
     /// <summary>
@@ -196,24 +196,39 @@ public class PlayerInputController : MonoBehaviour
     private void OnDisable()
     {
         // Move
-        _moveAction.performed -= HandleMovePerformed;
-        _moveAction.canceled -= HandleMoveCancelled;
+        if (_moveAction != null)
+        {
+            _moveAction.performed -= HandleMovePerformed;
+            _moveAction.canceled -= HandleMoveCancelled;
+        }
 
         // Attack
-        _attackAction.performed -= HandleAttackPerformed;
-        _attackAction.canceled -= HandleAttackCancelled;
+        if (_attackAction != null)
+        {
+            _attackAction.performed -= HandleAttackPerformed;
+            _attackAction.canceled -= HandleAttackCancelled;
+        }
 
         // Dash
-        _dashAction.performed -= HandleDashPerformed;
-        _dashAction.canceled -= HandleDashCancelled;
+        if (_dashAction != null)
+        {
+            _dashAction.performed -= HandleDashPerformed;
+            _dashAction.canceled -= HandleDashCancelled;
+        }
 
         // Menu
-        _menuAction.performed -= HandleMenuPerformed;
-        _menuAction.canceled -= HandleMenuCancelled;
+        if (_menuAction != null)
+        {
+            _menuAction.performed -= HandleMenuPerformed;
+            _menuAction.canceled -= HandleMenuCancelled;
+        }
 
         // Jump
-        _jumpAction.performed -= HandleJumpPerformed;
-        _jumpAction.canceled -= HandleJumpCancelled;
+        if (_jumpAction != null)
+        {
+            _jumpAction.performed -= HandleJumpPerformed;
+            _jumpAction.canceled -= HandleJumpCancelled;
+        }
     }
 
     #region Event Invoke Methods
@@ -316,6 +331,8 @@ public class PlayerInputController : MonoBehaviour
     public void UnregisterJumpPerformed(Action callback) => OnJumpPerformed -= callback;
     public void RegisterJumpCancelled(Action callback) => OnJumpCancelled += callback;
     public void UnregisterJumpCancelled(Action callback) => OnJumpCancelled -= callback;
+
+
 
     #endregion
 
