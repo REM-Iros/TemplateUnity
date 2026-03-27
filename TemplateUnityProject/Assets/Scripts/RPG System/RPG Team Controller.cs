@@ -39,10 +39,6 @@ public class TeamController : MonoBehaviour
     [SerializeField]
     private GameObject _actionMenuPrefab;
 
-    /// <summary>
-    /// TODO: Start Here - I'm moving the action UI to each character now. They will own the action menu as I don't plan to have a menu that just follows the player around anymore.
-    /// </summary>
-
     [Tooltip("This is the parent transform for instantiating action menus.")]
     [SerializeField]
     private Transform _actionMenuParentTransform;

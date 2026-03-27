@@ -17,6 +17,9 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is the index for this character. Chosen on runtime by the team controllers.")]
     private int _index;
 
+    [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
+    private CharacterStats _characterStats;
+
     [Tooltip("This is the health coordinator for the actor.")]
     [SerializeField, Header("Actor Components")]
     private RPGActorHealthCoordinator _healthCoordinator;
@@ -31,10 +34,8 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is a get method for the time coordinator.")]
     public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
 
-    [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
-    private CharacterStats _characterStats;
-
     [Tooltip("This is the action menu UI for the actor. It should be initialized by the team manager after other components initialize.")]
+    [SerializeField]
     private PlayerActionsUI _actionMenuUI;
 
     [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
@@ -161,10 +162,13 @@ public class RPGActor : MonoBehaviour
     {
         List<ActionInstance> _actions = new List<ActionInstance>();
 
+        int actionIndex = 0;
+
         // Initialize the actions list and fill it with the action data
         foreach (ActionData data in actionData)
         {
             _actions.Add(new ActionInstance(data));
+            _actionMenuUI.SetMenuElementAtIndex(actionIndex, data.name);
         }
     }
 
