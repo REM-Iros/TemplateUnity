@@ -29,10 +29,26 @@ public class PlayerActionUIElement : MonoBehaviour
     #region Methods
 
     /// <summary>
+    /// Called by action menu to enable the element.
+    /// </summary>
+    public void ActivateUIElement()
+    {
+        gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Called by action menu to disable the element.
+    /// </summary>
+    public void DeactivateUIElement()
+    {
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
     /// Store reference to Player Input for control scheme detection on initialization.
     /// </summary>
     /// <param name="playerInput"></param>
-    public void InitializeUIElement(PlayerInput playerInput)
+    public void SetUpRebindIcons(PlayerInput playerInput)
     {
         _playerInput = playerInput;
 

@@ -14,6 +14,9 @@ public class BattleController : MonoBehaviour
     [SerializeField, Header("Input Controller")]
     private PlayerInputController _playerInputController;
 
+    [Tooltip("This is the input router.")]
+    private RPGBattleInputRouter _battleInputRouter;
+
     [Tooltip("This is the player team controller.")]
     [SerializeField, Header("Actor Team Controllers")]
     private TeamController _playerTeamController;
@@ -28,6 +31,13 @@ public class BattleController : MonoBehaviour
     // This is hardcoded team data for testing purposes.
     public List<CharacterStats> enemyTeamData;
 
+    [Tooltip("This is the UI Manager for the battle.")]
+    [SerializeField, Header("UI Manager")]
+    private RPGBattleUIManager _battleUIManager;
+
+    [Tooltip("This is the current state the battle is in.")]
+    private RPGBattleState _battleState;
+
     #endregion
 
     #region Methods
@@ -40,12 +50,38 @@ public class BattleController : MonoBehaviour
         //_playerTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().TeamData);
         //_enemyTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().EnemyTeamData);
 
+        _battleState = RPGBattleState.Startup;
+
+        // Set up the input router
+        _battleInputRouter = GetComponent<RPGBattleInputRouter>();
+        _battleInputRouter.Bind(_playerInputController);
+
         // Hacked in team data for testing purposes until I get the global manager set up.
         _playerTeamController.InitializeActorTeam(playerTeamData);
         _enemyTeamController.InitializeActorTeam(enemyTeamData);
 
+        InitializeBattleUIManager();
+
+        
+
         // Add the action menu input controller to the player team controller so that it can listen for input when the action menu is active.
-        _playerTeamController.InitializeActionMenuInputController(_playerInputController.PlayerInput);
+        //_playerTeamController.InitializeActionMenuInputController(_playerInputController);
+    }
+
+    private void InitializeBattleUIManager()
+    {
+        // Initialize the ui manager with actors
+        foreach (RPGActor actor in _playerTeamController.Actors)
+        {
+            _battleUIManager.RegisterActor(actor, true);
+        }
+
+        foreach (RPGActor actor in _enemyTeamController.Actors)
+        {
+            _battleUIManager.RegisterActor(actor, false);
+        }
+
+        _battleUIManager.InitializeActionMenu();
     }
 
     #endregion

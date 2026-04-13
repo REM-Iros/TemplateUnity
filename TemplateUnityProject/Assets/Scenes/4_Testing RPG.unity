@@ -248,7 +248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RPGActor
   _healthCoordinator: {fileID: 1749263398}
   _timeCoordinator: {fileID: 1601768996}
-  _actionMenuUI: {fileID: 0}
   _actorImage: {fileID: 1571952121}
 --- !u!1 &154561951
 GameObject:
@@ -1850,7 +1849,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce0c88c1d12bed42bfebd97c7e2915d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RPGActorTimeCoordinator
-  _timeBar: {fileID: 1601768995}
 --- !u!1 &1623029217
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,7 +2487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c196c43d08a2a134d80638509dc21d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RPGActorHealthCoordinator
-  _healthBar: {fileID: 1749263397}
 --- !u!1 &1755544559
 GameObject:
   m_ObjectHideFlags: 0
@@ -2650,9 +2647,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeamController
   characterStats: []
-  _teamMembers: []
-  _actorSpritePrefab: {fileID: 0}
-  _actorSpriteParentTransform: {fileID: 1265760092}
+  _actors: []
+  _actorPrefab: {fileID: 0}
+  _actorPrefabParentTransform: {fileID: 0}
   _actorStatusUIPrefab: {fileID: 0}
   _actorStatusUIParentTransform: {fileID: 245588210}
   _actionMenuPrefab: {fileID: 0}
@@ -2963,8 +2960,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104e561c8b5b283419fca44176252cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActionsUI
-  _playerTransform: {fileID: 0}
-  _actionsUIParent: {fileID: 0}
   _actionUIElements:
   - {fileID: 1433234659}
   - {fileID: 1110108474}

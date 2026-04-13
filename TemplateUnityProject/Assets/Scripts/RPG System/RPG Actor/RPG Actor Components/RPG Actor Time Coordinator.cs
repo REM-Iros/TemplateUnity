@@ -13,8 +13,14 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     [Tooltip("This is the max time value for the actor's time bar.")]
     private float _maxTime;
 
+    [Tooltip("This is the public getter for max time.")]
+    public float MaxTime => _maxTime;
+
     [Tooltip("This is the current time value for the actor's time bar.")]
     private float _currentTime;
+
+    [Tooltip("This is the public getter for current time.")]
+    public float CurrentTime => _currentTime;
 
     [Tooltip("This is the rate at which the actor's time bar fills up.")]
     private float _timeFillRate;
@@ -25,12 +31,14 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     [Tooltip("This indicates whether the time coordinator should be running.")]
     private bool _isActive = false;
 
+    [Tooltip("This event runs when the time value changes.")]
+    public event Action<float> OnTimeUpdate;
+
+    [Tooltip("This event runs when the max time value changes.")]
+    public event Action<float> OnMaxTimeUpdate;
+
     [Tooltip("This is the event that is triggered when the actor can take an action.")]
     public event Action OnCanAct;
-
-    [Tooltip("This is the Time Bar component that will visually display the actor's time progress.")]
-    [SerializeField, Header("UI Components")]
-    private TimeBar _timeBar;
 
     #endregion
 
@@ -41,16 +49,12 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     /// fill rate being a better component to modify for different effects.
     /// </summary>
     /// <param name="newMaxTimeValue"></param>
-    public void Initialize(float newMaxTimeValue, int index)
+    public void Initialize(float newMaxTimeValue)
     {
         // Set max time and zero out current time
         _maxTime = newMaxTimeValue;
         _currentTime = 0f;
         _timeFillRate = 1f;
-
-        // Initialize the time bar UI
-        _timeBar.Initialize(_maxTime);
-        _timeBar.UpdateSliderValue(_currentTime);
 
         // Start the timer
         _isActive = true;
@@ -71,8 +75,7 @@ public class RPGActorTimeCoordinator : MonoBehaviour
         // Increment the current time based on fill rate and delta time
         _currentTime += _timeFillRate * Time.deltaTime;
 
-        // Update the time bar UI
-        _timeBar.UpdateSliderValue(_currentTime);
+        OnTimeUpdate?.Invoke(_currentTime);
 
         // Check if the actor can now act
         if (_currentTime < _maxTime)
@@ -95,7 +98,8 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     {
         _currentTime = 0f;
         _canAct = false;
-        _timeBar.UpdateSliderValue(_currentTime);
+
+        OnTimeUpdate?.Invoke(_currentTime);
     }
 
     /// <summary>
@@ -118,7 +122,7 @@ public class RPGActorTimeCoordinator : MonoBehaviour
         _isActive = false;
 
         // Reset visual
-        _timeBar.UpdateSliderValue(_currentTime);
+        OnTimeUpdate?.Invoke(_currentTime);
     }
 
     #endregion

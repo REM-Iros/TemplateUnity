@@ -8,21 +8,15 @@ using UnityEngine.InputSystem;
 /// 
 /// REM-i
 /// </summary>
-public class PlayerActionsUI : MonoBehaviour
+public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
 {
     #region Vars
 
-    [Tooltip("This is the player transform that we want to follow with the UI")]
-    [SerializeField, Header("Player Transform Reference")]
-    private Transform _playerTransform;
+    [Tooltip("This is the current actor we are following with the action menu.")]
+    private RPGActor _currentActor;
 
-    // UI Elements
-    [Tooltip("This is the parent object that contains all action UI Elements")]
-    [SerializeField, Header("Action UI Parent")]
-    private GameObject _actionsUIParent;
-
-    [Tooltip("This is the transform for the action UI GameObj")]
-    private RectTransform _actionUITransform;
+    [Tooltip("This is the current actor's transform we are following with the action menu.")]
+    private Transform _currentActorTransform;
 
     [Tooltip("These are the action UI Elements that compose the menu")]
     [SerializeField, Header("Action UI Components")]
@@ -37,40 +31,83 @@ public class PlayerActionsUI : MonoBehaviour
     /// </summary>
     public void Init(PlayerInput playerInput)
     {
+        //TODO: Work on this eventually, this rebinding crap is awful
         foreach (var actionUIElement in _actionUIElements)
         {
-            actionUIElement.InitializeUIElement(playerInput);
+            actionUIElement.SetUpRebindIcons(playerInput);
         }
 
-        // Store the ref for performance and ease of access
-        _actionUITransform = _actionsUIParent.GetComponent<RectTransform>();
+        // Deactivate all elements at startup.
+        foreach (PlayerActionUIElement element in _actionUIElements)
+        {
+            element.DeactivateUIElement();
+        }
 
-        // Deactivate menu at start
-        _actionsUIParent.SetActive(false);
+        // Deactivate menu
+        DeactivateActionMenu();
+    }
+
+    /// <summary>
+    /// On bind, we get the actor and cache actor and transform, initialize the icons for the actions, 
+    /// and activate the menu
+    /// </summary>
+    /// <param name="actor"></param>
+    public void Bind(RPGActor actor)
+    {
+        // Get current actor and transform
+        _currentActor = actor;
+        _currentActorTransform = actor.transform;
+
+        // Set index for actions
+        int index = 0;
+
+        // Fill the action elements with data
+        foreach(ActionInstance action in _currentActor.Actions)
+        {
+            _actionUIElements[index].SetActionName(action.ActionName);
+            _actionUIElements[index].ActivateUIElement();
+            index++;
+        }
+
+        // Set action menu to actor location
+        FollowActorTransform();
+
+        // Activate the action menu
+        ActivateActionMenu();
+
+        // Sub to event
+        _currentActor.OnActorActionStart += Unbind;
+        
+    }
+
+    /// <summary>
+    /// Called when either the actor finishes their action or becomes incapacitated. Unbinds from the current actor.
+    /// </summary>
+    public void Unbind()
+    {
+        // Hide the menu
+        DeactivateActionMenu();
+
+        // Unbind the actor
+        _currentActor.OnActorActionStart -= Unbind;
+        _currentActor = null;
+        _currentActorTransform = null;
     }
 
     /// <summary>
     /// Enables the action menu UI. 
     /// </summary>
-    public void ActivateActionMenu()
+    private void ActivateActionMenu()
     {
-        _actionsUIParent.SetActive(true);
+        gameObject.SetActive(true);
     }
 
     /// <summary>
     /// Disables the action menu UI.
     /// </summary>
-    public void DeactivateActionMenu()
+    private void DeactivateActionMenu()
     {
-        _actionsUIParent.SetActive(false);
-    }
-
-    /// <summary>
-    /// Called by the team controller when a character is ready to act, updates the action menu text.
-    /// </summary>
-    public void SetMenuElementAtIndex(int actionIndex, string actionText)
-    {
-        _actionUIElements[actionIndex].SetActionName(actionText);
+        gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -78,11 +115,19 @@ public class PlayerActionsUI : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+        FollowActorTransform();
+    }
+
+    /// <summary>
+    /// Transposese world position to UI screen position and moves UI to actor coordinates.
+    /// </summary>
+    private void FollowActorTransform()
+    {
         // Transpose world position to screen position
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(_playerTransform.position);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(_currentActorTransform.position);
 
         // Follow player position
-        _actionUITransform.position = screenPos;
+        transform.position = screenPos;
     }
 
     #endregion

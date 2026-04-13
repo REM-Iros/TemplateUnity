@@ -7,9 +7,12 @@ using TMPro;
 /// 
 /// REM-i
 /// </summary>
-public class HealthBar : UISliderParent
+public class RPGHealthBar : UISliderParent, RPGIUIInterface
 {
     #region Vars
+
+    [Tooltip("This is the actor we want to bind this UI to")]
+    private RPGActorHealthCoordinator _actorHealthCoordinator;
 
     [Tooltip("This is the text component that displays the health value.")]
     [SerializeField] 
@@ -18,6 +21,33 @@ public class HealthBar : UISliderParent
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// On bind, we need to set max value and current value of slider, and subscribe to events.
+    /// </summary>
+    /// <param name="actor"></param>
+    public void Bind(RPGActor actor)
+    {
+        _actorHealthCoordinator = actor.HealthCoordinator;
+
+        // Set Max value of slider
+        Initialize(_actorHealthCoordinator.MaxHP);
+
+        // Set Current value of slider
+        UpdateSliderValue(_actorHealthCoordinator.CurrHP);
+
+        _actorHealthCoordinator.OnHPUpdate += UpdateSliderValue;
+    }
+
+    /// <summary>
+    /// On unbind, we need to unsub from events and remove reference to health coordinator.
+    /// </summary>
+    public void Unbind()
+    {
+        _actorHealthCoordinator.OnHPUpdate -= UpdateSliderValue;
+
+        _actorHealthCoordinator = null;
+    }
 
     /// <summary>
     /// Override to add health text update functionality.

@@ -34,21 +34,17 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is a get method for the time coordinator.")]
     public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
 
-    [Tooltip("This is the action menu UI for the actor. It should be initialized by the team manager after other components initialize.")]
-    [SerializeField]
-    private PlayerActionsUI _actionMenuUI;
-
     [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
     private List<ActionInstance> _actions;
+
+    [Tooltip("This is a public getter for actions.")]
+    public List<ActionInstance> Actions => _actions;
 
     [Tooltip("This is a get method for the actions list count.")]
     public int ActionCount => _actions.Count;
 
     [Tooltip("This is the RPG stats component for the actor.")]
     private Stats _stats;
-
-    [Tooltip("This is the Player Actions UI that will be used to display the actions for the player when ready to attack.")]
-    private PlayerActionsUI _playerActionsUI;
 
     [Tooltip("This is the Image component that will display the actor.")]
     [SerializeField]
@@ -58,7 +54,9 @@ public class RPGActor : MonoBehaviour
 
     // Events for the actor, these will be used to notify the team controller and other components of important information such as when an action starts or ends, or when the actor is KOed.
     public event Action<int> OnActorKO;
-    public event Action<int> OnActorActionStart;
+    public event Action<int> OnActorActionAvailable;
+    public event Action OnActorActionStart;
+    public event Action<int> OnActorActionFinish;
 
     #endregion
 
@@ -168,7 +166,7 @@ public class RPGActor : MonoBehaviour
         foreach (ActionData data in actionData)
         {
             _actions.Add(new ActionInstance(data));
-            _actionMenuUI.SetMenuElementAtIndex(actionIndex, data.name);
+            //_actionMenuUI.SetMenuElementAtIndex(actionIndex, data.name);
         }
     }
 
@@ -178,7 +176,8 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void InitializeHealthCoordinator()
     {
-        _healthCoordinator.Initialize(_stats.maxHP, _index);
+        //TODO: This needs to be changed to current hp eventually but will work for now.
+        _healthCoordinator.Initialize(_stats.maxHP, _stats.maxHP);
     }
 
     /// <summary>
@@ -187,29 +186,12 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void InitializeTimeCoordinator()
     {
-        _timeCoordinator.Initialize(_stats.maxTime, _index);
-    }
-
-    /// <summary>
-    /// Method is called after the actor is initialized to set the reference for the action menu UI. This is necessary for the actor to be able to control the UI and display it when necessary.
-    /// </summary>
-    /// <param name="inputController"></param>
-    public void InitializeActionMenu(PlayerInput inputController)
-    {
-        _playerActionsUI.Init(inputController);
+        _timeCoordinator.Initialize(_stats.maxTime);
     }
 
     #endregion
 
     #region Action Methods
-
-    /// <summary>
-    /// Activates the action menu for the actor.
-    /// </summary>
-    public void ActivateActionMenu()
-    {
-        _playerActionsUI.ActivateActionMenu();
-    }
 
     /// <summary>
     /// Get method for returning the action instance name at a given index.
@@ -270,7 +252,7 @@ public class RPGActor : MonoBehaviour
     {
         _timeCoordinator.ResetTimer();
 
-        _playerActionsUI.DeactivateActionMenu();
+        OnActorActionFinish?.Invoke(_index);
     }
 
     /// <summary>
@@ -305,7 +287,7 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void ActionReady()
     {
-        OnActorActionStart?.Invoke(_index);
+        OnActorActionAvailable?.Invoke(_index);
     }
 
     /// <summary>

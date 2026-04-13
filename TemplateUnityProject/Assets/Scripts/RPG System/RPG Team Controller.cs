@@ -17,15 +17,23 @@ public class TeamController : MonoBehaviour
 
     [Tooltip("This is the list of RPGActors on the team. Set by a global manager but hacked in as serialize for now.")]
     [SerializeField, Header("Actor Stat Components")]
-    private List<RPGActor> _teamMembers;
+    private List<RPGActor> _actors;
+
+    [Tooltip("This is the public getter for rpg actors.")]
+    public List<RPGActor> Actors => _actors;
 
     [Tooltip("This is the prefab template game actor sprite that is initialized when creating a character.")]
-    [SerializeField, Header("Actor Sprite Components")]
-    private GameObject _actorSpritePrefab;
+    [SerializeField, Header("Actor GameObject Components")]
+    private GameObject _actorPrefab;
 
     [Tooltip("This is the parent transform for instantiating actors.")]
     [SerializeField]
-    private Transform _actorSpriteParentTransform;
+    private Transform _actorPrefabParentTransform;
+
+    /*
+    Note, remove the UI stuff from the team controller, it should simply handle each actor's stats. UI will be controlled by
+    a separate manager.
+     */
 
     [Tooltip("This is the actor status UI prefab that is instantiated for each character.")]
     [SerializeField, Header("Actor UI Components")]
@@ -67,7 +75,7 @@ public class TeamController : MonoBehaviour
     private void InitializePlayerActors(List<CharacterStats> teamActorStats)
     {
         // Don't run if we are missing something
-        if (_actorSpritePrefab == null || _teamMembers == null)
+        if (_actorPrefab == null || _actors == null)
         {
             Debug.LogError("No actors found for team creator. Stopping.");
             return;
@@ -79,10 +87,10 @@ public class TeamController : MonoBehaviour
         foreach (CharacterStats stats in teamActorStats)
         {
             //TODO: This shit is super hacky but for now it will work
-            GameObject obj = Instantiate(_actorSpritePrefab, _actorSpriteParentTransform);
+            GameObject obj = Instantiate(_actorPrefab, _actorPrefabParentTransform);
             RPGActor actor = obj.GetComponent<RPGActor>();
             actor.InitializeActor(index, stats);
-            _teamMembers.Add(actor);
+            _actors.Add(actor);
 
             SubscribeToActorEvents(actor);
 
@@ -97,7 +105,7 @@ public class TeamController : MonoBehaviour
     private void SubscribeToActorEvents(RPGActor actor)
     {
         actor.OnActorKO += UnSubscribeToPriorityList;
-        actor.OnActorActionStart += SubscribeToPriorityList;
+        actor.OnActorActionAvailable += SubscribeToPriorityList;
     }
 
     /// <summary>
@@ -150,7 +158,7 @@ public class TeamController : MonoBehaviour
         if (priorityList.Count == 0)
             return;
 
-        _teamMembers[priorityList[0]].ActivateActionMenu();
+        //_actors[priorityList[0]].ActivateActionMenu();
     }
 
     /// <summary>
@@ -160,7 +168,7 @@ public class TeamController : MonoBehaviour
     public bool IsTeamKOed()
     {
         // Check each team member
-        foreach (RPGActor member in _teamMembers)
+        foreach (RPGActor member in _actors)
         {
             if (!member.HealthCoordinator.IsKOed)
                 return false;
@@ -179,7 +187,7 @@ public class TeamController : MonoBehaviour
     public void TakeDamage(int index, int damage)
     {
         // Update health for the specific team member
-        _teamMembers[index].HealthCoordinator.UpdateHealth(damage);
+        _actors[index].HealthCoordinator.UpdateHealth(damage);
 
         // If the whole team is KOed, kill the player
         if (!IsTeamKOed())
@@ -204,7 +212,7 @@ public class TeamController : MonoBehaviour
     public void CleanupAttack()
     {
         // Finish the attack for the current attacker
-        _teamMembers[priorityList[0]].FinishAction();    
+        _actors[priorityList[0]].FinishAction();    
 
         // Remove the current attacker
         priorityList.RemoveAt(0);
@@ -224,9 +232,9 @@ public class TeamController : MonoBehaviour
     /// <param name="playerInput"></param>
     public void InitializeActionMenuInputController(PlayerInput playerInput)
     {
-        foreach(RPGActor member in _teamMembers)
+        foreach(RPGActor member in _actors)
         {
-            member.InitializeActionMenu(playerInput);
+            //member.InitializeActionMenu(playerInput);
         }
     }
 
@@ -235,10 +243,10 @@ public class TeamController : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        foreach (RPGActor member in _teamMembers)
+        foreach (RPGActor member in _actors)
         {
             member.OnActorKO -= UnSubscribeToPriorityList;
-            member.OnActorActionStart -= SubscribeToPriorityList;
+            member.OnActorActionAvailable -= SubscribeToPriorityList;
         }
     }
 
@@ -250,9 +258,9 @@ public class TeamController : MonoBehaviour
     {
         List<int> aliveIndices = new List<int>();
 
-        for (int i = 0; i < _teamMembers.Count; i++)
+        for (int i = 0; i < _actors.Count; i++)
         {
-            if (!_teamMembers[i].HealthCoordinator.IsKOed)
+            if (!_actors[i].HealthCoordinator.IsKOed)
             {
                 aliveIndices.Add(i);
             }
