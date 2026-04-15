@@ -53,10 +53,10 @@ public class RPGActor : MonoBehaviour
     #region Events
 
     // Events for the actor, these will be used to notify the team controller and other components of important information such as when an action starts or ends, or when the actor is KOed.
-    public event Action<int> OnActorKO;
-    public event Action<int> OnActorActionAvailable;
-    public event Action OnActorActionStart;
-    public event Action<int> OnActorActionFinish;
+    public event Action<RPGActor> OnActorKO;
+    public event Action<RPGActor> OnActorActionAvailable;
+    public event Action<RPGActor> OnActorActionStart;
+    public event Action<RPGActor> OnActorActionFinish;
 
     #endregion
 
@@ -252,7 +252,7 @@ public class RPGActor : MonoBehaviour
     {
         _timeCoordinator.ResetTimer();
 
-        OnActorActionFinish?.Invoke(_index);
+        OnActorActionFinish?.Invoke(this);
     }
 
     /// <summary>
@@ -279,7 +279,7 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void ActorKOActivateEvent()
     {
-        OnActorKO?.Invoke(_index);
+        OnActorKO?.Invoke(this);
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void ActionReady()
     {
-        OnActorActionAvailable?.Invoke(_index);
+        OnActorActionAvailable?.Invoke(this);
     }
 
     /// <summary>

@@ -75,8 +75,9 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         // Activate the action menu
         ActivateActionMenu();
 
-        // Sub to event
-        _currentActor.OnActorActionStart += Unbind;
+        // Sub to events
+        _currentActor.OnActorActionStart += HideActionMenu;
+        _currentActor.OnActorKO += HideActionMenu;
         
     }
 
@@ -89,10 +90,26 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         DeactivateActionMenu();
 
         // Unbind the actor
-        _currentActor.OnActorActionStart -= Unbind;
+        _currentActor.OnActorActionStart -= HideActionMenu;
+        _currentActor.OnActorKO -= HideActionMenu;
         _currentActor = null;
         _currentActorTransform = null;
     }
+
+    /// <summary>
+    /// If the actor completes their action or is KOed, hide the menu.
+    /// </summary>
+    /// <param name="actor"></param>
+    private void HideActionMenu(RPGActor actor)
+    {
+        if (_currentActor != actor)
+        {
+            return;
+        }
+
+        Unbind();
+    }
+
 
     /// <summary>
     /// Enables the action menu UI. 

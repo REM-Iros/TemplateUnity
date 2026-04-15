@@ -104,8 +104,10 @@ public class TeamController : MonoBehaviour
     /// <param name="actor"></param>
     private void SubscribeToActorEvents(RPGActor actor)
     {
+        /*
         actor.OnActorKO += UnSubscribeToPriorityList;
         actor.OnActorActionAvailable += SubscribeToPriorityList;
+        */
     }
 
     /// <summary>
@@ -245,8 +247,10 @@ public class TeamController : MonoBehaviour
     {
         foreach (RPGActor member in _actors)
         {
+            /*
             member.OnActorKO -= UnSubscribeToPriorityList;
             member.OnActorActionAvailable -= SubscribeToPriorityList;
+            */
         }
     }
 
