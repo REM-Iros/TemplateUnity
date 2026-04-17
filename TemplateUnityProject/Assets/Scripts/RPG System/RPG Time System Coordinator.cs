@@ -31,9 +31,19 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     /// <param name="actor"></param>
     public void SubscribeToActorEvents(RPGActor actor, bool isPlayerActor)
     {
-        actor.OnActorActionAvailable += (isPlayerActor) ? SubscribePlayerActor : SubscribeEnemyActor;
-        actor.OnActorActionFinish += (isPlayerActor) ? SubscribePlayerActor : SubscribeEnemyActor;
-        actor.OnActorKO += (isPlayerActor) ? UnsubscribePlayerActor : UnsubscribeEnemyActor;
+        // Subscribes to the component's events that correlate with actions.
+        if (isPlayerActor)
+        {
+            actor.TimeCoordinator.OnCanAct += SubscribePlayerActor;
+            // actor.ActionCoordinator.OnActionFinish += UnsubscribePlayerActor;
+            actor.HealthCoordinator.OnKO += UnsubscribePlayerActor;
+        }
+        else
+        {
+            actor.TimeCoordinator.OnCanAct += SubscribeEnemyActor;
+            // actor.ActionCoordinator.OnActionFinish += UnsubscribeEnemyActor;
+            actor.HealthCoordinator.OnKO += UnsubscribeEnemyActor;
+        }
     }
 
     /// <summary>
@@ -48,7 +58,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when a player actor is ready.
+    /// Called when a player actor is ready, and also when a player actor finishes their action. Checks priority list and activates the top actors menu.
     /// </summary>
     private void ActivateTopMenu()
     {
@@ -57,7 +67,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
             return;
         }
 
-
+        NotifyPlayerActorUI?.Invoke(_playerPriorityList[0]);
     }
 
     /// <summary>
@@ -72,6 +82,8 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
         }
 
         _playerPriorityList.Remove(actor);
+
+        ActivateTopMenu();
     }
 
     /// <summary>

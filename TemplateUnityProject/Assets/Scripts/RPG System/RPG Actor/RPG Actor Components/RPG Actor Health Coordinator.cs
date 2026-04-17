@@ -10,6 +10,9 @@ public class RPGActorHealthCoordinator : MonoBehaviour
 {
     #region Vars
 
+    [Tooltip("This is the actor that owns this component. Passed on event invokes.")]
+    private RPGActor _owner;
+
     [Tooltip("This is the max HP of the actor.")]
     private int _maxHP = 5;
 
@@ -35,7 +38,7 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     public event Action<float> OnMaxHPUpdate;
 
     [Tooltip("This event is called when the player is KOed.")]
-    public event Action OnKO;
+    public event Action<RPGActor> OnKO;
 
     #endregion
 
@@ -45,8 +48,9 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     /// Initializes the health bar component for the actor.
     /// </summary>
     /// <param name="maxHP"></param>
-    public void Initialize(int maxHP, int currHp)
+    public void Initialize(RPGActor owner, int maxHP, int currHp)
     {
+        _owner = owner;
         _maxHP = maxHP;
         _currHP = currHp;
     }
@@ -79,7 +83,7 @@ public class RPGActorHealthCoordinator : MonoBehaviour
     {
         // Set ko and invoke event
         _isKOed = true;
-        OnKO?.Invoke();
+        OnKO?.Invoke(_owner);
     }
 
     #endregion

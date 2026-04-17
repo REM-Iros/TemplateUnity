@@ -81,7 +81,7 @@ public class RPGBattleUIManager : MonoBehaviour
     /// </summary>
     public void BindActionMenu(RPGActor actor)
     {
-        //_actionMenuUI
+        _actionMenuUI.Bind(actor);
     }
 
     #endregion

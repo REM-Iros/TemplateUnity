@@ -76,8 +76,8 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         ActivateActionMenu();
 
         // Sub to events
-        _currentActor.OnActorActionStart += HideActionMenu;
-        _currentActor.OnActorKO += HideActionMenu;
+        // _currentActor.ActionCoordinator.OnActorActionStart += HideActionMenu;
+        _currentActor.HealthCoordinator.OnKO += HideActionMenu;
         
     }
 
@@ -90,8 +90,10 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         DeactivateActionMenu();
 
         // Unbind the actor
-        _currentActor.OnActorActionStart -= HideActionMenu;
-        _currentActor.OnActorKO -= HideActionMenu;
+        //_currentActor.ActionCoordinator.OnActorActionStart -= HideActionMenu;
+        _currentActor.HealthCoordinator.OnKO -= HideActionMenu;
+
+        // Clear cached actor and transform
         _currentActor = null;
         _currentActorTransform = null;
     }
@@ -102,6 +104,7 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
     /// <param name="actor"></param>
     private void HideActionMenu(RPGActor actor)
     {
+        // TODO: Validate if this is necessary, I think the time coordinator should only trigger these events for the current actor, but just in case we can check here.
         if (_currentActor != actor)
         {
             return;
@@ -109,7 +112,6 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
 
         Unbind();
     }
-
 
     /// <summary>
     /// Enables the action menu UI. 

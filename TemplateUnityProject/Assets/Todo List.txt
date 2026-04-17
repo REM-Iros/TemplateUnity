@@ -2,5 +2,4 @@ Todo List:
 
 Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
 
-Redid the event system, now I need to hook up the time system to the actor events, move actor events
-to the time coordinator
+Create the actor animation coordinator

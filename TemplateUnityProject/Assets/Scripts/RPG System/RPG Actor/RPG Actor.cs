@@ -14,9 +14,6 @@ public class RPGActor : MonoBehaviour
 {
     #region Vars
 
-    [Tooltip("This is the index for this character. Chosen on runtime by the team controllers.")]
-    private int _index;
-
     [Tooltip("This is the scriptable object that will store the character data. It should be filled by the team manager on combat start.")]
     private CharacterStats _characterStats;
 
@@ -34,6 +31,13 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is a get method for the time coordinator.")]
     public RPGActorTimeCoordinator TimeCoordinator => _timeCoordinator;
 
+    [Tooltip("This is the action coordinator for the actor.")]
+    [SerializeField]
+    private RPGActorActionCoordinator _actionCoordinator;
+
+    [Tooltip("This is a get method for the action coordinator.")]
+    public RPGActorActionCoordinator ActionCoordinator => _actionCoordinator;
+
     [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
     private List<ActionInstance> _actions;
 
@@ -50,16 +54,6 @@ public class RPGActor : MonoBehaviour
     [SerializeField]
     private Image _actorImage;
 
-    #region Events
-
-    // Events for the actor, these will be used to notify the team controller and other components of important information such as when an action starts or ends, or when the actor is KOed.
-    public event Action<RPGActor> OnActorKO;
-    public event Action<RPGActor> OnActorActionAvailable;
-    public event Action<RPGActor> OnActorActionStart;
-    public event Action<RPGActor> OnActorActionFinish;
-
-    #endregion
-
     #endregion
 
     #region Methods
@@ -71,21 +65,19 @@ public class RPGActor : MonoBehaviour
     /// the RPG Party Manager when the combat starts
     /// </summary>
     /// <param name="characterStats"></param>
-    public void InitializeActor(int index, CharacterStats characterStats)
+    public void InitializeActor(CharacterStats characterStats)
     {
         // Check that a character can even instantiate with the given data, if not, log an error and return
-        if (!ValidateInitialization(index, characterStats, characterStats.actionData))
+        if (!ValidateInitialization(characterStats, characterStats.actionData))
         {
             return;
         }
-
-        _index = index;
         
         // Initialize components
         InitializeCharacterStats(characterStats);
-        InitializeActionInstancesList(characterStats.actionData);
         InitializeHealthCoordinator();
         InitializeTimeCoordinator();
+        InitializeActionCoordinator();
 
         // Leaving this here for when animations get added and this needs to be refactored.
         _actorImage.sprite = characterStats.characterFullBodyImage;
@@ -99,15 +91,8 @@ public class RPGActor : MonoBehaviour
     /// <param name="characterStats"></param>
     /// <param name="actionData"></param>
     /// <returns></returns>
-    private bool ValidateInitialization(int index, CharacterStats characterStats, List<ActionData> actionData)
+    private bool ValidateInitialization(CharacterStats characterStats, List<ActionData> actionData)
     {
-        // Check for index and if it is valid
-        if (index < 0)
-        {
-            Debug.LogError("RPG Actor index cannot be less than 0 and will not work.");
-            return false;
-        }
-
         // Check for character stats and if it is present
         if (characterStats == null)
         {
@@ -136,6 +121,13 @@ public class RPGActor : MonoBehaviour
             return false;
         }
 
+        // Check for the action coordinator
+        if (_actionCoordinator == null)
+        {
+            Debug.LogError("Action Coordinator not found, RPG actor will not work.");
+            return false;
+        }
+
         return true;
     }
 
@@ -152,32 +144,13 @@ public class RPGActor : MonoBehaviour
     }
 
     /// <summary>
-    /// This method initializes the action instances list for the actor. 
-    /// It should only be called by the InitializeActor method, and it fills the list with the given action data.
-    /// </summary>
-    /// <param name="actionData"></param>
-    private void InitializeActionInstancesList(List<ActionData> actionData)
-    {
-        List<ActionInstance> _actions = new List<ActionInstance>();
-
-        int actionIndex = 0;
-
-        // Initialize the actions list and fill it with the action data
-        foreach (ActionData data in actionData)
-        {
-            _actions.Add(new ActionInstance(data));
-            //_actionMenuUI.SetMenuElementAtIndex(actionIndex, data.name);
-        }
-    }
-
-    /// <summary>
     /// This method initializes the health bar for the actor. It should only be called by the InitializeActor method, 
     /// and it sets the max value of the health bar to the max hp of the character stats.
     /// </summary>
     private void InitializeHealthCoordinator()
     {
         //TODO: This needs to be changed to current hp eventually but will work for now.
-        _healthCoordinator.Initialize(_stats.maxHP, _stats.maxHP);
+        _healthCoordinator.Initialize(this, _stats.maxHP, _stats.maxHP);
     }
 
     /// <summary>
@@ -186,64 +159,32 @@ public class RPGActor : MonoBehaviour
     /// </summary>
     private void InitializeTimeCoordinator()
     {
-        _timeCoordinator.Initialize(_stats.maxTime);
+        _timeCoordinator.Initialize(this, _stats.maxTime);
+
+        // Sub the ko event to the time coordinator
+        _healthCoordinator.OnKO += _timeCoordinator.HandleActorKO;
+    }
+
+    /// <summary>
+    /// This method initializes the action instances list for the actor. 
+    /// It should only be called by the InitializeActor method, and it fills the list with the given action data.
+    /// </summary>
+    /// <param name="actionData"></param>
+    private void InitializeActionCoordinator()
+    {
+        // Initialize the action coordinator
+        _actionCoordinator.InitializeActionCoordinator();
+
+        // Fill the action instances list with the given action data
+        foreach (ActionData data in _characterStats.actionData)
+        {
+            _actionCoordinator.AddAction(data);
+        }
     }
 
     #endregion
 
     #region Action Methods
-
-    /// <summary>
-    /// Get method for returning the action instance name at a given index.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public string GetActionNameAtIndex(int index)
-    {
-        // Exception handling for index out of range, if it is, log an error and return an empty string
-        if (index < 0 || index >= _actions.Count)
-        {
-            Debug.LogError("Index out of range for action instances list.");
-            return string.Empty;
-        }
-
-        // Return the action name at the given index
-        return _actions[index].ActionName;
-    }
-
-    /// <summary>
-    /// Get method for returning the action damage modifier at a given index.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public int GetActionDamageAtIndex(int index)
-    {
-        // Exception handling for index out of range, if it is, log an error and return 0
-        if (index < 0 || index >= _actions.Count)
-        {
-            Debug.LogError("Index out of range for action instances list.");
-            return 0;
-        }
-        // Return the action damage at the given index
-        return _actions[index].DamageModifier;
-    }
-
-    /// <summary>
-    /// Get method for returning the action effect index at a given index.
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public int GetActionEffectAtIndex(int index)
-    {
-        // Exception handling for index out of range, if it is, log an error and return 0
-        if (index < 0 || index >= _actions.Count)
-        {
-            Debug.LogError("Index out of range for action instances list.");
-            return 0;
-        }
-        // Return the action effect at the given index
-        return _actions[index].EffectIndex;
-    }
 
     /// <summary>
     /// Completes the current action, and resets the time bar for the actor.
@@ -252,60 +193,11 @@ public class RPGActor : MonoBehaviour
     {
         _timeCoordinator.ResetTimer();
 
-        OnActorActionFinish?.Invoke(this);
-    }
-
-    /// <summary>
-    /// Called when the user's action is interrupted, such as by death, or stagger.
-    /// </summary>
-    public void InterruptAction()
-    {
-        _timeCoordinator.DeactivateAndResetTimer();
+        //TODO: This should go to the action coordinator for the actor. The event should be called by the action coordinator when an action finishes, not the actor itself. This is just a placeholder for now.
+        //OnActorActionFinish?.Invoke(this);
     }
 
     #endregion
-
-    /// <summary>
-    /// Get method for returning the actor's index.
-    /// </summary>
-    /// <returns></returns>
-    public int GetActorIndex()
-    {
-        return _index;
-    }
-
-    /// <summary>
-    /// When the actor is KOed, activate this event and notify the team controller.
-    /// </summary>
-    private void ActorKOActivateEvent()
-    {
-        OnActorKO?.Invoke(this);
-    }
-
-    /// <summary>
-    /// When the actor is ready to take an action, activate this event and notify the team controller.
-    /// </summary>
-    private void ActionReady()
-    {
-        OnActorActionAvailable?.Invoke(this);
-    }
-
-    /// <summary>
-    /// Unsubscribe to the actor events on disable.
-    /// </summary>
-    private void OnDestroy()
-    {
-        if (_healthCoordinator != null)
-        {
-            _healthCoordinator.OnKO -= ActorKOActivateEvent;
-            _healthCoordinator.OnKO -= _timeCoordinator.DeactivateAndResetTimer;
-        }
-
-        if (_timeCoordinator != null)
-        {
-            _timeCoordinator.OnCanAct -= ActionReady;
-        }
-    }
 
     #endregion
 }

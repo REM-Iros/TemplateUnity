@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +13,6 @@ using UnityEngine.InputSystem;
 public class TeamController : MonoBehaviour
 {
     #region Vars
-
-    // Actor team info - This should be set by a global manager but is currently set as serialize for testing purposes
-    public List<CharacterStats> characterStats;
 
     [Tooltip("This is the list of RPGActors on the team. Set by a global manager but hacked in as serialize for now.")]
     [SerializeField, Header("Actor Stat Components")]
@@ -30,30 +29,6 @@ public class TeamController : MonoBehaviour
     [SerializeField]
     private Transform _actorPrefabParentTransform;
 
-    /*
-    Note, remove the UI stuff from the team controller, it should simply handle each actor's stats. UI will be controlled by
-    a separate manager.
-     */
-
-    [Tooltip("This is the actor status UI prefab that is instantiated for each character.")]
-    [SerializeField, Header("Actor UI Components")]
-    private GameObject _actorStatusUIPrefab;
-
-    [Tooltip("This is the parent transform for instantiating actor status UIs.")]
-    [SerializeField]
-    private Transform _actorStatusUIParentTransform;
-
-    [Tooltip("This is the action menu prefab that is instantiated for each character.")]
-    [SerializeField]
-    private GameObject _actionMenuPrefab;
-
-    [Tooltip("This is the parent transform for instantiating action menus.")]
-    [SerializeField]
-    private Transform _actionMenuParentTransform;
-
-    [Tooltip("This is the priority list for actions, it stores references to actor indexes and then ")]
-    private List<int> priorityList;
-
     #endregion
 
     #region Methods
@@ -63,17 +38,13 @@ public class TeamController : MonoBehaviour
     /// </summary>
     public void InitializeActorTeam(List<CharacterStats> teamActorStats)
     {
-        // Initialize priority list
-        priorityList = new List<int>();
+        // No character stats found for the team
+        if (teamActorStats == null || teamActorStats.Count == 0)
+        {
+            Debug.LogError("No character stats found for team creator. Stopping.");
+            return;
+        }
 
-        InitializePlayerActors(teamActorStats);
-    }
-
-    /// <summary>
-    /// This runs through the list of player actors and initializes them.
-    /// </summary>
-    private void InitializePlayerActors(List<CharacterStats> teamActorStats)
-    {
         // Don't run if we are missing something
         if (_actorPrefab == null || _actors == null)
         {
@@ -81,21 +52,25 @@ public class TeamController : MonoBehaviour
             return;
         }
 
-        int index = 0;
-
         // Run through each actor and initialize it
         foreach (CharacterStats stats in teamActorStats)
         {
-            //TODO: This shit is super hacky but for now it will work
-            GameObject obj = Instantiate(_actorPrefab, _actorPrefabParentTransform);
-            RPGActor actor = obj.GetComponent<RPGActor>();
-            actor.InitializeActor(index, stats);
-            _actors.Add(actor);
-
-            SubscribeToActorEvents(actor);
-
-            index++;
+            InitializeActor(stats);
         }
+    }
+
+    /// <summary>
+    /// This runs through the list of player actors and initializes them.
+    /// </summary>
+    private void InitializeActor(CharacterStats stats)
+    {
+        // Instantiate the gameobject and get the actor component
+        GameObject obj = Instantiate(_actorPrefab, _actorPrefabParentTransform);
+        RPGActor actor = obj.GetComponent<RPGActor>();
+
+        // Initialize the actor with the stats and add it to the list
+        actor.InitializeActor(stats);
+        _actors.Add(actor);
     }
 
     /// <summary>
@@ -110,6 +85,7 @@ public class TeamController : MonoBehaviour
         */
     }
 
+    /*
     /// <summary>
     /// Called by a character when they are ready to act, adds them to the priority list.
     /// </summary>
@@ -162,6 +138,7 @@ public class TeamController : MonoBehaviour
 
         //_actors[priorityList[0]].ActivateActionMenu();
     }
+    */
 
     /// <summary>
     /// Run through each actor in the team and check if they are all KOed.
@@ -198,6 +175,7 @@ public class TeamController : MonoBehaviour
         }
     }
 
+    /*
     /// <summary>
     /// Returns true if there are characters in the priority list ready to attack.
     /// </summary>
@@ -227,32 +205,7 @@ public class TeamController : MonoBehaviour
 
         ShowTopPriorityMenu();
     }
-
-    /// <summary>
-    /// Called by the team controller to initialize the action menu subscribing to the input controller.
-    /// </summary>
-    /// <param name="playerInput"></param>
-    public void InitializeActionMenuInputController(PlayerInput playerInput)
-    {
-        foreach(RPGActor member in _actors)
-        {
-            //member.InitializeActionMenu(playerInput);
-        }
-    }
-
-    /// <summary>
-    /// Unsubscribe to the actor events on destroy.
-    /// </summary>
-    private void OnDestroy()
-    {
-        foreach (RPGActor member in _actors)
-        {
-            /*
-            member.OnActorKO -= UnSubscribeToPriorityList;
-            member.OnActorActionAvailable -= SubscribeToPriorityList;
-            */
-        }
-    }
+    */
 
     #endregion
 
@@ -275,9 +228,11 @@ public class TeamController : MonoBehaviour
             return -1; // No alive targets
         }
 
-        int randomIndex = Random.Range(0, aliveIndices.Count);
+        //int randomIndex = Random.Range(0, aliveIndices.Count);
 
-        return aliveIndices[randomIndex];
+        return 0;
+
+        //return aliveIndices[randomIndex];
     }
 
     #endregion

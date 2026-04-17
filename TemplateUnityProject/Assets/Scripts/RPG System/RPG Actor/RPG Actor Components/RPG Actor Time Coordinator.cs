@@ -10,6 +10,9 @@ public class RPGActorTimeCoordinator : MonoBehaviour
 {
     #region Vars
 
+    [Tooltip("This is the actor that owns this component. Passed on event invokes.")]
+    private RPGActor _owner;
+
     [Tooltip("This is the max time value for the actor's time bar.")]
     private float _maxTime;
 
@@ -38,7 +41,7 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     public event Action<float> OnMaxTimeUpdate;
 
     [Tooltip("This is the event that is triggered when the actor can take an action.")]
-    public event Action OnCanAct;
+    public event Action<RPGActor> OnCanAct;
 
     #endregion
 
@@ -49,8 +52,11 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     /// fill rate being a better component to modify for different effects.
     /// </summary>
     /// <param name="newMaxTimeValue"></param>
-    public void Initialize(float newMaxTimeValue)
+    public void Initialize(RPGActor owner, float newMaxTimeValue)
     {
+        // Set the owner reference
+        _owner = owner;
+
         // Set max time and zero out current time
         _maxTime = newMaxTimeValue;
         _currentTime = 0f;
@@ -88,7 +94,7 @@ public class RPGActorTimeCoordinator : MonoBehaviour
         _canAct = true;
 
         // Notify that the actor can act
-        OnCanAct?.Invoke();
+        OnCanAct?.Invoke(_owner);
     }
 
     /// <summary>
@@ -112,9 +118,18 @@ public class RPGActorTimeCoordinator : MonoBehaviour
     }
 
     /// <summary>
+    /// This is called when the actor is KO'd, and it deactivates the timer and resets it to 0.
+    /// </summary>
+    /// <param name="actor"></param>
+    public void HandleActorKO(RPGActor actor)
+    {
+        DeactivateAndResetTimer();
+    }
+
+    /// <summary>
     /// Called when an actor is defeated
     /// </summary>
-    public void DeactivateAndResetTimer()
+    private void DeactivateAndResetTimer()
     {
         // Set time to 0 and deactivate
         _currentTime = 0f;

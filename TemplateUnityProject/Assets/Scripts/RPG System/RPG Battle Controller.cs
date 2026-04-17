@@ -35,6 +35,10 @@ public class BattleController : MonoBehaviour
     [SerializeField, Header("UI Manager")]
     private RPGBattleUIManager _battleUIManager;
 
+    [Tooltip("This is the time system for the battle.")]
+    [SerializeField, Header("Time System")]
+    private RPGTimeSystemCoordinator _timeSystemCoordinator;
+
     [Tooltip("This is the current state the battle is in.")]
     private RPGBattleState _battleState;
 
@@ -50,6 +54,7 @@ public class BattleController : MonoBehaviour
         //_playerTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().TeamData);
         //_enemyTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().EnemyTeamData);
 
+        // Set the battle state to startup to begin with.
         _battleState = RPGBattleState.Startup;
 
         // Set up the input router
@@ -60,14 +65,34 @@ public class BattleController : MonoBehaviour
         _playerTeamController.InitializeActorTeam(playerTeamData);
         _enemyTeamController.InitializeActorTeam(enemyTeamData);
 
+        InitializeBattleTimeSystem();
         InitializeBattleUIManager();
-
         
 
         // Add the action menu input controller to the player team controller so that it can listen for input when the action menu is active.
         //_playerTeamController.InitializeActionMenuInputController(_playerInputController);
     }
 
+    /// <summary>
+    /// Called on startup to get the battle time system set up with events from the actors so that it can coordinate actions between them.
+    /// </summary>
+    private void InitializeBattleTimeSystem()
+    {
+        // Subscribe time system to actors
+        foreach (RPGActor actor in _playerTeamController.Actors)
+        {
+            _timeSystemCoordinator.SubscribeToActorEvents(actor, true);
+        }
+
+        foreach (RPGActor actor in _enemyTeamController.Actors)
+        {
+            _timeSystemCoordinator.SubscribeToActorEvents(actor, false);
+        }
+    }
+
+    /// <summary>
+    /// Called on startup to get the battle UI manager set up with the actors and necessary information to display the UI correctly.
+    /// </summary>
     private void InitializeBattleUIManager()
     {
         // Initialize the ui manager with actors
@@ -82,6 +107,9 @@ public class BattleController : MonoBehaviour
         }
 
         _battleUIManager.InitializeActionMenu();
+
+        // Subscribe to time system for proper event handling
+        _timeSystemCoordinator.NotifyPlayerActorUI += _battleUIManager.BindActionMenu;
     }
 
     #endregion
