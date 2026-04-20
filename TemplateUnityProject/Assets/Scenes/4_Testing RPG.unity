@@ -248,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RPGActor
   _healthCoordinator: {fileID: 1749263398}
   _timeCoordinator: {fileID: 1601768996}
+  _actionCoordinator: {fileID: 0}
   _actorImage: {fileID: 1571952121}
 --- !u!1 &154561951
 GameObject:
@@ -2646,14 +2647,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d7e3700a1b3464fb123a03d9c34392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeamController
-  characterStats: []
   _actors: []
   _actorPrefab: {fileID: 0}
   _actorPrefabParentTransform: {fileID: 0}
-  _actorStatusUIPrefab: {fileID: 0}
-  _actorStatusUIParentTransform: {fileID: 245588210}
-  _actionMenuPrefab: {fileID: 0}
-  _actionMenuParentTransform: {fileID: 1914776050}
 --- !u!1 &1840585693
 GameObject:
   m_ObjectHideFlags: 0
