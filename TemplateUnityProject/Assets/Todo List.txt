@@ -2,4 +2,9 @@ Todo List:
 
 Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
 
-Create the actor animation coordinator
+Create the actor action system (for turn based combat handling)
+Create the input router system
+Create the targetting system
+Create the status system
+Create the sound effect system
+Create the music system

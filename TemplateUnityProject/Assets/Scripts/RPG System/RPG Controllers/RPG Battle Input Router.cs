@@ -12,6 +12,11 @@ public class RPGBattleInputRouter : MonoBehaviour
     [Tooltip("This is the player input controller that will be read from.")]
     private PlayerInputController _controller;
 
+    [Tooltip("This is the current actor that is taking their turn in battle.")]
+    private RPGActor _currentActor;
+
+    private RPGBattleInputContext _context = RPGBattleInputContext.None;
+
     #endregion
 
     #region Methods
@@ -23,6 +28,8 @@ public class RPGBattleInputRouter : MonoBehaviour
     public void Bind(PlayerInputController controller)
     {
         _controller = controller;
+
+        
     }
 
     //TODO: Start creating events that other components will subscribe to

@@ -62,9 +62,18 @@ public class RPGActorTimeCoordinator : MonoBehaviour
         _currentTime = 0f;
         _timeFillRate = 1f;
 
-        // Start the timer
-        _isActive = true;
         _canAct = false;
+
+        // Stop the timer
+        _isActive = false;
+    }
+
+    /// <summary>
+    /// Called to toggle the timer on or off. This is used to start the timer at the beginning of battle, and can also be used for other effects that stop time for an actor.
+    /// </summary>
+    public void ToggleTimer(bool isActive)
+    {
+        _isActive = isActive;
     }
 
     /// <summary>

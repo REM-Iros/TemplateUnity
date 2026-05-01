@@ -12,18 +12,27 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
 {
     #region Vars
 
-    [Tooltip("This is the list of player actors that are ready to attack.")]
+    [Tooltip("This is the queue of player actors that are ready to attack.")]
     private List<RPGActor> _playerPriorityList;
 
-    [Tooltip("This is the list of enemy actors that are ready to attack.")]
+    [Tooltip("This is the queue of enemy actors that are ready to attack.")]
     private List<RPGActor> _enemyPriorityList;
 
     [Tooltip("This is the event that fires when the player actor is ready.")]
-    public event Action<RPGActor> NotifyPlayerActorUI;
+    public event Action<RPGActor> OnPlayerActorTurnStarted;
 
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// Initialize the queues.
+    /// </summary>
+    public void InitializeQueues()
+    {        
+        _playerPriorityList = new List<RPGActor>();
+        _enemyPriorityList = new List<RPGActor>();
+    }
 
     /// <summary>
     /// Subscribes the time system to actor events.
@@ -47,7 +56,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds the actor passed in from the event to the player list. 
+    /// Adds the actor passed in from the event to the player queue. 
     /// </summary>
     /// <param name="actor"></param>
     private void SubscribePlayerActor(RPGActor actor)
@@ -62,16 +71,18 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     /// </summary>
     private void ActivateTopMenu()
     {
+        // Only needs to run if we have an actor ready to go. If we don't have any actors ready, then we don't need to do anything.
+        // This is more of a safety check.
         if (_playerPriorityList.Count <= 0)
         {
             return;
         }
 
-        NotifyPlayerActorUI?.Invoke(_playerPriorityList[0]);
+        OnPlayerActorTurnStarted?.Invoke(_playerPriorityList[0]);
     }
 
     /// <summary>
-    /// Removes the specified actor from the player list.
+    /// Removes the specified actor from the player queue.
     /// </summary>
     /// <param name="actor"></param>
     private void UnsubscribePlayerActor(RPGActor actor)
@@ -87,7 +98,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     }
 
     /// <summary>
-    /// Adds the actor passed in from the event to the player list. 
+    /// Adds the actor passed in from the event to the enemy queue. 
     /// </summary>
     /// <param name="actor"></param>
     private void SubscribeEnemyActor(RPGActor actor)
@@ -96,7 +107,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
     }
 
     /// <summary>
-    /// Removes the specified actor from the player list.
+    /// Removes the specified actor from the enemy queue.
     /// </summary>
     /// <param name="actor"></param>
     private void UnsubscribeEnemyActor(RPGActor actor)

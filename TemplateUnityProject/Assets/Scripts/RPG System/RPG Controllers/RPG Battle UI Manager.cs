@@ -50,7 +50,7 @@ public class RPGBattleUIManager : MonoBehaviour
                         isPlayer ? _playerActorUIParentTransform : _enemyActorUIParentTransform);
 
         // Add the binder and activate it
-        var uiBinder = uiPrefab.AddComponent<RPGActorUIBinder>();
+        var uiBinder = uiPrefab.GetComponent<RPGActorUIBinder>();
         uiBinder.Bind(actor);
 
         _actorBindingDict.Add(actor, uiBinder);
@@ -62,6 +62,13 @@ public class RPGBattleUIManager : MonoBehaviour
     /// <param name="actor"></param>
     public void UnregisterActor(RPGActor actor)
     {
+        if (!_actorBindingDict.ContainsKey(actor))
+        {
+            Debug.LogError($"Trying to unregister actor {actor.name} from the battle UI manager but it isn't registered!");
+            return;
+        }
+
+            
         _actorBindingDict[actor].Unbind();
         _actorBindingDict[actor].gameObject.SetActive(false);
         _actorBindingDict.Remove(actor);

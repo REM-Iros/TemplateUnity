@@ -10,16 +10,29 @@ public class BattleController : MonoBehaviour
 {
     #region Vars
 
+    [Tooltip("This is the current state of the battle.")]
+    private RPGIBattleState _currentState;
+
     [Tooltip("This is the player input controller for the battle.")]
     [SerializeField, Header("Input Controller")]
     private PlayerInputController _playerInputController;
 
+    [Tooltip("This is the public getter for player input controller for state access.")]
+    public PlayerInputController PlayerInputController => _playerInputController;
+
     [Tooltip("This is the input router.")]
+    [SerializeField]
     private RPGBattleInputRouter _battleInputRouter;
+
+    [Tooltip("This is the public getter for battle input router for state access.")]
+    public RPGBattleInputRouter BattleInputRouter => _battleInputRouter;
 
     [Tooltip("This is the player team controller.")]
     [SerializeField, Header("Actor Team Controllers")]
     private TeamController _playerTeamController;
+
+    [Tooltip("This is the public getter for player team controller for state access.")]
+    public TeamController PlayerTeam => _playerTeamController;
 
     // This is hardcoded team data for testing purposes.
     public List<CharacterStats> playerTeamData;
@@ -28,6 +41,9 @@ public class BattleController : MonoBehaviour
     [SerializeField]
     private TeamController _enemyTeamController;
 
+    [Tooltip("This is the public getter for enemy team controller for state access.")]
+    public TeamController EnemyTeam => _enemyTeamController;
+
     // This is hardcoded team data for testing purposes.
     public List<CharacterStats> enemyTeamData;
 
@@ -35,12 +51,15 @@ public class BattleController : MonoBehaviour
     [SerializeField, Header("UI Manager")]
     private RPGBattleUIManager _battleUIManager;
 
+    [Tooltip("This is the public getter for battle UI manager for state access.")]
+    public RPGBattleUIManager UIManager => _battleUIManager;
+
     [Tooltip("This is the time system for the battle.")]
     [SerializeField, Header("Time System")]
     private RPGTimeSystemCoordinator _timeSystemCoordinator;
 
-    [Tooltip("This is the current state the battle is in.")]
-    private RPGBattleState _battleState;
+    [Tooltip("This is the public getter for time system coordinator for state access.")]
+    public RPGTimeSystemCoordinator TimeSystem => _timeSystemCoordinator;
 
     #endregion
 
@@ -51,65 +70,46 @@ public class BattleController : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        // On startup, we need to initialize the player and enemy teams by calling the team controllers to initialize with the necessary data.
+        // This will likely come from a global manager of some sort that holds the team data for the battle, but for now we can just hardcode some data in the inspector for testing purposes.
         //_playerTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().TeamData);
         //_enemyTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().EnemyTeamData);
 
-        // Set the battle state to startup to begin with.
-        _battleState = RPGBattleState.Startup;
-
-        // Set up the input router
-        _battleInputRouter = GetComponent<RPGBattleInputRouter>();
-        _battleInputRouter.Bind(_playerInputController);
-
-        // Hacked in team data for testing purposes until I get the global manager set up.
-        _playerTeamController.InitializeActorTeam(playerTeamData);
-        _enemyTeamController.InitializeActorTeam(enemyTeamData);
-
-        InitializeBattleTimeSystem();
-        InitializeBattleUIManager();
-        
+        // Go into the startup state to set up the battle.
+        ChangeState(new RPGBattleStartState(this));
 
         // Add the action menu input controller to the player team controller so that it can listen for input when the action menu is active.
         //_playerTeamController.InitializeActionMenuInputController(_playerInputController);
     }
 
     /// <summary>
-    /// Called on startup to get the battle time system set up with events from the actors so that it can coordinate actions between them.
+    /// Change state called when the system needs to change to a different battle state.
     /// </summary>
-    private void InitializeBattleTimeSystem()
+    /// <param name="newState"></param>
+    public void ChangeState(RPGIBattleState newState)
     {
-        // Subscribe time system to actors
-        foreach (RPGActor actor in _playerTeamController.Actors)
+        // Don't change states if we are using the same state again.
+        if (_currentState == newState)
         {
-            _timeSystemCoordinator.SubscribeToActorEvents(actor, true);
+            return;
         }
 
-        foreach (RPGActor actor in _enemyTeamController.Actors)
-        {
-            _timeSystemCoordinator.SubscribeToActorEvents(actor, false);
-        }
+        // Exit the current state if it exists, then enter the new state and set it as the current state.
+        _currentState?.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 
     /// <summary>
-    /// Called on startup to get the battle UI manager set up with the actors and necessary information to display the UI correctly.
+    /// Called when the time system notifies the battle controller that an actor is ready to take an action.
     /// </summary>
-    private void InitializeBattleUIManager()
+    /// <param name="actor"></param>
+    public void HandlePlayerActorReady(RPGActor actor)
     {
-        // Initialize the ui manager with actors
-        foreach (RPGActor actor in _playerTeamController.Actors)
-        {
-            _battleUIManager.RegisterActor(actor, true);
-        }
+        // Notify the UI manager that an actor is ready to take an action so that it can update the UI accordingly.
+        _battleUIManager.BindActionMenu(actor);
 
-        foreach (RPGActor actor in _enemyTeamController.Actors)
-        {
-            _battleUIManager.RegisterActor(actor, false);
-        }
-
-        _battleUIManager.InitializeActionMenu();
-
-        // Subscribe to time system for proper event handling
-        _timeSystemCoordinator.NotifyPlayerActorUI += _battleUIManager.BindActionMenu;
+        
     }
 
     #endregion
