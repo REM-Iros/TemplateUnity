@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,6 +22,13 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
     [Tooltip("These are the action UI Elements that compose the menu")]
     [SerializeField, Header("Action UI Components")]
     private List<PlayerActionUIElement> _actionUIElements;
+
+    #region Events
+
+    public event Action<int> OnActionAtIndex;
+    public event Action OnRunSelected;
+
+    #endregion
 
     #endregion
 
@@ -58,8 +66,8 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         _currentActor = actor;
         _currentActorTransform = actor.transform;
 
-        // Set index for actions
-        int index = 0;
+        // Set index for actions (we use index 1 because index 0 is reserved for default attack action)
+        int index = 2;
 
         // Fill the action elements with data
         foreach(ActionInstance action in _currentActor.Actions)
@@ -88,6 +96,11 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
     {
         // Hide the menu
         DeactivateActionMenu();
+
+        foreach (PlayerActionUIElement element in _actionUIElements)
+        {
+            element.DeactivateUIElement();
+        }
 
         // Unbind the actor
         //_currentActor.ActionCoordinator.OnActorActionStart -= HideActionMenu;
@@ -148,6 +161,42 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         // Follow player position
         transform.position = screenPos;
     }
+
+
+    #region Button Press Events
+
+    /// <summary>
+    /// Called when the basic attack button is pressed. Will trigger an event that the battle controller will listen to and execute based on the basic attack action.
+    /// </summary>
+    public void OnActionChosen(int index)
+    {
+        // Don't think this should ever be null but just in case.
+        if (_currentActor == null)
+        {
+            Debug.LogError("No actor bound to action menu.");
+            return;
+        }
+
+        // Trigger event for basic attack action
+        OnActionAtIndex?.Invoke(index);
+    }
+
+    /// <summary>
+    /// Called when the run button is pressed. Will trigger an event that the battle controller will listen to and execute based on the run action.
+    /// </summary>
+    public void OnRun()
+    {
+
+        if (_currentActor == null)
+        {
+            Debug.LogError("No actor bound to action menu.");
+            return;
+        }
+
+        OnRunSelected?.Invoke();
+    }
+
+    #endregion
 
     #endregion
 }
