@@ -30,6 +30,14 @@ public class RPGBattleUIManager : MonoBehaviour
     [SerializeField, Header("Action Menu UI")]
     private PlayerActionsUI _actionMenuUI;
 
+    [Tooltip("This is the player team target menu.")]
+    [SerializeField, Header("Target UI")]
+    private RPGActorTeamTargetUI _playerTeamTargetUI;
+
+    [Tooltip("This is the enemy team target menu.")]
+    [SerializeField]
+    private RPGActorTeamTargetUI _enemyTeamTargetUI;
+
     [Tooltip("This is a dictionary of all ui objects registered to actors. I don't know if I'll ever need this but just in case.")]
     private Dictionary<RPGActor, RPGActorUIBinder> _actorBindingDict = new();
 
@@ -48,6 +56,8 @@ public class RPGBattleUIManager : MonoBehaviour
         GameObject uiPrefab = 
             Instantiate(isPlayer ? _playerActorUIPrefab : _enemyActorUIPrefab, 
                         isPlayer ? _playerActorUIParentTransform : _enemyActorUIParentTransform);
+
+        // Create a target icon to go with the actor
 
         // Add the binder and activate it
         var uiBinder = uiPrefab.GetComponent<RPGActorUIBinder>();

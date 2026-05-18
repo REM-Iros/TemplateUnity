@@ -23,9 +23,9 @@ public class TeamController : MonoBehaviour
     [SerializeField, Header("Actor GameObject Components")]
     private GameObject _actorPrefab;
 
-    [Tooltip("This is the parent transform for instantiating actors.")]
+    [Tooltip("This is the parent transform for instantiating actors. Devs to decide how big they want their parties.")]
     [SerializeField]
-    private Transform _actorPrefabParentTransform;
+    private List<Transform> _actorPrefabParentTransforms;
 
     #endregion
 
@@ -50,20 +50,28 @@ public class TeamController : MonoBehaviour
             return;
         }
 
+        // Set the index for creating actors through 
+        int index = 0;
+
         // Run through each actor and initialize it
         foreach (CharacterStats stats in teamActorStats)
         {
-            InitializeActor(stats);
+            InitializeActor(stats, index);
+            index++;
         }
     }
 
     /// <summary>
     /// This runs through the list of player actors and initializes them.
     /// </summary>
-    private void InitializeActor(CharacterStats stats)
+    private void InitializeActor(CharacterStats stats, int index)
     {
         // Instantiate the gameobject and get the actor component
-        GameObject obj = Instantiate(_actorPrefab, _actorPrefabParentTransform);
+        GameObject obj = Instantiate(_actorPrefab, 
+                                     _actorPrefabParentTransforms[index].position, 
+                                     _actorPrefabParentTransforms[index].rotation, 
+                                     _actorPrefabParentTransforms[index]);
+
         RPGActor actor = obj.GetComponent<RPGActor>();
 
         // Initialize the actor with the stats and add it to the list

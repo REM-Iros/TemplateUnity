@@ -34,12 +34,12 @@ public class RPGBattleRunState : RPGIBattleState
     {
         if (_battleController.PlayerTeam.IsTeamKOed())
         {
-
+            _battleController.ChangeState(new RPGBattleLoseState(_battleController));
         }
 
         if (_battleController.EnemyTeam.IsTeamKOed())
         {
-
+            _battleController.ChangeState(new RPGBattleWinState(_battleController));
         }
     }
 

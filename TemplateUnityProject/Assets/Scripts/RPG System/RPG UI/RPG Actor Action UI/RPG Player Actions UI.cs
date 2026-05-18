@@ -70,7 +70,7 @@ public class PlayerActionsUI : MonoBehaviour, RPGIUIInterface
         int index = 2;
 
         // Fill the action elements with data
-        foreach(ActionInstance action in _currentActor.Actions)
+        foreach(ActionInstance action in _currentActor.ActionCoordinator.Actions)
         {
             _actionUIElements[index].SetActionName(action.ActionName);
             _actionUIElements[index].ActivateUIElement();

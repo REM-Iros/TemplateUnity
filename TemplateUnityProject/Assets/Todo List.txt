@@ -2,6 +2,11 @@ Todo List:
 
 Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
 
+Currently creating the targeting ui system. Will need to build out actual targeting when I'm ready to learn that system.
+Ok... so I probably need to implement the targeting system first to then have the ui build out. As it is now, the target
+ui would need to understand the context passed in, which requires me to land on a context, which means I need to develop
+the targeting for attack methods so that I know what context I'm passing.
+
 Create the actor action system (for turn based combat handling)
 Create the input router system
 Create the targetting system

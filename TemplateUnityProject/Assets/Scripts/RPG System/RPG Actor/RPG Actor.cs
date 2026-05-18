@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
+
 
 /// <summary>
 /// This is the basic RPG Actor class. It will be used as the orchestrator of all character
@@ -38,21 +36,25 @@ public class RPGActor : MonoBehaviour
     [Tooltip("This is a get method for the action coordinator.")]
     public RPGActorActionCoordinator ActionCoordinator => _actionCoordinator;
 
-    [Tooltip("This is the list of actions that the actor can take. It should be filled by the team manager on combat start.")]
-    private List<ActionInstance> _actions;
-
-    [Tooltip("This is a public getter for actions.")]
-    public List<ActionInstance> Actions => _actions;
-
-    [Tooltip("This is a get method for the actions list count.")]
-    public int ActionCount => _actions.Count;
-
     [Tooltip("This is the RPG stats component for the actor.")]
     private Stats _stats;
 
+    [Tooltip("This is the getter method for the name of the actor.")]
+    public string ActorName => _characterStats.characterName;
+
+    [Tooltip("This is the getter method for the headshot of the actor.")]
+    public Sprite ActorHeadshot => _characterStats.characterHeadshot;
+
     [Tooltip("This is the Image component that will display the actor.")]
     [SerializeField]
-    private Image _actorImage;
+    private SpriteRenderer _actorImage;
+
+    [Tooltip("This is the transform component that should indicate where the target should appear.")]
+    [SerializeField]
+    private Transform _actorTargetTransform;
+
+    [Tooltip("This is the getter for the transform target component.")]
+    public Transform ActorTargetTransform => _actorTargetTransform;
 
     #endregion
 

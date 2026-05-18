@@ -25,6 +25,9 @@ public class CharacterStats : ScriptableObject
     [Tooltip("This is the stat block for the character")]
     public Stats baseStats;
 
-    // Holy hack, but without setting up other things, this will work for now. 
+    // In clarification, this is a hack for now because most games have characters learning skills over
+    // time or based on equipment or level or such. For now, if you just need to test skills working, this
+    // will work, but I don't know how this would look currently, and it would likely vary based upon rpg
+    // implementation.
     public List<ActionData> actionData;
 }

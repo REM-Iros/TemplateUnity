@@ -6,7 +6,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-[CreateAssetMenu(fileName = "UIIconDatabase", menuName = "ScriptableObjects/UI/UIIconDatabase")]
+[CreateAssetMenu(fileName = "UIIconDatabase", menuName = "Scriptable Objects/UI/UIIconDatabase")]
 public class UIControlIconDatabase : ScriptableObject
 {
     private static UIControlIconDatabase _instance;

@@ -13,6 +13,9 @@ public class RPGActorActionCoordinator : MonoBehaviour
     [Tooltip("This is the list of action instances that the actor can take. It should be filled by the actor on initialization.")]
     private List<ActionInstance> _actions;
 
+    [Tooltip("This is the public getter for the actions.")]
+    public List<ActionInstance> Actions => _actions;
+
     [Tooltip("This is a public getter for the list of actions.")]
     public int ActionCount => _actions.Count;
 
