@@ -2,6 +2,18 @@ Todo List:
 
 Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
 
+Target manager has the events it needs, but we are dropping using Unity UI for this and instead are going to build out the input router now. The input router
+is going to require a context script that gets pushed onto a stack, and the input router will run assign a generic method to sub each the stack's top context's
+actions to listen to the events. When the stack has a new context pushed on top, it jumps to that new context, using FIFO. 
+
+Time Coordinator passes actor to action manager when actor is ready
+UI triggers Action Manager Target Action (index)
+Action Manager runs event notifying Target Manager 
+
+
+Action Manager needs to trigger the targeting manager, which then returns valid targets 
+to the ui, which then the ui triggers the action manager to perform the action
+
 Currently creating the targeting ui system. Will need to build out actual targeting when I'm ready to learn that system.
 Ok... so I probably need to implement the targeting system first to then have the ui build out. As it is now, the target
 ui would need to understand the context passed in, which requires me to land on a context, which means I need to develop

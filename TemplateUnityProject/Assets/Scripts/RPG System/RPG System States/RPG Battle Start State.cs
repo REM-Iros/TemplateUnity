@@ -6,14 +6,14 @@
 public class RPGBattleStartState : RPGIBattleState
 {
     // The controller for the battle, used to perform necessary behaviors and set up the battle to start.
-    private readonly BattleController _battleController;
+    private readonly RPGBattleController _battleController;
 
     /// <summary>
     /// Constructor called to pass in battle controller so we can perform the behaviors we need to in this state. 
     /// This will be used to initialize the battle and set up the necessary data for the battle to start.
     /// </summary>
     /// <param name="battleController"></param>
-    public RPGBattleStartState(BattleController battleController)
+    public RPGBattleStartState(RPGBattleController battleController)
     {
         _battleController = battleController;
     }
@@ -30,6 +30,7 @@ public class RPGBattleStartState : RPGIBattleState
         // Hacked in team data for testing purposes until I get the global manager set up.
         _battleController.PlayerTeam.InitializeActorTeam(_battleController.playerTeamData);
         _battleController.EnemyTeam.InitializeActorTeam(_battleController.enemyTeamData);
+        _battleController.GenerateBattleContext();
 
         // Set up the input router
         _battleController.BattleInputRouter.Bind(_battleController.PlayerInputController);
@@ -53,6 +54,8 @@ public class RPGBattleStartState : RPGIBattleState
         // Initialize the action menu and subscribe it to the time system so it can update when the player actor changes.
         _battleController.UIManager.InitializeActionMenu();
         _battleController.TimeSystem.OnPlayerActorTurnStarted += _battleController.HandlePlayerActorReady;
+        _battleController.TimeSystem.OnPlayerActorTurnStarted += _battleController.ActionManager.GetCurrentPlayerActor;
+        _battleController.ActionManager.OnActionSelectedForTargeting += _battleController.TargetingManager.ResolveTarget;
 
         // TODO: Set up missing components
 

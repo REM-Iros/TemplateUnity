@@ -1,18 +1,18 @@
 /// <summary>
-/// This is the state for when the player loses a battle. It is currently a placeholder for future implementation.
+/// This is the state for when the player wins a battle. It is currently a placeholder for future implementation.
 /// 
 /// REM-i
 /// </summary>
-public class RPGBattleLoseState : RPGIBattleState
+public class RPGBattleWinState : RPGIBattleState
 {
     // The controller for the battle, used to perform necessary behaviors and set up the battle to start.
-    private readonly BattleController _battleController;
+    private readonly RPGBattleController _battleController;
 
     /// <summary>
     /// Constructor called to pass in battle controller so we can perform the behaviors we need to in this state. 
     /// </summary>
     /// <param name="battleController"></param>
-    public RPGBattleLoseState(BattleController battleController)
+    public RPGBattleWinState(RPGBattleController battleController)
     {
         _battleController = battleController;
     }

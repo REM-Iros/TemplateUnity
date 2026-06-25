@@ -6,13 +6,13 @@
 public class RPGBattleRunState : RPGIBattleState
 {
     // The controller for the battle, used to perform necessary behaviors and set up the battle to start.
-    private readonly BattleController _battleController;
+    private readonly RPGBattleController _battleController;
 
     /// <summary>
     /// Constructor called to pass in battle controller so we can perform the behaviors we need to in this state. 
     /// </summary>
     /// <param name="battleController"></param>
-    public RPGBattleRunState(BattleController battleController)
+    public RPGBattleRunState(RPGBattleController battleController)
     {
         _battleController = battleController;
     }

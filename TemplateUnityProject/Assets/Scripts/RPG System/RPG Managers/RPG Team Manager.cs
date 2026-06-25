@@ -8,7 +8,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class TeamController : MonoBehaviour
+public class RPGTeamManager : MonoBehaviour
 {
     #region Vars
 

@@ -12,4 +12,5 @@ public class ActionData : ScriptableObject
     public string actionName;
     public int damageModifier;
     public int effectIndex;
+    public RPGActionTargetType actionTargetStrategy;
 }

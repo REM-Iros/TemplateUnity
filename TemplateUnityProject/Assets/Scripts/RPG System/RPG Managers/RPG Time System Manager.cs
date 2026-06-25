@@ -8,7 +8,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class RPGTimeSystemCoordinator : MonoBehaviour
+public class RPGTimeSystemManager : MonoBehaviour
 {
     #region Vars
 
@@ -116,7 +116,7 @@ public class RPGTimeSystemCoordinator : MonoBehaviour
         {
             return;
         }
-
+        
         _enemyPriorityList.Remove(actor);
     }
 

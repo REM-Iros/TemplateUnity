@@ -6,7 +6,7 @@ using UnityEngine;
 /// 
 /// REM-i
 /// </summary>
-public class BattleController : MonoBehaviour
+public class RPGBattleController : MonoBehaviour
 {
     #region Vars
 
@@ -29,20 +29,20 @@ public class BattleController : MonoBehaviour
 
     [Tooltip("This is the player team controller.")]
     [SerializeField, Header("Actor Team Controllers")]
-    private TeamController _playerTeamController;
+    private RPGTeamManager _playerTeamController;
 
     [Tooltip("This is the public getter for player team controller for state access.")]
-    public TeamController PlayerTeam => _playerTeamController;
+    public RPGTeamManager PlayerTeam => _playerTeamController;
 
     // This is hardcoded team data for testing purposes.
     public List<CharacterStats> playerTeamData;
 
     [Tooltip("This is the enemy team controller.")]
     [SerializeField]
-    private TeamController _enemyTeamController;
+    private RPGTeamManager _enemyTeamController;
 
     [Tooltip("This is the public getter for enemy team controller for state access.")]
-    public TeamController EnemyTeam => _enemyTeamController;
+    public RPGTeamManager EnemyTeam => _enemyTeamController;
 
     // This is hardcoded team data for testing purposes.
     public List<CharacterStats> enemyTeamData;
@@ -56,10 +56,25 @@ public class BattleController : MonoBehaviour
 
     [Tooltip("This is the time system for the battle.")]
     [SerializeField, Header("Time System")]
-    private RPGTimeSystemCoordinator _timeSystemCoordinator;
+    private RPGTimeSystemManager _timeSystemManager;
 
-    [Tooltip("This is the public getter for time system coordinator for state access.")]
-    public RPGTimeSystemCoordinator TimeSystem => _timeSystemCoordinator;
+    [Tooltip("This is the public getter for time system manager for state access.")]
+    public RPGTimeSystemManager TimeSystem => _timeSystemManager;
+
+    [Tooltip("This is the action manager for the battle.")]
+    private RPGActionManager _actionManager;
+
+    [Tooltip("This is the public getter for action manager.")]
+    public RPGActionManager ActionManager => _actionManager;
+
+    [Tooltip("This is the targeting manager for the battle.")]
+    private RPGTargetingManager _targetingManager;
+
+    [Tooltip("This is the public getter for targeting manager.")]
+    public RPGTargetingManager TargetingManager => _targetingManager;
+
+    [Tooltip("This is the battle context stored for the battle.")]
+    private RPGBattleContext _context;
 
     #endregion
 
@@ -74,6 +89,7 @@ public class BattleController : MonoBehaviour
         // This will likely come from a global manager of some sort that holds the team data for the battle, but for now we can just hardcode some data in the inspector for testing purposes.
         //_playerTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().TeamData);
         //_enemyTeamController.InitializeActorTeam(ServiceLocator.Get<TeamManager>().EnemyTeamData);
+        _context = new RPGBattleContext();
 
         // Go into the startup state to set up the battle.
         ChangeState(new RPGBattleStartState(this));
@@ -108,8 +124,30 @@ public class BattleController : MonoBehaviour
     {
         // Notify the UI manager that an actor is ready to take an action so that it can update the UI accordingly.
         _battleUIManager.BindActionMenu(actor);
+    }
 
-        
+    /// <summary>
+    /// This is called by the action menu ui buttons directly. It pulls the current actors action by index and
+    /// sends the targeting strategy of the action to the targeting manager.
+    /// </summary>
+    /// <param name="index"></param>
+    public void OnActionSelection(int index)
+    {
+        // TODO: Move this method to the action selection
+        //_currActor.ActionCoordinator.GetActionAtIndex(index).Data.actionTargetStrategy.GetValidTargets(GenerateBattleContext(), _currActor);
+    }
+
+    /// <summary>
+    /// This is a helper method that generates the battle context for handling targeting
+    /// </summary>
+    /// <returns></returns>
+    public RPGBattleContext GenerateBattleContext()
+    {
+        // Get the player actors and the enemy actors.
+        _context.playerActors = _playerTeamController.Actors;
+        _context.enemyActors = _enemyTeamController.Actors;
+
+        return _context;
     }
 
     #endregion
