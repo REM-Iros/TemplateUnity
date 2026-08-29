@@ -1,0 +1,44 @@
+Flow of how the input system works:
+
+PlayerInputRegistry
+	- Generated via Bootstrap so always present
+	- Goes in Service Locator thru Bootstrap
+	- Stores input routers with player indices
+	- Reached via Service Locator to push contexts onto input stacks/manipulate input stacks
+
+BattleContextCreator
+	- Owned by battlemanager
+	- Creates contexts at start and keeps references to them
+	- Subscribes to events that require context script changes
+	- When the event is called, goes to PlayerInputRegistry and gets corresponding InputRouter to pass context in.
+
+GameObject 
+	- Owns PlayerInput (new InputSystem) 
+
+PlayerInput
+	- In C# event mode for onActionTriggered event
+	- On an input, broadcasts onActionTriggered
+
+InputRouter
+	- Reference to Player Input (onActionTriggered event)
+	- Built via input context stack (gameplay -> menu -> confirmation menu) when you back out of confirmation menu, brings you back to menu...
+	- Subscribes itself to PlayerInputRegistry on creation
+	- Can have Input Context's passed onto it via PlayerInputRegistry
+	- Takes action triggered via PlayerInput, and calls Input Context methods based on what Interfaces the context implements if it matches the action.
+	- Reads action name, reads current top context, if case statement present that matches action with context, calls contexts corresponding method, if not, no action needed.
+
+IInputContext
+	- Basic interface that signals something is going to go into the input router.
+	- Implemented by anything that will ever need to be used via the input router.
+
+Basic Functionality Input Context Interface
+	- Granular set of basic controls that you can expect to be used.
+	- Implement a bunch of these into the Functional Input Context's for specific gameplay "modes"
+
+Functional Input Context
+	- Implements IInputContext and 1 to N of the functional input contexts
+	- Used for specific gameplay modes like combat, ui/menu, etc.
+	- Defines what action map should be set for player input
+	- OnEnter, the current map is set set via the input router.
+	- OnExit, the current map is removed via the input router and the previous item on the stack's map is set.
+

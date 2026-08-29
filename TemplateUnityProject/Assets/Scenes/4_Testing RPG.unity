@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: 5b2efb0a29e16054dab61a325ba42b95, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -3849,7 +3849,7 @@ MonoBehaviour:
   enemyTeamData:
   - {fileID: 11400000, guid: f8693cf75678446418f0baeb51084edf, type: 2}
   _battleUIManager: {fileID: 1167368873}
-  _timeSystemCoordinator: {fileID: 1251627288}
+  _timeSystemManager: {fileID: 1251627288}
 --- !u!1 &1826066050
 GameObject:
   m_ObjectHideFlags: 0

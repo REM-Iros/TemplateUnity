@@ -39,6 +39,7 @@ public class Bootstrap : MonoBehaviour
         var sceneControlManager = CreateManager<SceneControlManager>();
         var gameStateManager = CreateManager<GameStateManager>();
         var uiFocusManager = CreateManager<UIFocusManager>();
+        var playerInputRegistry = CreateManager<PlayerInputRegistry>();
 
         // Register major game managers that need to persist throughout scenes.
         ServiceLocator.Register(audioManager);
@@ -47,6 +48,7 @@ public class Bootstrap : MonoBehaviour
         ServiceLocator.Register(sceneControlManager);
         ServiceLocator.Register(gameStateManager);
         ServiceLocator.Register(uiFocusManager);
+        ServiceLocator.Register(playerInputRegistry);
     }
 
     /// <summary>

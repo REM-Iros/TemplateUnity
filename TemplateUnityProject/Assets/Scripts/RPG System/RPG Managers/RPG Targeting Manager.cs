@@ -5,7 +5,7 @@ using UnityEngine;
 /// This script acts as the go between for the targeting ui and the battle system which provides context to this.
 /// The battle manager passes in the actors, and this handles determining who is available for targetting.
 /// </summary>
-public class RPGTargetingManager : MonoBehaviour
+public class RPGTargetingManager : MonoBehaviour, IInputContext
 {
     #region Vars
 
@@ -16,13 +16,27 @@ public class RPGTargetingManager : MonoBehaviour
     [SerializeField, Header("Events")]
     private RPGTargetEvent targetEvent;
 
-    [Tooltip ("This is the untarget event we use to reach the target ui.")]
+    [Tooltip("This is the untarget event we use to reach the target ui.")]
     [SerializeField]
     private RPGUntargetEvent untargetEvent;
+
+    [Tooltip("This is the action map associated with the input context.")]
+    private const string _actionMapName = "UI";
+    public string ActionMapName => _actionMapName;
 
     #endregion
 
     #region Methods
+
+    public void OnEnter()
+    {
+        // TODO: Implement these
+    }
+
+    public void OnExit()
+    {
+
+    }
 
     /// <summary>
     /// On startup, need to pass in a reference to the battle context.

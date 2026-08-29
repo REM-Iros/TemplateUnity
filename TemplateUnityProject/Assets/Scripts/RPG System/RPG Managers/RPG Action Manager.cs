@@ -41,7 +41,5 @@ public class RPGActionManager : MonoBehaviour
         OnActionSelectedForTargeting.Invoke(_currPlayerActor, _currPlayerActor.ActionCoordinator.GetActionAtIndex(index));
     }
 
-
-
     #endregion
 }

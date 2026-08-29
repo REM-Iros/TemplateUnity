@@ -2,6 +2,10 @@ Todo List:
 
 Side Quest: UI Icon Image Database (I think this works now but will need to test it out more)
 
+Developed out the input router, and have it basically set up now. I'm working through the target manager now implementing the interface components.
+I need to implement proper interfaces for common control schemes like movement and navigation, and then build specific context schemes like targeting.
+Then, I'll need to separate targeting manager so that input isn't wrapped up in it as well.
+
 Target manager has the events it needs, but we are dropping using Unity UI for this and instead are going to build out the input router now. The input router
 is going to require a context script that gets pushed onto a stack, and the input router will run assign a generic method to sub each the stack's top context's
 actions to listen to the events. When the stack has a new context pushed on top, it jumps to that new context, using FIFO. 
