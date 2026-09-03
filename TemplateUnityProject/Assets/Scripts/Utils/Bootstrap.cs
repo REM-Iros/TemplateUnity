@@ -49,6 +49,10 @@ public class Bootstrap : MonoBehaviour
         ServiceLocator.Register(gameStateManager);
         ServiceLocator.Register(uiFocusManager);
         ServiceLocator.Register(playerInputRegistry);
+
+        // Init the player rig registry after the input registry is registered to enable rig registry to work properly.
+        var playerInputRigRegistry = CreateManager<PlayerInputRigRegistry>();
+        ServiceLocator.Register(playerInputRigRegistry);
     }
 
     /// <summary>

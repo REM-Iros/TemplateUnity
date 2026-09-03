@@ -19,9 +19,40 @@ public class PlayerInputRig : MonoBehaviour
     [SerializeField, Header("Input Router")]
     private PlayerInputRouter _router;
 
+    [Tooltip("This is the index for the rig. This is assigned by the rig registry and passed to the input registry.")]
+    private int _index;
+
     #endregion
 
     #region Methods
+
+    /// <summary>
+    /// On start, the rig registers itself to the service locator's rig registry and registers the input router to the input router registry. 
+    /// It also sets itself to be persistant across scenes.
+    /// </summary>
+    public void GenerateRig(int index)
+    {
+        // Set as persistant across scenes.
+        DontDestroyOnLoad(_rig);
+
+        // Set the rig's index.
+        _index = index;
+
+        // Register the input router to the input router registry.
+        ServiceLocator.Get<PlayerInputRegistry>().Register(_index, _router);
+    }
+
+    /// <summary>
+    /// On call via the rig registry, removes the rig from the registries and destroys the rig.
+    /// </summary>
+    public void RemoveRig()
+    {
+        // Remove the input router from the input registry
+        ServiceLocator.Get<PlayerInputRegistry>().Unregister(_index);
+
+        // Destroy this rig.
+        Destroy(_rig);
+    }
 
     #endregion
 }
