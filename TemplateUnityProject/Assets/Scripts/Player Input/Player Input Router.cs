@@ -35,7 +35,7 @@ public class PlayerInputRouter : MonoBehaviour
     private void Awake()
     {
         // Validate input is attached before waking.
-        if (_input != null)
+        if (_input == null)
         {
             Debug.LogError("Missing player input, input router will not work.");
             return;
@@ -46,10 +46,6 @@ public class PlayerInputRouter : MonoBehaviour
 
         // Generate the stack
         _contextStack = new Stack<IInputContext>();
-
-        // Register this to the service locator.
-        // TODO: This is hacky crap, but I'm testing right now so I don't care.
-        ServiceLocator.Get<PlayerInputRegistry>().Register(0, this);
     }
 
     /// <summary>

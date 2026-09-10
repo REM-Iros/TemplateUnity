@@ -13,8 +13,7 @@ public class PlayerInputRigRegistry : MonoBehaviour
     [Tooltip("This is the dictionary that we store input rigs in.")]
     private static readonly SortedDictionary<int, PlayerInputRig> _rigs = new();
 
-    [Tooltip("This is the prefab that we directly attach to the script from inspector view. This is our rig prefab we generate when we need a new rig.")]
-    [SerializeField]
+    [Tooltip("This is our rig prefab we generate when we need a new rig.")]
     private GameObject _rigPrefab;
 
     [Tooltip("This is the max amount of players you want to have in your game.")]
@@ -29,6 +28,8 @@ public class PlayerInputRigRegistry : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        _rigPrefab = Resources.Load<GameObject>("Prefabs/Player Input/Player Input Rig");
+
         RegisterRig();
     }
 
@@ -92,6 +93,14 @@ public class PlayerInputRigRegistry : MonoBehaviour
         }
 
         return -1;
+    }
+
+    /// <summary>
+    /// On destroy, we want to clear the dictionary to avoid memory leaks. This is a static dictionary, so it will persist across scenes unless cleared.
+    /// </summary>
+    private void OnDestroy()
+    {
+        _rigs.Clear();
     }
 
     #endregion

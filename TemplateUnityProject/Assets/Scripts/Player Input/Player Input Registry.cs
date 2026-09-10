@@ -51,5 +51,13 @@ public class PlayerInputRegistry : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// We want to clear the dictionary on destroy to avoid memory leaks. This is a static dictionary, so it will persist across scenes unless cleared.
+    /// </summary>
+    private void OnDestroy()
+    {
+        _routers.Clear();
+    }
+
     #endregion
 }
